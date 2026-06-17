@@ -1,0 +1,73 @@
+name: Deploy to Azure Container Apps
+
+# Builds images in ACR and rolls new Container App revisions on push to main.
+# Infrastructure itself is provisioned once via deploy/azure/setup-azure.sh.
+#
+# Required GitHub configuration:
+#   Secrets:
+#     AZURE_CLIENT_ID        - app registration (federated OIDC) client id
+#     AZURE_TENANT_ID        - Azure AD tenant id
+#     AZURE_SUBSCRIPTION_ID  - target subscription id
+#   Variables (Settings > Variables):
+#     ACR_NAME               - e.g. iiotacr12345
+#     RESOURCE_GROUP         - e.g. iiot-rg
+#     API_DOMAIN             - e.g. api.eneguardian.app
+#     AUTH_DOMAIN            - e.g. auth.eneguardian.app
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'services/**'
+      - 'infrastructure/mosquitto/**'
+      - 'deploy/azure/**'
+      - '.github/workflows/azure-deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # required for azure/login OIDC
+  contents: read
+
+env:
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build images in ACR
+        run: |
+          set -euo pipefail
+          ACR=${{ vars.ACR_NAME }}
+          TAG=${{ env.IMAGE_TAG }}
+          az acr build -r "$ACR" -t auth-service:$TAG ./services/auth-service
+          az acr build -r "$ACR" -t ai-engine:$TAG    ./services/ai-engine
+          az acr build -r "$ACR" -t simulator:$TAG    ./services/simulator
+          az acr build -r "$ACR" -t mosquitto:$TAG    ./infrastructure/mosquitto
+          az acr build -r "$ACR" -t web-frontend:$TAG \
+            --build-arg NEXT_PUBLIC_API_URL=https://${{ vars.API_DOMAIN }} \
+            --build-arg NEXT_PUBLIC_AUTH_URL=https://${{ vars.AUTH_DOMAIN }} \
+            ./services/web-frontend
+
+      - name: Roll new revisions
+        run: |
+          set -euo pipefail
+          RG=${{ vars.RESOURCE_GROUP }}
+          ACR=${{ vars.ACR_NAME }}
+          TAG=${{ env.IMAGE_TAG }}
+          SERVER="$(az acr show -n "$ACR" --query loginServer -o tsv)"
+          update() { az containerapp update -g "$RG" -n "$1" --image "$SERVER/$2:$TAG" --only-show-errors >/dev/null; echo "updated $1"; }
+          update auth-service auth-service
+          update ai-engine    ai-engine
+          update simulator    simulator
+          update mosquitto    mosquitto
+          update web-frontend web-frontend

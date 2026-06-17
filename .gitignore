@@ -1,0 +1,20 @@
+venv/
+__pycache__/
+.DS_Store
+*.pkl
+.env
+
+# Logs and temporary data
+*.log
+live_data.csv
+build.log
+
+# Node modules and package backups
+node_modules/
+*.bak
+
+# PostgreSQL data directory
+infrastructure/postgres/data/
+
+# Claude Code local working files
+.claude/

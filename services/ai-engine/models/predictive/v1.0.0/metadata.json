@@ -1,0 +1,32 @@
+{
+  "version": "1.0.0",
+  "model_type": "predictive",
+  "status": "staging",
+  "created_at": "2025-12-09T19:58:54.967299Z",
+  "updated_at": "2025-12-09T19:58:54.967299Z",
+  "created_by": "system",
+  "description": "MTTF prediction model. R\u00b2=-0.0262, MAE=137.35",
+  "algorithm": "RandomForestRegressor",
+  "hyperparameters": {
+    "n_estimators": 150,
+    "max_depth": 12,
+    "min_samples_split": 5,
+    "min_samples_leaf": 2
+  },
+  "features": [
+    "Humidity",
+    "Temperature",
+    "Age",
+    "Quantity"
+  ],
+  "metrics": {
+    "mae": 137.34715076561133,
+    "rmse": 158.39683578480484,
+    "training_samples": 4000,
+    "validation_samples": 1000
+  },
+  "model_file": "/app/models/predictive/v1.0.0/model.pkl",
+  "scaler_file": "/app/models/predictive/v1.0.0/scaler.pkl",
+  "model_checksum": "7623cf947988f5f55ae3b82c4f8bc5f93faf85b2e8d39b551ca9499e18f5708e",
+  "traffic_percentage": 0.0
+}

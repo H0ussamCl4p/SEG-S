@@ -1,0 +1,32 @@
+# Base Dependencies
+pandas==2.0.3
+scikit-learn==1.3.2
+
+# App Dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+influxdb==5.3.1
+paho-mqtt==1.6.1
+python-multipart==0.0.6
+supervisor==4.2.5
+openpyxl==3.1.2
+xlrd==2.0.1
+reportlab==4.0.7
+pillow==10.1.0
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+authlib==1.3.0
+httpx==0.27.0
+
+# Chatbot Dependencies
+langchain==0.2.14
+langchain-community==0.2.12
+langchain-core==0.2.33
+langchain-pinecone==0.1.3
+langchain-openai==0.1.20
+pinecone-client==5.0.1
+python-dotenv==1.0.1
+sentence-transformers==3.0.1
+openai==1.40.0
+pypdf==4.3.1
+tiktoken==0.7.0

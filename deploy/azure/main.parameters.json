@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "namePrefix": { "value": "iiot" },
+    "imageTag": { "value": "latest" },
+    "rootDomain": { "value": "eneguardian.app" },
+    "apiDomain": { "value": "api.eneguardian.app" },
+    "authDomain": { "value": "auth.eneguardian.app" },
+    "pgAdminLogin": { "value": "iiot_admin" },
+    "pgDatabaseName": { "value": "iiot_users" },
+    "accessTokenExpireMinutes": { "value": "60" },
+    "llmModel": { "value": "deepseek-chat" },
+    "llmApiBase": { "value": "https://api.deepseek.com" },
+    "influxDatabase": { "value": "factory_data" }
+  }
+}
