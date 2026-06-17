@@ -161,16 +161,29 @@ except ImportError as e:
     ENHANCED_ML_AVAILABLE = False
     print(f"⚠️  Enhanced ML modules not available: {e}")
 
-# Initialize Chatbot
+# Initialize Chatbot in the BACKGROUND so it never blocks app startup.
+# Loading the embedding model + ChromaDB can take a while; doing it at import
+# time previously prevented uvicorn from binding the port (the whole data API
+# was unavailable until the chatbot finished). The chat endpoints already guard
+# with `if not chatbot`, so they return "initializing" until it's ready.
+import threading
+
 chatbot = None
 chatbot_init_error = None
-try:
-    from src.chatbot import RAGChatbot
-    chatbot = RAGChatbot()
-    print("✓ Chatbot initialized")
-except Exception as e:
-    chatbot_init_error = str(e)
-    print(f"⚠️  Warning: Could not initialize Chatbot: {e}")
+
+
+def _init_chatbot_background():
+    global chatbot, chatbot_init_error
+    try:
+        from src.chatbot import RAGChatbot
+        chatbot = RAGChatbot()
+        print("✓ Chatbot initialized")
+    except Exception as e:
+        chatbot_init_error = str(e)
+        print(f"⚠️  Warning: Could not initialize Chatbot: {e}")
+
+
+threading.Thread(target=_init_chatbot_background, daemon=True).start()
 
 
 # Pydantic models for request bodies
