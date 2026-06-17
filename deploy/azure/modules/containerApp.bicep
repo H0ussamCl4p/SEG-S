@@ -1,7 +1,7 @@
 // ==========================================================================
 // Reusable Container App module — one instance per service.
 // Handles ingress (external HTTP / internal HTTP / internal TCP / none),
-// ACR pull via user-assigned identity, secrets, env vars and Azure Files mounts.
+// ACR pull via registry admin credentials, secrets, env vars and Azure Files mounts.
 // ==========================================================================
 
 @description('Container App name (also the in-environment hostname for service-to-service calls).')
@@ -12,11 +12,15 @@ param location string = resourceGroup().location
 @description('Resource ID of the Container Apps managed environment.')
 param environmentId string
 
-@description('Resource ID of the user-assigned managed identity used to pull from ACR.')
-param identityId string
-
 @description('ACR login server, e.g. iiotacr123.azurecr.io')
 param acrLoginServer string
+
+@description('ACR admin username (used to pull images).')
+param acrUsername string
+
+@description('ACR admin password (used to pull images).')
+@secure()
+param acrPassword string
 
 @description('Full image reference, e.g. iiotacr123.azurecr.io/ai-engine:latest')
 param image string
@@ -69,13 +73,12 @@ var ingressConfig = ingressKind == 'external-http' ? {
   exposedPort: targetPort
 } : null
 
-var containerEnv = concat(
-  envVars,
-  [for s in secretEnvVars: {
-    name: s.name
-    secretRef: s.secretRef
-  }]
-)
+var secretEnvList = [for s in secretEnvVars: {
+  name: s.name
+  secretRef: s.secretRef
+}]
+
+var containerEnv = concat(envVars, secretEnvList)
 
 var volumes = [for v in volumeMounts: {
   name: v.volumeName
@@ -88,25 +91,28 @@ var containerVolumeMounts = [for v in volumeMounts: {
   mountPath: v.mountPath
 }]
 
+// Append the ACR pull password as an app secret referenced by the registry config.
+var allSecrets = concat(secrets, [
+  {
+    name: 'acr-pull-password'
+    value: acrPassword
+  }
+])
+
 resource app 'Microsoft.App/containerApps@2024-03-01' = {
   name: name
   location: location
-  identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${identityId}': {}
-    }
-  }
   properties: {
     managedEnvironmentId: environmentId
     configuration: {
       activeRevisionsMode: 'Single'
       ingress: hasIngress ? ingressConfig : null
-      secrets: secrets
+      secrets: allSecrets
       registries: [
         {
           server: acrLoginServer
-          identity: identityId
+          username: acrUsername
+          passwordSecretRef: 'acr-pull-password'
         }
       ]
     }

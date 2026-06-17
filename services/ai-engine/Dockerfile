@@ -20,6 +20,13 @@ WORKDIR /app
 # Copy only requirements (changes rarely = better cache)
 COPY requirements-base.txt requirements-app.txt ./
 
+# Install CPU-only PyTorch FIRST so sentence-transformers reuses it instead of
+# pulling the default CUDA build (~2.5GB of unused nvidia libs). This cuts the
+# image from ~8.7GB to ~2.5GB — faster pushes and faster cold starts.
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --default-timeout=1000 --no-compile \
+    torch --index-url https://download.pytorch.org/whl/cpu
+
 # Use BuildKit cache mount for pip - MASSIVE speedup
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --default-timeout=1000 --no-compile -r requirements-base.txt -r requirements-app.txt

@@ -20,8 +20,10 @@ resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
     name: 'Basic'
   }
   properties: {
-    // Pulls use a managed identity (see main.bicep), so the admin user stays off.
-    adminUserEnabled: false
+    // Admin user enabled so Container Apps can pull with registry credentials
+    // (avoids needing an AcrPull role assignment, which can be restricted on
+    // Azure for Students / personal-account subscriptions).
+    adminUserEnabled: true
   }
 }
 

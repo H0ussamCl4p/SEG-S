@@ -1,73 +1,76 @@
-name: Deploy to Azure Container Apps
+name: Build & Push images to ACR
 
-# Builds images in ACR and rolls new Container App revisions on push to main.
-# Infrastructure itself is provisioned once via deploy/azure/setup-azure.sh.
+# Builds all service images on a GitHub-hosted runner and pushes them to Azure
+# Container Registry. Used instead of `az acr build` because ACR Tasks are
+# disabled on Azure for Students subscriptions. The heavy push happens over
+# GitHub's network, not your local connection.
 #
-# Required GitHub configuration:
-#   Secrets:
-#     AZURE_CLIENT_ID        - app registration (federated OIDC) client id
-#     AZURE_TENANT_ID        - Azure AD tenant id
-#     AZURE_SUBSCRIPTION_ID  - target subscription id
-#   Variables (Settings > Variables):
-#     ACR_NAME               - e.g. iiotacr12345
-#     RESOURCE_GROUP         - e.g. iiot-rg
-#     API_DOMAIN             - e.g. api.eneguardian.app
-#     AUTH_DOMAIN            - e.g. auth.eneguardian.app
+# Required repo secrets:
+#   ACR_LOGIN_SERVER  - e.g. iiotacrxxxx.azurecr.io
+#   ACR_USERNAME      - ACR admin username
+#   ACR_PASSWORD      - ACR admin password
+#
+# Trigger manually (Actions tab → Run workflow) or via `gh workflow run`.
+# Frontend public URLs are inputs so they can be set to the real Azure FQDNs.
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'services/**'
-      - 'infrastructure/mosquitto/**'
-      - 'deploy/azure/**'
-      - '.github/workflows/azure-deploy.yml'
   workflow_dispatch:
+    inputs:
+      api_url:
+        description: 'NEXT_PUBLIC_API_URL baked into the frontend'
+        default: 'https://api.eneguardian.app'
+        required: true
+      auth_url:
+        description: 'NEXT_PUBLIC_AUTH_URL baked into the frontend'
+        default: 'https://auth.eneguardian.app'
+        required: true
+      image_tag:
+        description: 'Image tag to push'
+        default: 'latest'
+        required: true
 
 permissions:
-  id-token: write   # required for azure/login OIDC
   contents: read
 
-env:
-  IMAGE_TAG: ${{ github.sha }}
-
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+    env:
+      ACR: ${{ secrets.ACR_LOGIN_SERVER }}
+      TAG: ${{ github.event.inputs.image_tag }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Azure login (OIDC)
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Log in to ACR
+        run: echo "${{ secrets.ACR_PASSWORD }}" | docker login "$ACR" -u "${{ secrets.ACR_USERNAME }}" --password-stdin
 
-      - name: Build images in ACR
+      - name: Build & push mosquitto
         run: |
-          set -euo pipefail
-          ACR=${{ vars.ACR_NAME }}
-          TAG=${{ env.IMAGE_TAG }}
-          az acr build -r "$ACR" -t auth-service:$TAG ./services/auth-service
-          az acr build -r "$ACR" -t ai-engine:$TAG    ./services/ai-engine
-          az acr build -r "$ACR" -t simulator:$TAG    ./services/simulator
-          az acr build -r "$ACR" -t mosquitto:$TAG    ./infrastructure/mosquitto
-          az acr build -r "$ACR" -t web-frontend:$TAG \
-            --build-arg NEXT_PUBLIC_API_URL=https://${{ vars.API_DOMAIN }} \
-            --build-arg NEXT_PUBLIC_AUTH_URL=https://${{ vars.AUTH_DOMAIN }} \
+          docker build -t "$ACR/mosquitto:$TAG" ./infrastructure/mosquitto
+          docker push "$ACR/mosquitto:$TAG"
+
+      - name: Build & push auth-service
+        run: |
+          docker build -t "$ACR/auth-service:$TAG" ./services/auth-service
+          docker push "$ACR/auth-service:$TAG"
+
+      - name: Build & push simulator
+        run: |
+          docker build -t "$ACR/simulator:$TAG" ./services/simulator
+          docker push "$ACR/simulator:$TAG"
+
+      - name: Build & push ai-engine
+        run: |
+          docker build -t "$ACR/ai-engine:$TAG" ./services/ai-engine
+          docker push "$ACR/ai-engine:$TAG"
+
+      - name: Build & push web-frontend
+        run: |
+          docker build -t "$ACR/web-frontend:$TAG" \
+            --build-arg NEXT_PUBLIC_API_URL=${{ github.event.inputs.api_url }} \
+            --build-arg NEXT_PUBLIC_AUTH_URL=${{ github.event.inputs.auth_url }} \
             ./services/web-frontend
+          docker push "$ACR/web-frontend:$TAG"
 
-      - name: Roll new revisions
-        run: |
-          set -euo pipefail
-          RG=${{ vars.RESOURCE_GROUP }}
-          ACR=${{ vars.ACR_NAME }}
-          TAG=${{ env.IMAGE_TAG }}
-          SERVER="$(az acr show -n "$ACR" --query loginServer -o tsv)"
-          update() { az containerapp update -g "$RG" -n "$1" --image "$SERVER/$2:$TAG" --only-show-errors >/dev/null; echo "updated $1"; }
-          update auth-service auth-service
-          update ai-engine    ai-engine
-          update simulator    simulator
-          update mosquitto    mosquitto
-          update web-frontend web-frontend
+      - name: Done
+        run: echo "All images pushed to $ACR with tag $TAG"

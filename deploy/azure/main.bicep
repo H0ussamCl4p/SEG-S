@@ -132,23 +132,11 @@ resource pgFirewallAzure 'Microsoft.DBforPostgreSQL/flexibleServers/firewallRule
 var databaseUrl = 'postgresql://${pgAdminLogin}:${pgAdminPassword}@${postgres.properties.fullyQualifiedDomainName}:5432/${pgDatabaseName}?sslmode=require'
 
 // ==========================================================================
-// Managed identity for ACR pulls
+// ACR pull credentials (admin user) — avoids needing a role assignment
 // ==========================================================================
-resource uami 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
-  name: '${namePrefix}-pull-identity'
-  location: location
-}
-
-// AcrPull role
-resource acrPull 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  scope: acr
-  name: guid(acr.id, uami.id, 'AcrPull')
-  properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
-    principalId: uami.properties.principalId
-    principalType: 'ServicePrincipal'
-  }
-}
+var acrCreds = acr.listCredentials()
+var acrUsername = acrCreds.username
+var acrPassword = acrCreds.passwords[0].value
 
 // ==========================================================================
 // Container Apps environment + Azure Files storages
@@ -201,8 +189,9 @@ module mosquitto 'modules/containerApp.bicep' = {
   params: {
     location: location
     environmentId: env.id
-    identityId: uami.id
     acrLoginServer: acrLoginServer
+    acrUsername: acrUsername
+    acrPassword: acrPassword
     name: 'mosquitto'
     // Config baked into the image (infrastructure/mosquitto/Dockerfile).
     image: images.mosquitto
@@ -213,7 +202,6 @@ module mosquitto 'modules/containerApp.bicep' = {
     minReplicas: 1
     maxReplicas: 1
   }
-  dependsOn: [ acrPull ]
 }
 
 // Time-series DB — internal HTTP, reachable in-env at host "influxdb:8086"
@@ -222,8 +210,9 @@ module influxdb 'modules/containerApp.bicep' = {
   params: {
     location: location
     environmentId: env.id
-    identityId: uami.id
     acrLoginServer: acrLoginServer
+    acrUsername: acrUsername
+    acrPassword: acrPassword
     name: 'influxdb'
     image: 'influxdb:1.8'
     // TCP ingress preserves the native 8086 port for the InfluxDB client
@@ -242,7 +231,7 @@ module influxdb 'modules/containerApp.bicep' = {
       { volumeName: 'influx-data', storageName: 'influx-data', mountPath: '/var/lib/influxdb' }
     ]
   }
-  dependsOn: [ envStorages, acrPull ]
+  dependsOn: [ envStorages ]
 }
 
 // ==========================================================================
@@ -254,8 +243,9 @@ module authService 'modules/containerApp.bicep' = {
   params: {
     location: location
     environmentId: env.id
-    identityId: uami.id
     acrLoginServer: acrLoginServer
+    acrUsername: acrUsername
+    acrPassword: acrPassword
     name: 'auth-service'
     image: images.authService
     ingressKind: 'external-http'
@@ -276,7 +266,7 @@ module authService 'modules/containerApp.bicep' = {
       { name: 'jwt-secret', value: jwtSecretKey }
     ]
   }
-  dependsOn: [ acrPull, pgDatabase ]
+  dependsOn: [ pgDatabase ]
 }
 
 module aiEngine 'modules/containerApp.bicep' = {
@@ -284,8 +274,9 @@ module aiEngine 'modules/containerApp.bicep' = {
   params: {
     location: location
     environmentId: env.id
-    identityId: uami.id
     acrLoginServer: acrLoginServer
+    acrUsername: acrUsername
+    acrPassword: acrPassword
     name: 'ai-engine'
     image: images.aiEngine
     ingressKind: 'external-http'
@@ -320,7 +311,7 @@ module aiEngine 'modules/containerApp.bicep' = {
       { volumeName: 'aiengine-data', storageName: 'aiengine-data', mountPath: '/app/persist' }
     ]
   }
-  dependsOn: [ acrPull, influxdb, mosquitto ]
+  dependsOn: [ influxdb, mosquitto ]
 }
 
 module simulator 'modules/containerApp.bicep' = {
@@ -328,8 +319,9 @@ module simulator 'modules/containerApp.bicep' = {
   params: {
     location: location
     environmentId: env.id
-    identityId: uami.id
     acrLoginServer: acrLoginServer
+    acrUsername: acrUsername
+    acrPassword: acrPassword
     name: 'simulator'
     image: images.simulator
     ingressKind: 'none'
@@ -344,7 +336,7 @@ module simulator 'modules/containerApp.bicep' = {
       { name: 'PYTHONUNBUFFERED', value: '1' }
     ]
   }
-  dependsOn: [ acrPull, mosquitto ]
+  dependsOn: [ mosquitto ]
 }
 
 module webFrontend 'modules/containerApp.bicep' = {
@@ -352,8 +344,9 @@ module webFrontend 'modules/containerApp.bicep' = {
   params: {
     location: location
     environmentId: env.id
-    identityId: uami.id
     acrLoginServer: acrLoginServer
+    acrUsername: acrUsername
+    acrPassword: acrPassword
     name: 'web-frontend'
     image: images.webFrontend
     ingressKind: 'external-http'
@@ -369,7 +362,7 @@ module webFrontend 'modules/containerApp.bicep' = {
       { name: 'AUTH_SERVICE_URL', value: 'http://auth-service' }
     ]
   }
-  dependsOn: [ acrPull, aiEngine, authService ]
+  dependsOn: [ aiEngine, authService ]
 }
 
 // ==========================================================================
