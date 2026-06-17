@@ -28,6 +28,12 @@ on:
         description: 'Image tag to push'
         default: 'latest'
         required: true
+      service:
+        description: 'Which image to build'
+        default: 'all'
+        required: true
+        type: choice
+        options: [all, mosquitto, auth-service, simulator, ai-engine, web-frontend]
 
 permissions:
   contents: read
@@ -45,26 +51,31 @@ jobs:
         run: echo "${{ secrets.ACR_PASSWORD }}" | docker login "$ACR" -u "${{ secrets.ACR_USERNAME }}" --password-stdin
 
       - name: Build & push mosquitto
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'mosquitto' }}
         run: |
           docker build -t "$ACR/mosquitto:$TAG" ./infrastructure/mosquitto
           docker push "$ACR/mosquitto:$TAG"
 
       - name: Build & push auth-service
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'auth-service' }}
         run: |
           docker build -t "$ACR/auth-service:$TAG" ./services/auth-service
           docker push "$ACR/auth-service:$TAG"
 
       - name: Build & push simulator
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'simulator' }}
         run: |
           docker build -t "$ACR/simulator:$TAG" ./services/simulator
           docker push "$ACR/simulator:$TAG"
 
       - name: Build & push ai-engine
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'ai-engine' }}
         run: |
           docker build -t "$ACR/ai-engine:$TAG" ./services/ai-engine
           docker push "$ACR/ai-engine:$TAG"
 
       - name: Build & push web-frontend
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'web-frontend' }}
         run: |
           docker build -t "$ACR/web-frontend:$TAG" \
             --build-arg NEXT_PUBLIC_API_URL=${{ github.event.inputs.api_url }} \

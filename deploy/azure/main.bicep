@@ -18,6 +18,9 @@ param acrName string
 @description('Image tag to deploy for all services.')
 param imageTag string = 'latest'
 
+@description('Image tag for the web-frontend (rebuilt separately against the real Azure FQDNs).')
+param webFrontendTag string = 'latest'
+
 // ---- Public domains (frontend bakes these into the browser bundle) ----------
 @description('Root domain for the dashboard.')
 param rootDomain string = 'eneguardian.app'
@@ -175,7 +178,7 @@ var images = {
   authService: '${acrLoginServer}/auth-service:${imageTag}'
   aiEngine: '${acrLoginServer}/ai-engine:${imageTag}'
   simulator: '${acrLoginServer}/simulator:${imageTag}'
-  webFrontend: '${acrLoginServer}/web-frontend:${imageTag}'
+  webFrontend: '${acrLoginServer}/web-frontend:${webFrontendTag}'
   mosquitto: '${acrLoginServer}/mosquitto:${imageTag}'
 }
 
@@ -281,11 +284,14 @@ module aiEngine 'modules/containerApp.bicep' = {
     image: images.aiEngine
     ingressKind: 'external-http'
     targetPort: 8000
-    cpu: '1.0'
-    memory: '2.0Gi'
+    // Extra headroom for loading torch + the embedding model on boot.
+    cpu: '2.0'
+    memory: '4.0Gi'
     // Single replica: it holds the MQTT subscription and ingests into InfluxDB.
     minReplicas: 1
     maxReplicas: 1
+    // ~7 min startup window: first boot downloads the ~470MB embedding model.
+    startupFailureThreshold: 40
     envVars: [
       { name: 'INFLUX_HOST', value: 'influxdb' }
       { name: 'INFLUX_PORT', value: '8086' }

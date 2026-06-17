@@ -42,6 +42,9 @@ param memory string = '1.0Gi'
 param minReplicas int = 1
 param maxReplicas int = 1
 
+@description('Startup probe failure threshold (each attempt is ~10s apart). Raise for slow-starting apps like ai-engine that load ML models on boot.')
+param startupFailureThreshold int = 6
+
 @description('Plain (non-secret) environment variables: [{ name, value }].')
 param envVars array = []
 
@@ -99,6 +102,22 @@ var allSecrets = concat(secrets, [
   }
 ])
 
+// Lenient TCP startup probe so slow-booting apps (ai-engine loads an embedding
+// model on first start) aren't killed before they bind their port. Once started,
+// the platform leaves them alone (no aggressive liveness probe).
+var probes = hasIngress ? [
+  {
+    type: 'Startup'
+    tcpSocket: {
+      port: targetPort
+    }
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: startupFailureThreshold
+  }
+] : []
+
 resource app 'Microsoft.App/containerApps@2024-03-01' = {
   name: name
   location: location
@@ -127,6 +146,7 @@ resource app 'Microsoft.App/containerApps@2024-03-01' = {
           }
           env: containerEnv
           volumeMounts: containerVolumeMounts
+          probes: probes
         }
       ]
       volumes: volumes

@@ -55,6 +55,11 @@ COPY data/ /app/data/
 # restarts (manuals aren't re-embedded on every cold start).
 RUN mkdir -p /app/logs /app/persist
 
+# Pre-download the chatbot embedding model into the image so startup is fast and
+# works offline — otherwise it pulls ~470MB from HuggingFace on every cold start,
+# which previously blocked the port long enough to fail Azure's startup probe.
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')"
+
 # Create Supervisord configuration
 RUN echo '[supervisord]' > /etc/supervisord.conf && \
     echo 'nodaemon=true' >> /etc/supervisord.conf && \
@@ -62,20 +67,24 @@ RUN echo '[supervisord]' > /etc/supervisord.conf && \
     echo 'logfile=/app/logs/supervisord.log' >> /etc/supervisord.conf && \
     echo '' >> /etc/supervisord.conf && \
     echo '[program:fastapi]' >> /etc/supervisord.conf && \
-    echo 'command=uvicorn src.api:app --host 0.0.0.0 --port 8000 --reload' >> /etc/supervisord.conf && \
+    echo 'command=uvicorn src.api:app --host 0.0.0.0 --port 8000' >> /etc/supervisord.conf && \
     echo 'directory=/app' >> /etc/supervisord.conf && \
     echo 'autostart=true' >> /etc/supervisord.conf && \
     echo 'autorestart=true' >> /etc/supervisord.conf && \
-    echo 'stderr_logfile=/app/logs/fastapi.err.log' >> /etc/supervisord.conf && \
-    echo 'stdout_logfile=/app/logs/fastapi.out.log' >> /etc/supervisord.conf && \
+    echo 'stderr_logfile=/dev/fd/2' >> /etc/supervisord.conf && \
+    echo 'stderr_logfile_maxbytes=0' >> /etc/supervisord.conf && \
+    echo 'stdout_logfile=/dev/fd/1' >> /etc/supervisord.conf && \
+    echo 'stdout_logfile_maxbytes=0' >> /etc/supervisord.conf && \
     echo '' >> /etc/supervisord.conf && \
     echo '[program:ai_consumer]' >> /etc/supervisord.conf && \
     echo 'command=python src/main.py' >> /etc/supervisord.conf && \
     echo 'directory=/app' >> /etc/supervisord.conf && \
     echo 'autostart=true' >> /etc/supervisord.conf && \
     echo 'autorestart=true' >> /etc/supervisord.conf && \
-    echo 'stderr_logfile=/app/logs/ai_consumer.err.log' >> /etc/supervisord.conf && \
-    echo 'stdout_logfile=/app/logs/ai_consumer.out.log' >> /etc/supervisord.conf
+    echo 'stderr_logfile=/dev/fd/2' >> /etc/supervisord.conf && \
+    echo 'stderr_logfile_maxbytes=0' >> /etc/supervisord.conf && \
+    echo 'stdout_logfile=/dev/fd/1' >> /etc/supervisord.conf && \
+    echo 'stdout_logfile_maxbytes=0' >> /etc/supervisord.conf
 
 # Expose ports
 EXPOSE 8000
