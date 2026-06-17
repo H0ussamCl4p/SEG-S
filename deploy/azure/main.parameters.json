@@ -10,8 +10,8 @@
     "pgAdminLogin": { "value": "iiot_admin" },
     "pgDatabaseName": { "value": "iiot_users" },
     "accessTokenExpireMinutes": { "value": "60" },
-    "llmModel": { "value": "deepseek-chat" },
-    "llmApiBase": { "value": "https://api.deepseek.com" },
+    "llmModel": { "value": "llama-3.3-70b-versatile" },
+    "llmApiBase": { "value": "https://api.groq.com/openai/v1" },
     "influxDatabase": { "value": "factory_data" }
   }
 }
