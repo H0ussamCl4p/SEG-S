@@ -37,6 +37,23 @@ equipment = {
     }
 }
 
+def generate_machine_001_data(tick):
+    """MACHINE_001: Hydraulic Press - healthy NORMAL baseline (default dashboard machine)."""
+    vibration = 42 + random.uniform(-4, 4) + math.sin(tick * 0.1) * 3
+    vibration = max(30, min(55, vibration))
+    temp = 52 + random.uniform(-3, 3) + math.cos(tick * 0.12) * 2
+    temp = max(45, min(60, temp))
+    humidity = 45 + random.uniform(-5, 5)
+    state = "\U0001F7E2 NORMAL"
+    return {
+        "timestamp": time.time(),
+        "machine_id": "MACHINE_001",
+        "equipment_name": "Hydraulic Press",
+        "vibration": round(vibration, 2),
+        "temperature": round(temp, 2),
+        "humidity": round(max(0, min(100, humidity)), 2)
+    }, state
+
 def generate_machine_002_data(tick):
     """MACHINE_002: Critical ANOMALY state - bearing failure with overheating"""
     # Critical vibration range (85-100) with erratic behavior
@@ -91,11 +108,13 @@ def generate_machine_003_data(tick, spike_cycle):
 
 try:
     while True:
-        # Generate data for 2 machines
+        # Generate data for 3 machines
+        data_001, state_001 = generate_machine_001_data(tick)
         data_002, state_002 = generate_machine_002_data(tick)
         data_003, state_003 = generate_machine_003_data(tick, spike_cycle)
-        
-        # Publish both
+
+        # Publish all
+        client.publish(TOPIC, json.dumps(data_001))
         client.publish(TOPIC, json.dumps(data_002))
         client.publish(TOPIC, json.dumps(data_003))
         
