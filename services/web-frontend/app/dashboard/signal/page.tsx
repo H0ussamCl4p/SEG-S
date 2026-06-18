@@ -16,6 +16,7 @@ type Reading = {
   bearing?: { shaft: number; BPFO: number; BPFI: number; BSF: number; FTF: number }
   fault?: { detected: boolean; type: string; fault_frequency_hz: number | null; confidence: number; ratios: Record<string, number> }
   condition?: string | null
+  device_id?: string
   fs?: number
   shaft_hz?: number
   timestamp?: string
