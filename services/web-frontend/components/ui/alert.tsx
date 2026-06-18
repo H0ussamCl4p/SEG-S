@@ -7,7 +7,7 @@ const Alert = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEleme
     <div
       ref={ref}
       role="alert"
-      className={cn("w-full rounded-lg border border-slate-800/60 bg-slate-900/70 px-4 py-3 text-sm text-slate-200", className)}
+      className={cn("w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground", className)}
       {...props}
     />
   )
@@ -18,7 +18,7 @@ const AlertDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttrib
   ({ className, ...props }, ref) => (
     <p
       ref={ref}
-      className={cn("text-sm leading-relaxed text-slate-300", className)}
+      className={cn("text-sm leading-relaxed text-foreground", className)}
       {...props}
     />
   )
