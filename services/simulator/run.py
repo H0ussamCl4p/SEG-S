@@ -10,6 +10,7 @@ import time
 procs = [
     subprocess.Popen([sys.executable, "-u", "simulate_wear.py"]),
     subprocess.Popen([sys.executable, "-u", "simulate_esp.py"]),
+    subprocess.Popen([sys.executable, "-u", "simulate_signal.py"]),
 ]
 
 try:

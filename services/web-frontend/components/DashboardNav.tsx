@@ -14,13 +14,15 @@ import {
   FileText,
   Activity,
   MessageSquare,
-  Cpu
+  Cpu,
+  AudioWaveform
 } from "lucide-react"
 
 const items = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
   { href: "/dashboard/chatbot", label: "Chatbot", icon: MessageSquare },
   { href: "/dashboard/esp", label: "Motor (ESP32)", icon: Cpu },
+  { href: "/dashboard/signal", label: "Signal Analysis", icon: AudioWaveform },
   { href: "/dashboard/data", label: "Data", icon: Database },
   { href: "/dashboard/anomaly", label: "Anomaly", icon: AlertTriangle },
   { href: "/dashboard/prediction", label: "Prediction", icon: TrendingUp },

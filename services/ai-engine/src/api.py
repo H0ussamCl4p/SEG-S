@@ -3369,6 +3369,85 @@ async def esp_history(minutes: int = 30):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# =====================================================================
+# Vibration Signal Analysis (FFT + envelope + bearing fault detection)
+# A waveform source POSTs a raw vibration window; we extract time-domain
+# features and frequency/envelope spectra, then flag bearing defects.
+# =====================================================================
+SIGNAL_MEASUREMENT = "signal_features"
+_signal_last: Dict[str, Any] = {}
+
+
+class SignalReading(BaseModel):
+    samples: List[float]
+    fs: float = 10000.0          # sample rate (Hz)
+    shaft_hz: float = 25.0       # rotation speed (Hz)
+    device_id: Optional[str] = "bearing_motor_1"
+    condition: Optional[str] = None   # ground-truth label from the simulator (optional)
+    bearing: Optional[Dict[str, Any]] = None
+
+
+@app.post("/api/signal/ingest")
+async def signal_ingest(reading: SignalReading):
+    """Analyze a raw vibration window: time features + FFT + envelope + fault detection."""
+    global _signal_last
+    from src.signal_features import analyze
+    result = analyze(reading.samples, reading.fs, reading.shaft_hz, reading.bearing)
+    now = datetime.utcnow()
+    _signal_last = {
+        **result,
+        "device_id": reading.device_id,
+        "condition": reading.condition,
+        "fs": reading.fs,
+        "shaft_hz": reading.shaft_hz,
+        "timestamp": now.isoformat() + "Z",
+    }
+    if influx_client:
+        try:
+            tf, fault = result["time"], result["fault"]
+            influx_client.write_points([{
+                "measurement": SIGNAL_MEASUREMENT,
+                "tags": {"device_id": reading.device_id or "bearing_motor_1"},
+                "time": now.isoformat() + "Z",
+                "fields": {
+                    "rms": tf["rms"],
+                    "kurtosis": tf["kurtosis"],
+                    "crest_factor": tf["crest_factor"],
+                    "peak": tf["peak"],
+                    "fault_detected": 1.0 if fault["detected"] else 0.0,
+                    "confidence": float(fault["confidence"]),
+                },
+            }])
+        except Exception as e:
+            print(f"⚠️  Signal ingest InfluxDB write failed: {e}")
+    return {"fault": result["fault"], "kurtosis": result["time"]["kurtosis"],
+            "crest_factor": result["time"]["crest_factor"]}
+
+
+@app.get("/api/signal/status")
+async def signal_status():
+    """Latest analyzed window: features, spectra, bearing frequencies, fault verdict."""
+    return {
+        "reading": _signal_last or None,
+        "thresholds": {"kurtosis_warn": 4.0, "crest_warn": 5.0},
+    }
+
+
+@app.get("/api/signal/history")
+async def signal_history(minutes: int = 30):
+    """Trend of the scalar features (RMS / kurtosis / crest factor)."""
+    if not influx_client:
+        return {"points": []}
+    minutes = max(1, min(1440, minutes))
+    try:
+        query = (f'SELECT "rms","kurtosis","crest_factor","fault_detected" '
+                 f'FROM "{SIGNAL_MEASUREMENT}" WHERE time > now() - {minutes}m')
+        pts = list(influx_client.query(query).get_points())
+        return {"points": pts, "count": len(pts)}
+    except Exception as e:
+        return {"points": [], "error": str(e)}
+
+
 if __name__ == "__main__":
     print("=" * 70)
     print("🚀 Starting FastAPI Server")
