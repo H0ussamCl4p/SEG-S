@@ -1,29 +1,31 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Cpu, Radio, AudioWaveform, Bell } from 'lucide-react'
+import { Cpu, Radio, AudioWaveform, TrendingUp } from 'lucide-react'
 
 const steps = [
   {
-    phase: 'DAY 0',
+    phase: 'DAYS 1–2',
     title: 'Connect',
-    body: 'Wire an ESP32 or PLC and publish sensor data over MQTT — or start instantly with the built-in simulator.',
+    body: 'Old machines get a small sensor box; modern lines tap straight into existing protocols (MQTT / PLC).',
     icon: Cpu,
     visual: (
       <div className="space-y-2">
-        {['Thermocouple', 'Vibration', 'Humidity'].map((s) => (
-          <div key={s} className="flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2 text-xs">
-            <span className="text-muted-foreground">{s}</span>
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
-          </div>
-        ))}
+        <div className="flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2 text-xs">
+          <span className="text-muted-foreground">Legacy machine</span>
+          <span className="rounded bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-700">sensor box</span>
+        </div>
+        <div className="flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2 text-xs">
+          <span className="text-muted-foreground">Modern line</span>
+          <span className="rounded bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-700">MQTT / PLC</span>
+        </div>
       </div>
     ),
   },
   {
-    phase: 'REAL-TIME',
-    title: 'Ingest',
-    body: 'Telemetry streams into a time-series store with sub-second latency, ready to query and chart.',
+    phase: 'DAYS 3–4',
+    title: 'Stream',
+    body: 'Telemetry streams continuously to the AI; baselines and models calibrate to your equipment.',
     icon: Radio,
     visual: (
       <div className="space-y-1.5 font-mono text-[11px] text-muted-foreground">
@@ -34,9 +36,9 @@ const steps = [
     ),
   },
   {
-    phase: 'LIVE',
-    title: 'Detect',
-    body: 'AI anomaly scoring plus FFT + envelope analysis flag bearing faults at their characteristic frequencies.',
+    phase: 'UNDER 1 WEEK',
+    title: 'Go live',
+    body: 'Anomaly detection plus FFT + envelope vibration analysis go live — dashboards, alerts and health scores.',
     icon: AudioWaveform,
     visual: (
       <div className="flex h-[88px] items-end justify-between gap-1 rounded-lg border border-border bg-background p-3">
@@ -47,19 +49,19 @@ const steps = [
     ),
   },
   {
-    phase: 'ONGOING',
-    title: 'Act',
-    body: 'Health scores, remaining-useful-life estimates, alerts and an AI assistant grounded in your manuals.',
-    icon: Bell,
+    phase: 'UNDER 7 MONTHS',
+    title: 'Payback',
+    body: 'Avoided unplanned downtime and condition-based maintenance deliver ROI in under seven months.',
+    icon: TrendingUp,
     visual: (
       <div className="space-y-2">
         <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 px-3 py-2 text-xs">
-          <div className="font-semibold text-emerald-700">Health 100 · Excellent</div>
-          <div className="text-muted-foreground">Next service in 24 days</div>
+          <div className="font-semibold text-emerald-700">Payback &lt; 7 months</div>
+          <div className="text-muted-foreground">Downtime avoided</div>
         </div>
-        <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-xs">
-          <div className="font-semibold text-amber-700">Warning · MACHINE_002</div>
-          <div className="text-muted-foreground">High vibration 90.4</div>
+        <div className="rounded-lg border border-border bg-background px-3 py-2 text-xs">
+          <div className="font-semibold text-foreground">Health 100 · Excellent</div>
+          <div className="text-muted-foreground">Next service in 24 days</div>
         </div>
       </div>
     ),
@@ -79,10 +81,10 @@ export default function Timeline() {
         >
           <p className="text-sm font-medium uppercase tracking-widest text-emerald-600">Timeline</p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-5xl">
-            Live in a day. Insights from the first signal.
+            Live in under a week. Payback in under seven months.
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            From raw sensor to actionable diagnostics — here's how a machine goes online.
+            Old or new machines — we connect, stream and act fast. Here's how a line goes online.
           </p>
         </motion.div>
 
@@ -97,11 +99,9 @@ export default function Timeline() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: i * 0.08 }}
               >
-                {/* visual mock */}
                 <div className="mb-5 min-h-[140px] rounded-2xl border border-border bg-background p-4 shadow-sm">
                   {s.visual}
                 </div>
-                {/* label + copy */}
                 <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">{s.phase}</p>
                 <div className="mt-2 flex items-center gap-2">
                   <Icon className="h-4 w-4 text-emerald-600" />
