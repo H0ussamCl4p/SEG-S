@@ -66,7 +66,7 @@ export default function ParetoChart({
   const totalCost = data.reduce((sum, d) => sum + (d.cost_estimate || 0), 0)
 
   return (
-    <Card className="border-slate-800">
+    <Card className="border-border">
       <CardHeader className="pb-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
@@ -79,12 +79,12 @@ export default function ParetoChart({
             </CardDescription>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <label className="text-xs text-slate-400">Timeframe:</label>
+            <label className="text-xs text-muted-foreground">Timeframe:</label>
             <Select value={timeframe} onValueChange={setTimeframe}>
-              <SelectTrigger className="w-[120px] h-8 bg-slate-900/60 border-slate-800 text-foreground text-xs">
+              <SelectTrigger className="w-[120px] h-8 bg-background border-border text-foreground text-xs">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-slate-900 border-slate-800">
+              <SelectContent className="bg-background border-border">
                 <SelectItem value="7" className="text-foreground text-xs">Last 7 days</SelectItem>
                 <SelectItem value="30" className="text-foreground text-xs">Last 30 days</SelectItem>
                 <SelectItem value="90" className="text-foreground text-xs">Last 90 days</SelectItem>
@@ -99,7 +99,7 @@ export default function ParetoChart({
             <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : data.length === 0 ? (
-          <div className="h-64 flex items-center justify-center text-slate-500">
+          <div className="h-64 flex items-center justify-center text-muted-foreground">
             No data available for the selected timeframe
           </div>
         ) : (
@@ -117,11 +117,11 @@ export default function ParetoChart({
 
             {/* Chart */}
             <div className="overflow-x-auto pb-4">
-              <div className="min-w-[600px] relative h-80 flex items-end justify-between gap-2 border-b-2 border-l-2 border-r-2 border-slate-700 p-4 bg-slate-900/20 mx-12">
+              <div className="min-w-[600px] relative h-80 flex items-end justify-between gap-2 border-b-2 border-l-2 border-r-2 border-border p-4 bg-background mx-12">
                 {/* 80% Reference Line - Horizontal */}
                 <div className="absolute left-0 right-0 border-t-2 border-dashed border-red-500/60 pointer-events-none" 
                      style={{ bottom: 'calc(80% + 1rem)' }}>
-                  <span className="absolute -right-2 -top-3 text-xs font-bold text-red-600 bg-slate-900 px-1">80%</span>
+                  <span className="absolute -right-2 -top-3 text-xs font-bold text-red-600 bg-background px-1">80%</span>
                 </div>
 
                 {data.map((item, idx) => {
@@ -134,12 +134,12 @@ export default function ParetoChart({
                       {/* Bar */}
                       <div className="relative h-full flex flex-col justify-end items-center">
                         {/* Percentage label on top */}
-                        <div className="absolute -top-8 text-xs font-semibold text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute -top-8 text-xs font-semibold text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
                           {item.percentage}%
                         </div>
                         
                         {/* Count label */}
-                        <div className="absolute -top-14 text-xs font-bold text-foreground bg-slate-800 px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute -top-14 text-xs font-bold text-foreground bg-muted px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
                           {item.count}
                         </div>
 
@@ -155,7 +155,7 @@ export default function ParetoChart({
                         />
                         
                         {/* Cumulative percentage point */}
-                        <div className="absolute -right-1 w-3 h-3 bg-orange-500 rounded-full border-2 border-slate-900 shadow-lg" 
+                        <div className="absolute -right-1 w-3 h-3 bg-orange-500 rounded-full border-2 border-border shadow-lg" 
                              style={{ bottom: `${linePoint}%` }}
                              title={`Cumulative: ${item.cumulative}%`} 
                         />
@@ -181,7 +181,7 @@ export default function ParetoChart({
                 </svg>
 
                 {/* Left Y-axis labels (Bar counts) */}
-                <div className="absolute -left-12 inset-y-0 flex flex-col justify-between text-xs text-slate-500 pr-2">
+                <div className="absolute -left-12 inset-y-0 flex flex-col justify-between text-xs text-muted-foreground pr-2">
                   <span className="text-right">{maxCount}</span>
                   <span className="text-right">{Math.round(maxCount * 0.75)}</span>
                   <span className="text-right">{Math.round(maxCount * 0.5)}</span>
@@ -205,10 +205,10 @@ export default function ParetoChart({
               {data.map((item, idx) => {
                 const isVital = item.cumulative <= 80
                 return (
-                  <div key={idx} className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm gap-2 p-2 bg-slate-900/30 rounded-lg">
+                  <div key={idx} className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm gap-2 p-2 bg-background rounded-lg">
                     <div className="flex items-center gap-2 flex-wrap">
                       <div className={`w-3 h-3 rounded shrink-0 ${isVital ? 'bg-red-500' : 'bg-blue-500'}`} />
-                      <span className="text-slate-300 font-medium">{item.factor}</span>
+                      <span className="text-muted-foreground font-medium">{item.factor}</span>
                       {isVital && (
                         <span className="text-xs px-2 py-0.5 bg-red-500/20 text-red-600 border border-red-500/30 rounded">
                           VITAL 20%
@@ -216,13 +216,13 @@ export default function ParetoChart({
                       )}
                     </div>
                     <div className="flex items-center gap-3 sm:gap-4 flex-wrap text-xs sm:text-sm pl-5 sm:pl-0">
-                      <span className="text-slate-400">{item.count} occurrences</span>
-                      <span className="text-slate-400">({item.percentage}%)</span>
+                      <span className="text-muted-foreground">{item.count} occurrences</span>
+                      <span className="text-muted-foreground">({item.percentage}%)</span>
                       {item.cost_estimate && (
                         <span className="text-emerald-600 font-semibold">${item.cost_estimate.toLocaleString()}</span>
                       )}
                       <span className="text-orange-600 font-semibold flex items-center gap-1">
-                        <span className="text-xs text-slate-500">Σ</span>{item.cumulative}%
+                        <span className="text-xs text-muted-foreground">Σ</span>{item.cumulative}%
                       </span>
                     </div>
                   </div>
@@ -240,7 +240,7 @@ export default function ParetoChart({
                     <p className="text-sm font-bold text-red-700 mb-1">
                       Pareto Principle (80/20 Rule)
                     </p>
-                    <p className="text-xs text-slate-300 leading-relaxed">
+                    <p className="text-xs text-muted-foreground leading-relaxed">
                       <span className="font-semibold text-red-600">
                         {data.filter(d => d.cumulative <= 80).length} cause{data.filter(d => d.cumulative <= 80).length !== 1 ? 's' : ''}
                       </span>
@@ -262,7 +262,7 @@ export default function ParetoChart({
                     <p className="text-sm font-bold text-blue-700 mb-1">
                       Recommended Action
                     </p>
-                    <p className="text-xs text-slate-300 leading-relaxed">
+                    <p className="text-xs text-muted-foreground leading-relaxed">
                       Prioritize resources on the <span className="text-red-600 font-semibold">red bars</span> (vital causes) for maximum efficiency.
                     </p>
                     <p className="text-xs text-blue-700/70 mt-2">
@@ -277,19 +277,19 @@ export default function ParetoChart({
             <div className="mt-3 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs">
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 bg-red-500 rounded" />
-                <span className="text-slate-400">Vital Few (≤80%)</span>
+                <span className="text-muted-foreground">Vital Few (≤80%)</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 bg-blue-500 rounded" />
-                <span className="text-slate-400">Trivial Many ({'>'}80%)</span>
+                <span className="text-muted-foreground">Trivial Many ({'>'}80%)</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-4 h-1 bg-orange-500" />
-                <span className="text-slate-400">Cumulative %</span>
+                <span className="text-muted-foreground">Cumulative %</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-4 h-0.5 bg-red-500 border-t-2 border-dashed" />
-                <span className="text-slate-400">80% Threshold</span>
+                <span className="text-muted-foreground">80% Threshold</span>
               </div>
             </div>
           </div>

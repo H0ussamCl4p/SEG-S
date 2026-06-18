@@ -93,11 +93,11 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
 
   if (loading) {
     return (
-      <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+      <div className="bg-muted border border-border rounded-xl p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-slate-700 rounded w-1/3"></div>
-          <div className="h-4 bg-slate-700 rounded w-2/3"></div>
-          <div className="h-4 bg-slate-700 rounded w-1/2"></div>
+          <div className="h-6 bg-muted rounded w-1/3"></div>
+          <div className="h-4 bg-muted rounded w-2/3"></div>
+          <div className="h-4 bg-muted rounded w-1/2"></div>
         </div>
       </div>
     )
@@ -105,12 +105,12 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
 
   if (error || !prediction) {
     return (
-      <div className="bg-slate-800/50 border border-red-500/30 rounded-xl p-6">
+      <div className="bg-muted border border-red-500/30 rounded-xl p-6">
         <div className="flex items-center gap-3 text-red-500">
           <AlertTriangle className="w-5 h-5" />
           <div>
             <p className="font-semibold">Prediction Service Unavailable</p>
-            <p className="text-sm text-slate-400">{error || 'No data available'}</p>
+            <p className="text-sm text-muted-foreground">{error || 'No data available'}</p>
           </div>
         </div>
       </div>
@@ -126,7 +126,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
       case 'HIGH': return 'text-orange-600 bg-orange-500/10 border-orange-500/30'
       case 'MEDIUM': return 'text-amber-600 bg-yellow-500/10 border-yellow-500/30'
       case 'LOW': return 'text-emerald-600 bg-green-500/10 border-green-500/30'
-      default: return 'text-slate-500 bg-slate-500/10 border-slate-500/30'
+      default: return 'text-muted-foreground bg-muted border-border'
     }
   }
 
@@ -154,22 +154,22 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
       </div>
 
       {/* Overall Assessment */}
-      <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+      <div className="bg-muted border border-border rounded-xl p-6">
         <div className="flex items-start gap-4">
           <div className={`p-3 rounded-lg ${getRiskColor(overall_assessment.risk_level)}`}>
             {getRiskIcon(overall_assessment.risk_level)}
           </div>
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-foreground mb-2">Overall Assessment</h3>
-            <p className="text-slate-300 mb-3">{overall_assessment.recommendation}</p>
-            <p className="text-sm text-slate-400">{overall_assessment.analysis}</p>
+            <p className="text-muted-foreground mb-3">{overall_assessment.recommendation}</p>
+            <p className="text-sm text-muted-foreground">{overall_assessment.analysis}</p>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Current State */}
-        <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+        <div className="bg-muted border border-border rounded-xl p-6">
           <div className="flex items-center gap-3 mb-4">
             <Activity className="w-5 h-5 text-blue-500" />
             <h3 className="text-lg font-semibold text-foreground">Real-time Detection</h3>
@@ -177,22 +177,22 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">Status</span>
+              <span className="text-muted-foreground">Status</span>
               <span className={`px-3 py-1 rounded-lg border font-semibold text-sm ${getRiskColor(current_state.risk_level)}`}>
                 {current_state.status}
               </span>
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">Anomaly Score</span>
+              <span className="text-muted-foreground">Anomaly Score</span>
               <span className="text-foreground font-semibold">{current_state.anomaly_score}/100</span>
             </div>
 
             {Array.isArray(current_state.warnings) && current_state.warnings.length > 0 && (
               <div className="mt-4 space-y-2">
-                <p className="text-sm font-semibold text-slate-300">Warnings:</p>
+                <p className="text-sm font-semibold text-muted-foreground">Warnings:</p>
                 {current_state.warnings.map((warning, idx) => (
-                  <div key={idx} className="flex items-start gap-2 text-sm text-slate-300 bg-slate-900/50 p-2 rounded">
+                  <div key={idx} className="flex items-start gap-2 text-sm text-muted-foreground bg-background p-2 rounded">
                     <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
                     <span>{warning}</span>
                   </div>
@@ -201,13 +201,13 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
             )}
 
             {!current_state.model_loaded && (
-              <p className="text-xs text-slate-500 mt-2">Model not loaded</p>
+              <p className="text-xs text-muted-foreground mt-2">Model not loaded</p>
             )}
           </div>
         </div>
 
         {/* Future Prediction */}
-        <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+        <div className="bg-muted border border-border rounded-xl p-6">
           <div className="flex items-center gap-3 mb-4">
             <TrendingUp className="w-5 h-5 text-purple-500" />
             <h3 className="text-lg font-semibold text-foreground">Future Forecast</h3>
@@ -216,7 +216,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
           {future_prediction.model_loaded ? (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Risk Level</span>
+                <span className="text-muted-foreground">Risk Level</span>
                 <span className={`px-3 py-1 rounded-lg border font-semibold text-sm ${getRiskColor(future_prediction.future_risk_level)}`}>
                   {future_prediction.future_risk_emoji} {future_prediction.future_risk_level}
                 </span>
@@ -225,12 +225,12 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
               {future_prediction.predicted_mttf !== null && (
                 <>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Predicted MTTF</span>
+                    <span className="text-muted-foreground">Predicted MTTF</span>
                     <span className="text-foreground font-semibold">{future_prediction.predicted_mttf.toFixed(2)} hrs</span>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Time to Failure</span>
+                    <span className="text-muted-foreground">Time to Failure</span>
                     <span className="text-foreground font-semibold flex items-center gap-1">
                       <Clock className="w-4 h-4" />
                       ~{future_prediction.estimated_days_until_failure?.toFixed(1)} days
@@ -240,21 +240,21 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
               )}
 
               {future_prediction.most_critical_factor && (
-                <div className="mt-4 p-3 bg-slate-900/50 rounded-lg">
-                  <p className="text-xs text-slate-400 mb-1">Most Critical Factor</p>
+                <div className="mt-4 p-3 bg-background rounded-lg">
+                  <p className="text-xs text-muted-foreground mb-1">Most Critical Factor</p>
                   <p className="text-sm font-semibold text-foreground">
                     {future_prediction.most_critical_factor.name}
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-muted-foreground">
                     Importance: {future_prediction.most_critical_factor.importance.toFixed(1)}%
                   </p>
                 </div>
               )}
 
-              <div className="mt-4 pt-4 border-t border-slate-700">
-                <p className="text-sm text-slate-300">{future_prediction.recommended_action}</p>
+              <div className="mt-4 pt-4 border-t border-border">
+                <p className="text-sm text-muted-foreground">{future_prediction.recommended_action}</p>
                 {future_prediction.confidence && (
-                  <p className="text-xs text-slate-500 mt-2">Confidence: {future_prediction.confidence}</p>
+                  <p className="text-xs text-muted-foreground mt-2">Confidence: {future_prediction.confidence}</p>
                 )}
               </div>
             </div>
@@ -263,7 +263,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
               <AlertTriangle className="w-5 h-5" />
               <div>
                 <p className="font-semibold">Model Not Loaded</p>
-                <p className="text-sm text-slate-400">{future_prediction.recommended_action}</p>
+                <p className="text-sm text-muted-foreground">{future_prediction.recommended_action}</p>
               </div>
             </div>
           )}

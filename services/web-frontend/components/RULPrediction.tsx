@@ -106,7 +106,7 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
       case 'ATTENTION': return 'bg-yellow-500'
       case 'NORMAL': return 'bg-blue-500'
       case 'HEALTHY': return 'bg-green-500'
-      default: return 'bg-gray-500'
+      default: return 'bg-muted'
     }
   }
 
@@ -116,7 +116,7 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
       case 'HIGH': return 'text-orange-600 bg-orange-500/10 border-orange-500/30'
       case 'MEDIUM': return 'text-amber-600 bg-yellow-500/10 border-yellow-500/30'
       case 'LOW': return 'text-emerald-600 bg-green-500/10 border-green-500/30'
-      default: return 'text-gray-400 bg-gray-500/10 border-gray-500/30'
+      default: return 'text-muted-foreground bg-muted border-border'
     }
   }
 
@@ -136,7 +136,7 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
 
   if (loading) {
     return (
-      <Card className="border-slate-800">
+      <Card className="border-border">
         <CardContent className="p-6">
           <div className="flex items-center justify-center h-32">
             <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
@@ -167,7 +167,7 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
   }
 
   return (
-    <Card className="border-slate-800">
+    <Card className="border-border">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Clock className="w-5 h-5 text-blue-500" />
@@ -179,7 +179,7 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
       </CardHeader>
       <CardContent className="space-y-4">
         {rulData.map((data) => (
-          <div key={data.machine_id} className="border border-slate-800 rounded-lg p-4 space-y-4">
+          <div key={data.machine_id} className="border border-border rounded-lg p-4 space-y-4">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
@@ -188,7 +188,7 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
                 </div>
                 <div className="min-w-0">
                   <h3 className="font-semibold text-lg truncate">{data.machine_id}</h3>
-                  <p className="text-sm text-slate-400">
+                  <p className="text-sm text-muted-foreground">
                     Health: {data.health_score}% • Confidence: {data.confidence}%
                   </p>
                 </div>
@@ -228,13 +228,13 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
                 </div>
               </div>
 
-              <div className="p-4 rounded-lg bg-slate-900/40 border border-slate-800">
+              <div className="p-4 rounded-lg bg-background border border-border">
                 <div className="flex items-center gap-2 mb-2">
                   <Calendar className="w-4 h-4" />
                   <span className="text-sm font-medium">Predicted Date</span>
                 </div>
                 <div className="text-2xl font-bold">{data.predicted_failure_date}</div>
-                <div className="text-xs text-slate-400 mt-1">
+                <div className="text-xs text-muted-foreground mt-1">
                   Estimated failure date
                 </div>
               </div>
@@ -243,10 +243,10 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
             {/* Progress Bar */}
             <div>
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-slate-400">Health Degradation Progress</span>
+                <span className="text-muted-foreground">Health Degradation Progress</span>
                 <span className="font-semibold">{data.degradation_rate}% per day</span>
               </div>
-              <div className="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+              <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
                 <div
                   className={`h-full transition-all duration-500 ${
                     data.rul_days <= 3 ? 'bg-red-500' :
@@ -257,7 +257,7 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
                   style={{ width: `${Math.min(100, (data.health_score / 100) * 100)}%` }}
                 />
               </div>
-              <div className="flex justify-between text-xs text-slate-500 mt-1">
+              <div className="flex justify-between text-xs text-muted-foreground mt-1">
                 <span>Critical (20%)</span>
                 <span>Healthy (100%)</span>
               </div>
@@ -271,7 +271,7 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
               </div>
               <div className="flex flex-wrap gap-2">
                 {data.critical_factors.map((factor, idx) => (
-                  <Badge key={idx} variant="outline" className="text-xs border-slate-700">
+                  <Badge key={idx} variant="outline" className="text-xs border-border">
                     {factor}
                   </Badge>
                 ))}
@@ -280,14 +280,14 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
 
             {/* Sensor Readings */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-              <div className="flex items-center justify-between p-3 bg-slate-900/40 rounded">
-                <span className="text-slate-400">Avg Vibration</span>
+              <div className="flex items-center justify-between p-3 bg-background rounded">
+                <span className="text-muted-foreground">Avg Vibration</span>
                 <span className={`font-semibold ${data.avg_vibration > 75 ? 'text-red-600' : 'text-foreground'}`}>
                   {data.avg_vibration}
                 </span>
               </div>
-              <div className="flex items-center justify-between p-3 bg-slate-900/40 rounded">
-                <span className="text-slate-400">Avg Temperature</span>
+              <div className="flex items-center justify-between p-3 bg-background rounded">
+                <span className="text-muted-foreground">Avg Temperature</span>
                 <span className={`font-semibold ${data.avg_temperature > 70 ? 'text-red-600' : 'text-foreground'}`}>
                   {data.avg_temperature}°C
                 </span>
@@ -306,7 +306,7 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
             </div>
 
             {/* Confidence Indicator */}
-            <div className="flex items-center gap-2 text-xs text-slate-400">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Activity className="w-3 h-3" />
               <span>
                 Prediction confidence: {data.confidence}% 
@@ -317,7 +317,7 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
         ))}
 
         {rulData.length === 0 && (
-          <div className="text-center py-8 text-slate-500">
+          <div className="text-center py-8 text-muted-foreground">
             <Clock className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>No RUL data available</p>
             <p className="text-sm mt-1">Collecting baseline data...</p>

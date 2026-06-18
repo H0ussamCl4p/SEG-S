@@ -20,7 +20,7 @@ function StatusBadge({ status }: { status: string }) {
     NORMAL: 'bg-green-500/10 text-emerald-600 border-green-500/30',
     WARNING: 'bg-yellow-500/10 text-amber-600 border-yellow-500/30',
     ANOMALY: 'bg-red-500/10 text-red-500 border-red-500/30',
-    UNKNOWN: 'bg-slate-500/10 text-slate-400 border-slate-500/30',
+    UNKNOWN: 'bg-muted text-muted-foreground border-border',
   }
   return <Badge variant="outline" className={variants[status] || variants.UNKNOWN}>{status}</Badge>
 }
@@ -42,7 +42,7 @@ export default function StatusPage() {
       {/* Multi-Machine Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {allMachines.map((machine) => (
-          <Card key={machine.id} className="border-slate-800">
+          <Card key={machine.id} className="border-border">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">{machine.name}</CardTitle>
@@ -53,19 +53,19 @@ export default function StatusPage() {
             <CardContent>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400 text-sm">Vibration</span>
+                  <span className="text-muted-foreground text-sm">Vibration</span>
                   <span className="text-foreground font-medium">{machine.data?.vibration?.toFixed(1) || '--'}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400 text-sm">Temperature</span>
+                  <span className="text-muted-foreground text-sm">Temperature</span>
                   <span className="text-foreground font-medium">{machine.data?.temperature?.toFixed(1) || '--'}°C</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400 text-sm">AI Score</span>
+                  <span className="text-muted-foreground text-sm">AI Score</span>
                   <span className="text-foreground font-medium">{machine.data?.score?.toFixed(3) || '--'}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400 text-sm">Health</span>
+                  <span className="text-muted-foreground text-sm">Health</span>
                   <span className={`font-medium ${
                     (machine.data?.health?.score ?? 0) >= 80 ? 'text-emerald-600' :
                     (machine.data?.health?.score ?? 0) >= 50 ? 'text-amber-600' : 'text-red-600'
@@ -73,8 +73,8 @@ export default function StatusPage() {
                     {machine.data?.health?.score?.toFixed(0) || '--'}%
                   </span>
                 </div>
-                <div className="pt-2 border-t border-slate-800">
-                  <span className="text-xs text-slate-500">
+                <div className="pt-2 border-t border-border">
+                  <span className="text-xs text-muted-foreground">
                     {machine.data?.timestamp ? new Date(machine.data.timestamp).toLocaleTimeString() : 'No data'}
                   </span>
                 </div>
@@ -92,19 +92,19 @@ export default function StatusPage() {
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">Total Machines</span>
+              <span className="text-muted-foreground">Total Machines</span>
               <span className="text-foreground font-medium">{machines?.length || 2}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">ESP MTTF model</span>
+              <span className="text-muted-foreground">ESP MTTF model</span>
               <span className="text-foreground font-medium">Exponential thermal + linear vibration</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">Refresh Interval</span>
+              <span className="text-muted-foreground">Refresh Interval</span>
               <span className="text-foreground font-medium">3 seconds</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">Auto-Maintenance</span>
+              <span className="text-muted-foreground">Auto-Maintenance</span>
               <span className="text-emerald-600 font-medium">✓ Enabled</span>
             </div>
           </div>

@@ -86,13 +86,13 @@ export default function AddEquipmentDialog({ onSuccess }: AddEquipmentDialogProp
           Add Equipment
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-slate-900 border-slate-800 text-foreground max-w-2xl">
+      <DialogContent className="bg-background border-border text-foreground max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Wifi className="w-5 h-5 text-blue-600" />
             Connect New Equipment (ESP32/PLC)
           </DialogTitle>
-          <DialogDescription className="text-slate-400">
+          <DialogDescription className="text-muted-foreground">
             Register equipment connected via ESP32 MQTT bridge. The system will automatically monitor data from the configured topic.
           </DialogDescription>
         </DialogHeader>
@@ -100,7 +100,7 @@ export default function AddEquipmentDialog({ onSuccess }: AddEquipmentDialogProp
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Equipment ID */}
           <div>
-            <Label htmlFor="id" className="text-slate-300">
+            <Label htmlFor="id" className="text-muted-foreground">
               Equipment ID <span className="text-red-600">*</span>
             </Label>
             <Input
@@ -108,15 +108,15 @@ export default function AddEquipmentDialog({ onSuccess }: AddEquipmentDialogProp
               value={formData.id}
               onChange={(e) => setFormData({ ...formData, id: e.target.value.toUpperCase() })}
               placeholder="e.g., PLC_001, ESP32_MOTOR_01"
-              className="bg-slate-800 border-slate-700 text-foreground"
+              className="bg-muted border-border text-foreground"
               required
             />
-            <p className="text-xs text-slate-500 mt-1">Unique identifier for this equipment</p>
+            <p className="text-xs text-muted-foreground mt-1">Unique identifier for this equipment</p>
           </div>
 
           {/* Equipment Name */}
           <div>
-            <Label htmlFor="name" className="text-slate-300">
+            <Label htmlFor="name" className="text-muted-foreground">
               Equipment Name <span className="text-red-600">*</span>
             </Label>
             <Input
@@ -124,7 +124,7 @@ export default function AddEquipmentDialog({ onSuccess }: AddEquipmentDialogProp
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="e.g., Assembly Line Robot, Cooling Fan"
-              className="bg-slate-800 border-slate-700 text-foreground"
+              className="bg-muted border-border text-foreground"
               required
             />
           </div>
@@ -132,14 +132,14 @@ export default function AddEquipmentDialog({ onSuccess }: AddEquipmentDialogProp
           {/* Type and Location */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="type" className="text-slate-300">
+              <Label htmlFor="type" className="text-muted-foreground">
                 Type <span className="text-red-600">*</span>
               </Label>
               <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
-                <SelectTrigger className="bg-slate-800 border-slate-700 text-foreground">
+                <SelectTrigger className="bg-muted border-border text-foreground">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-slate-900 border-slate-800">
+                <SelectContent className="bg-background border-border">
                   <SelectItem value="Motor" className="text-foreground">Motor</SelectItem>
                   <SelectItem value="Pump" className="text-foreground">Pump</SelectItem>
                   <SelectItem value="Conveyor" className="text-foreground">Conveyor</SelectItem>
@@ -153,7 +153,7 @@ export default function AddEquipmentDialog({ onSuccess }: AddEquipmentDialogProp
             </div>
 
             <div>
-              <Label htmlFor="location" className="text-slate-300">
+              <Label htmlFor="location" className="text-muted-foreground">
                 Location <span className="text-red-600">*</span>
               </Label>
               <Input
@@ -161,7 +161,7 @@ export default function AddEquipmentDialog({ onSuccess }: AddEquipmentDialogProp
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                 placeholder="e.g., Line A, Building 2"
-                className="bg-slate-800 border-slate-700 text-foreground"
+                className="bg-muted border-border text-foreground"
                 required
               />
             </div>
@@ -169,7 +169,7 @@ export default function AddEquipmentDialog({ onSuccess }: AddEquipmentDialogProp
 
           {/* MQTT Topic */}
           <div>
-            <Label htmlFor="mqtt_topic" className="text-slate-300 flex items-center gap-2">
+            <Label htmlFor="mqtt_topic" className="text-muted-foreground flex items-center gap-2">
               <Database className="w-4 h-4" />
               MQTT Topic <span className="text-red-600">*</span>
             </Label>
@@ -178,10 +178,10 @@ export default function AddEquipmentDialog({ onSuccess }: AddEquipmentDialogProp
               value={formData.mqtt_topic}
               onChange={(e) => setFormData({ ...formData, mqtt_topic: e.target.value })}
               placeholder="factory/plc/data"
-              className="bg-slate-800 border-slate-700 text-foreground font-mono"
+              className="bg-muted border-border text-foreground font-mono"
               required
             />
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               ESP32 will publish sensor data to this topic
             </p>
           </div>
@@ -189,11 +189,11 @@ export default function AddEquipmentDialog({ onSuccess }: AddEquipmentDialogProp
           {/* ESP32 Configuration Info */}
           <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
             <h4 className="text-sm font-semibold text-blue-700 mb-2">📡 ESP32 Configuration</h4>
-            <div className="text-xs text-slate-300 space-y-1 font-mono">
-              <p><span className="text-slate-500">Broker:</span> mqtt://mosquitto:1883</p>
-              <p><span className="text-slate-500">Topic:</span> {formData.mqtt_topic}</p>
-              <p><span className="text-slate-500">Data Format (JSON):</span></p>
-              <pre className="text-xs bg-slate-950 p-2 rounded mt-1 overflow-x-auto">
+            <div className="text-xs text-muted-foreground space-y-1 font-mono">
+              <p><span className="text-muted-foreground">Broker:</span> mqtt://mosquitto:1883</p>
+              <p><span className="text-muted-foreground">Topic:</span> {formData.mqtt_topic}</p>
+              <p><span className="text-muted-foreground">Data Format (JSON):</span></p>
+              <pre className="text-xs bg-background p-2 rounded mt-1 overflow-x-auto">
 {`{
   "machine_id": "${formData.id || 'YOUR_ID'}",
   "equipment_name": "${formData.name || 'YOUR_NAME'}",
@@ -211,7 +211,7 @@ export default function AddEquipmentDialog({ onSuccess }: AddEquipmentDialogProp
               type="button"
               variant="outline"
               onClick={() => setOpen(false)}
-              className="border-slate-700 text-slate-300"
+              className="border-border text-muted-foreground"
             >
               Cancel
             </Button>

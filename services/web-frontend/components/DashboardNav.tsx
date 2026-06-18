@@ -64,7 +64,7 @@ export default function DashboardNav({ mobile = false, onNavigate }: DashboardNa
           >
             <Icon className={cn(
               "h-[18px] w-[18px] transition-colors",
-              active ? "text-emerald-600" : "text-zinc-400 group-hover:text-emerald-600"
+              active ? "text-emerald-600" : "text-muted-foreground group-hover:text-emerald-600"
             )} />
             <span className="text-sm">{item.label}</span>
             {active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-400" />}

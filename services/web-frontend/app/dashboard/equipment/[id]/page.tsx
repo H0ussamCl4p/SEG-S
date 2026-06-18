@@ -44,8 +44,8 @@ export default function EquipmentDetailPage() {
                   maintenanceUrgency={liveData.health.maintenance_urgency}
                 />
               ) : (
-                <div className="p-8 bg-slate-900/50 border border-slate-800 rounded-xl h-full flex items-center justify-center">
-                  <p className="text-slate-500">Loading health...</p>
+                <div className="p-8 bg-background border border-border rounded-xl h-full flex items-center justify-center">
+                  <p className="text-muted-foreground">Loading health...</p>
                 </div>
               )}
             </div>
@@ -54,7 +54,7 @@ export default function EquipmentDetailPage() {
                 <TelemetryCharts data={historyData} />
               ) : (
                 <div className="h-48 flex items-center justify-center">
-                  <p className="text-slate-500">Waiting for telemetry...</p>
+                  <p className="text-muted-foreground">Waiting for telemetry...</p>
                 </div>
               )}
             </div>

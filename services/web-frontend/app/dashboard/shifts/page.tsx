@@ -22,7 +22,7 @@ type Shift = {
 
 function StatusIcon({ status }: { status: Shift['status'] }) {
   if (status === 'ACTIVE') return <CheckCircle className="w-4 h-4 text-emerald-600" />
-  if (status === 'COMPLETED') return <XCircle className="w-4 h-4 text-slate-500" />
+  if (status === 'COMPLETED') return <XCircle className="w-4 h-4 text-muted-foreground" />
   return <Clock className="w-4 h-4 text-amber-600" />
 }
 
@@ -49,24 +49,24 @@ export default function ShiftManagementPage() {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <div className="text-center py-8 text-slate-400">Loading shifts...</div>
+            <div className="text-center py-8 text-muted-foreground">Loading shifts...</div>
           ) : (
             <div className="space-y-3">
               {shifts.map(shift => (
-                <div key={shift.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-900/50 border border-slate-800 rounded-lg gap-4">
+                <div key={shift.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-background border border-border rounded-lg gap-4">
                   <div className="flex items-center gap-4">
                     <StatusIcon status={shift.status} />
                     <div>
                       <p className="text-foreground font-medium">{shift.name}</p>
-                      <p className="text-slate-400 text-sm">{shift.startTime} - {shift.endTime}</p>
+                      <p className="text-muted-foreground text-sm">{shift.startTime} - {shift.endTime}</p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
                     <div className="text-left sm:text-right">
-                      <p className="text-slate-400 text-xs">Operator</p>
+                      <p className="text-muted-foreground text-xs">Operator</p>
                       <p className="text-foreground text-sm">{shift.operator}</p>
                     </div>
-                    <Badge variant="outline" className="border-slate-700 text-slate-300">
+                    <Badge variant="outline" className="border-border text-muted-foreground">
                       {shift.status}
                     </Badge>
                   </div>
@@ -84,7 +84,7 @@ export default function ShiftManagementPage() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-foreground">{productionCount.toLocaleString()}</div>
-            <p className="text-slate-400 text-sm mt-1">units this shift</p>
+            <p className="text-muted-foreground text-sm mt-1">units this shift</p>
           </CardContent>
         </Card>
 
@@ -94,7 +94,7 @@ export default function ShiftManagementPage() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-amber-600">{downtime} min</div>
-            <p className="text-slate-400 text-sm mt-1">total this shift</p>
+            <p className="text-muted-foreground text-sm mt-1">total this shift</p>
           </CardContent>
         </Card>
 
@@ -104,7 +104,7 @@ export default function ShiftManagementPage() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-emerald-600">{efficiency.toFixed(1)}%</div>
-            <p className="text-slate-400 text-sm mt-1">OEE score</p>
+            <p className="text-muted-foreground text-sm mt-1">OEE score</p>
           </CardContent>
         </Card>
       </div>

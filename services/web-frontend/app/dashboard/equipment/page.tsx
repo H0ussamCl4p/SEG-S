@@ -26,7 +26,7 @@ function StatusBadge({ status }: { status: Equipment['status'] }) {
     MAINTENANCE: 'warning',
   } as const
   const label = status === 'ONLINE' ? 'Online' : status === 'OFFLINE' ? 'Offline' : 'Maintenance'
-  return <Badge variant="outline" className={`border-slate-700 text-slate-300`}>{label}</Badge>
+  return <Badge variant="outline" className={`border-border text-muted-foreground`}>{label}</Badge>
 }
 
 export default function EquipmentPage() {
@@ -53,8 +53,8 @@ export default function EquipmentPage() {
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-slate-900/60">
-                <tr className="text-slate-400">
+              <thead className="bg-background">
+                <tr className="text-muted-foreground">
                   <th className="text-left px-3 py-2">ID</th>
                   <th className="text-left px-3 py-2">Name</th>
                   <th className="text-left px-3 py-2">Type</th>
@@ -64,22 +64,22 @@ export default function EquipmentPage() {
               </thead>
               <tbody>
                 {equipment.map(eq => (
-                  <tr key={eq.id} className="border-t border-slate-800">
+                  <tr key={eq.id} className="border-t border-border">
                     <td className="px-3 py-2 text-foreground font-medium">
                       <a href={`/dashboard/equipment/${encodeURIComponent(eq.id)}`} className="hover:underline">
                         {eq.id}
                       </a>
                     </td>
-                    <td className="px-3 py-2 text-slate-300">{eq.name}</td>
-                    <td className="px-3 py-2 text-slate-300">{eq.type}</td>
-                    <td className="px-3 py-2 text-slate-300">{eq.location || '-'}</td>
+                    <td className="px-3 py-2 text-muted-foreground">{eq.name}</td>
+                    <td className="px-3 py-2 text-muted-foreground">{eq.type}</td>
+                    <td className="px-3 py-2 text-muted-foreground">{eq.location || '-'}</td>
                     <td className="px-3 py-2"><StatusBadge status={eq.status} /></td>
                   </tr>
                 ))}
               </tbody>
             </table>
             {error && (
-              <p className="text-xs text-slate-500 mt-2">Showing sample data (API unavailable).</p>
+              <p className="text-xs text-muted-foreground mt-2">Showing sample data (API unavailable).</p>
             )}
           </div>
         </CardContent>

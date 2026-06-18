@@ -84,7 +84,7 @@ export default function MaintenanceForecast({
   }
 
   return (
-    <Card className="border-slate-800">
+    <Card className="border-border">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
@@ -120,13 +120,13 @@ export default function MaintenanceForecast({
         {/* Critical Factors */}
         {criticalFactors.length > 0 && (
           <div>
-            <h4 className="text-sm font-semibold text-slate-300 mb-2 flex items-center gap-2">
+            <h4 className="text-sm font-semibold text-muted-foreground mb-2 flex items-center gap-2">
               <Wrench className="w-4 h-4" />
               Critical Factors
             </h4>
             <div className="space-y-2">
               {criticalFactors.map((factor, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-sm text-slate-400 bg-slate-900/50 p-2 rounded">
+                <div key={idx} className="flex items-center gap-2 text-sm text-muted-foreground bg-background p-2 rounded">
                   <span className="text-red-600">•</span>
                   {factor}
                 </div>
@@ -155,7 +155,7 @@ export default function MaintenanceForecast({
           )}
         </Button>
 
-        <p className="text-xs text-slate-500 text-center">
+        <p className="text-xs text-muted-foreground text-center">
           This will create a scheduled maintenance task in the calendar
         </p>
       </CardContent>

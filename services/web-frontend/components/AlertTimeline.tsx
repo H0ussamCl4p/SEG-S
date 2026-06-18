@@ -14,9 +14,9 @@ export default function AlertTimeline({ alerts }: AlertTimelineProps) {
   if (!alerts || alerts.length === 0) {
     return (
       <div className="text-center py-8">
-        <Activity className="w-12 h-12 text-slate-700 mx-auto mb-3" />
-        <p className="text-slate-500">No alerts in the last 24 hours</p>
-        <p className="text-sm text-slate-600 mt-1">System operating normally</p>
+        <Activity className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+        <p className="text-muted-foreground">No alerts in the last 24 hours</p>
+        <p className="text-sm text-muted-foreground mt-1">System operating normally</p>
       </div>
     )
   }
@@ -44,12 +44,12 @@ export default function AlertTimeline({ alerts }: AlertTimelineProps) {
                   <span className={`font-semibold text-sm ${textColor}`}>
                     {alert.severity}
                   </span>
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-muted-foreground">
                     {formatDistanceToNow(new Date(alert.timestamp), { addSuffix: true })}
                   </span>
                 </div>
                 <p className="text-sm text-foreground mb-2">{alert.message}</p>
-                <div className="flex gap-4 text-xs text-slate-400">
+                <div className="flex gap-4 text-xs text-muted-foreground">
                   <span>Vibration: {alert.vibration}</span>
                   <span>Temp: {alert.temperature}°C</span>
                   <span>Score: {alert.score}</span>

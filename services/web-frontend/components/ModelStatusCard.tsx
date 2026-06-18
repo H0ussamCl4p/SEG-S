@@ -45,7 +45,7 @@ export default function ModelStatusCard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-slate-400 flex items-center gap-2">
+              <span className="text-muted-foreground flex items-center gap-2">
                 <Activity className="w-4 h-4" />
                 Anomaly Detection
               </span>
@@ -53,13 +53,13 @@ export default function ModelStatusCard() {
                 {data?.anomaly_detection_model.available ? "Available" : "Missing"}
               </Badge>
             </div>
-            <p className="text-xs text-slate-500 truncate">{data?.anomaly_detection_model.type}</p>
-            <p className="text-xs text-slate-500 truncate">{data?.anomaly_detection_model.path}</p>
+            <p className="text-xs text-muted-foreground truncate">{data?.anomaly_detection_model.type}</p>
+            <p className="text-xs text-muted-foreground truncate">{data?.anomaly_detection_model.path}</p>
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-slate-400 flex items-center gap-2">
+              <span className="text-muted-foreground flex items-center gap-2">
                 <Zap className="w-4 h-4" />
                 Predictive (MTTF)
               </span>
@@ -67,8 +67,8 @@ export default function ModelStatusCard() {
                 {data?.predictive_model.available ? "Available" : "Missing"}
               </Badge>
             </div>
-            <p className="text-xs text-slate-500 truncate">{data?.predictive_model.type}</p>
-            <p className="text-xs text-slate-500 truncate">{data?.predictive_model.path}</p>
+            <p className="text-xs text-muted-foreground truncate">{data?.predictive_model.type}</p>
+            <p className="text-xs text-muted-foreground truncate">{data?.predictive_model.path}</p>
           </div>
         </div>
       </CardContent>

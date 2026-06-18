@@ -282,7 +282,7 @@ export function ChatInterface({ fullHeight = false }: ChatInterfaceProps) {
                 </div>
 
                 {/* Input Area */}
-                <div className="p-4 sm:p-6 bg-gradient-to-t from-zinc-950/80 to-transparent border-t border-border backdrop-blur-md">
+                <div className="p-4 sm:p-6 bg-gradient-to-t from-background to-transparent border-t border-border backdrop-blur-md">
                     <div className="relative max-w-4xl mx-auto flex flex-col gap-3">
                         <div className="relative group bg-background/80 border border-border rounded-2xl transition-all focus-within:border-emerald-500/50 focus-within:bg-background focus-within:shadow-lg focus-within:shadow-emerald-500/5 overflow-hidden backdrop-blur-xl">
                             <textarea
@@ -296,7 +296,7 @@ export function ChatInterface({ fullHeight = false }: ChatInterfaceProps) {
                                 }}
                                 placeholder="Ask about equipment status, anomalies, or technical docs..."
                                 disabled={isLoading}
-                                className="w-full bg-transparent border-none focus:ring-0 text-sm text-zinc-100 placeholder:text-muted-foreground resize-none max-h-48 min-h-[60px] p-4 custom-scrollbar"
+                                className="w-full bg-transparent border-none focus:ring-0 text-sm text-muted-foreground placeholder:text-muted-foreground resize-none max-h-48 min-h-[60px] p-4 custom-scrollbar"
                             />
 
                             <div className="flex items-center justify-between px-3 pb-3 pt-1 border-t border-border bg-white/[0.02]">

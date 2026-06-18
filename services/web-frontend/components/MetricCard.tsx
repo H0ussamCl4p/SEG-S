@@ -29,13 +29,13 @@ export default function MetricCard({
   return (
     <Card className={`transition-all hover:scale-[1.01] ${statusStyles[status]}`}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-slate-400">{title}</CardTitle>
-        {icon && <div className="text-slate-500">{icon}</div>}
+        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
+        {icon && <div className="text-muted-foreground">{icon}</div>}
       </CardHeader>
       <CardContent>
         <div className="flex items-baseline space-x-2">
           <span className="text-4xl font-bold text-foreground">{value.toFixed(2)}</span>
-          <span className="text-lg text-slate-500">{unit}</span>
+          <span className="text-lg text-muted-foreground">{unit}</span>
         </div>
         {trend !== undefined && (
           <div className={`mt-2 text-sm ${trendColor}`}>

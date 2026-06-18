@@ -13,9 +13,9 @@ export default function PatternAnalysis({ patterns }: PatternAnalysisProps) {
   if (!patterns || !Array.isArray(patterns) || patterns.length === 0) {
     return (
       <div className="text-center py-8">
-        <Brain className="w-12 h-12 text-slate-700 mx-auto mb-3 animate-pulse" />
-        <p className="text-slate-500">Analyzing patterns...</p>
-        <p className="text-sm text-slate-600 mt-1">Requires at least 7 days of data</p>
+        <Brain className="w-12 h-12 text-muted-foreground mx-auto mb-3 animate-pulse" />
+        <p className="text-muted-foreground">Analyzing patterns...</p>
+        <p className="text-sm text-muted-foreground mt-1">Requires at least 7 days of data</p>
       </div>
     )
   }
@@ -26,7 +26,7 @@ export default function PatternAnalysis({ patterns }: PatternAnalysisProps) {
       case 'MEDIUM': return { bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', text: 'text-amber-600', icon: 'text-amber-600' }
       case 'LOW': return { bg: 'bg-blue-500/10', border: 'border-blue-500/30', text: 'text-blue-500', icon: 'text-blue-500' }
       case 'INFO': return { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-500', icon: 'text-emerald-500' }
-      default: return { bg: 'bg-slate-500/10', border: 'border-slate-500/30', text: 'text-slate-500', icon: 'text-slate-500' }
+      default: return { bg: 'bg-muted', border: 'border-border', text: 'text-muted-foreground', icon: 'text-muted-foreground' }
     }
   }
 
@@ -62,7 +62,7 @@ export default function PatternAnalysis({ patterns }: PatternAnalysisProps) {
                       {pattern.confidence.toFixed(0)}% confidence
                     </span>
                     {pattern.occurrences > 0 && (
-                      <span className="text-xs text-slate-500">
+                      <span className="text-xs text-muted-foreground">
                         ({pattern.occurrences} occurrences)
                       </span>
                     )}
@@ -70,24 +70,24 @@ export default function PatternAnalysis({ patterns }: PatternAnalysisProps) {
                 </div>
                 
                 {/* Confidence Bar */}
-                <div className="w-full bg-slate-800 rounded-full h-1.5 mb-3 overflow-hidden">
+                <div className="w-full bg-muted rounded-full h-1.5 mb-3 overflow-hidden">
                   <div
                     className={`h-full ${colors.icon.replace('text-', 'bg-')} transition-all duration-1000 ease-out`}
                     style={{ width: `${pattern.confidence}%` }}
                   />
                 </div>
 
-                <p className="text-xs text-slate-300 mb-3 leading-relaxed">
+                <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
                   {pattern.description}
                 </p>
 
                 {/* Recommendation */}
-                <div className={`p-3 rounded-md bg-slate-900/50 border ${colors.border}`}>
+                <div className={`p-3 rounded-md bg-background border ${colors.border}`}>
                   <div className="flex items-start gap-2">
-                    <AlertCircle className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
+                    <AlertCircle className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="text-xs font-medium text-slate-400 mb-1">Recommendation:</p>
-                      <p className="text-xs text-slate-300 leading-relaxed">
+                      <p className="text-xs font-medium text-muted-foreground mb-1">Recommendation:</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
                         {pattern.recommendation}
                       </p>
                     </div>
@@ -97,8 +97,8 @@ export default function PatternAnalysis({ patterns }: PatternAnalysisProps) {
             </div>
 
             {/* Pattern Type Badge */}
-            <div className="flex items-center justify-between pt-3 border-t border-slate-700">
-              <span className="text-xs text-slate-500">
+            <div className="flex items-center justify-between pt-3 border-t border-border">
+              <span className="text-xs text-muted-foreground">
                 {pattern.type.replace(/_/g, ' ')}
               </span>
               <span className={`text-xs font-medium px-2 py-1 rounded ${colors.bg} ${colors.text}`}>

@@ -57,7 +57,7 @@ export default function HealthScoreCard({
             stroke="currentColor"
             strokeWidth="12"
             fill="none"
-            className="text-slate-800"
+            className="text-foreground"
           />
           {/* Progress circle */}
           <circle
@@ -82,7 +82,7 @@ export default function HealthScoreCard({
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-slate-800 rounded-full h-2 mb-4 overflow-hidden">
+      <div className="w-full bg-muted rounded-full h-2 mb-4 overflow-hidden">
         <div 
           className={`h-full ${colors.ring.replace('stroke-', 'bg-')} transition-all duration-1000 ease-out`}
           style={{ width: `${score}%` }}
@@ -91,7 +91,7 @@ export default function HealthScoreCard({
 
       {/* Maintenance info */}
       <div className="text-center">
-        <p className={`text-xs sm:text-sm font-medium ${maintenanceUrgency === 'immediate' ? 'text-red-600' : 'text-slate-400'}`}>
+        <p className={`text-xs sm:text-sm font-medium ${maintenanceUrgency === 'immediate' ? 'text-red-600' : 'text-muted-foreground'}`}>
           {getMaintenanceText()}
         </p>
       </div>
@@ -99,18 +99,18 @@ export default function HealthScoreCard({
       {/* Status indicators */}
       <div className="grid grid-cols-3 gap-2 mt-4 sm:mt-6 text-xs">
         <div className="text-center">
-          <div className={`w-full h-1 rounded mb-1 ${score >= 80 ? 'bg-emerald-500' : 'bg-slate-700'}`} />
-          <span className="text-slate-500 hidden sm:inline">Excellent</span>
-          <span className="text-slate-500 sm:hidden">Good</span>
+          <div className={`w-full h-1 rounded mb-1 ${score >= 80 ? 'bg-emerald-500' : 'bg-muted'}`} />
+          <span className="text-muted-foreground hidden sm:inline">Excellent</span>
+          <span className="text-muted-foreground sm:hidden">Good</span>
         </div>
         <div className="text-center">
-          <div className={`w-full h-1 rounded mb-1 ${score >= 40 && score < 80 ? 'bg-yellow-500' : 'bg-slate-700'}`} />
-          <span className="text-slate-500">Fair</span>
+          <div className={`w-full h-1 rounded mb-1 ${score >= 40 && score < 80 ? 'bg-yellow-500' : 'bg-muted'}`} />
+          <span className="text-muted-foreground">Fair</span>
         </div>
         <div className="text-center">
-          <div className={`w-full h-1 rounded mb-1 ${score < 40 ? 'bg-red-500' : 'bg-slate-700'}`} />
-          <span className="text-slate-500 hidden sm:inline">Critical</span>
-          <span className="text-slate-500 sm:hidden">Bad</span>
+          <div className={`w-full h-1 rounded mb-1 ${score < 40 ? 'bg-red-500' : 'bg-muted'}`} />
+          <span className="text-muted-foreground hidden sm:inline">Critical</span>
+          <span className="text-muted-foreground sm:hidden">Bad</span>
         </div>
       </div>
     </div>

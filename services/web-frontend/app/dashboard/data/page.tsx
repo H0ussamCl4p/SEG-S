@@ -30,18 +30,18 @@ export default function DataPage() {
     <div className="space-y-6">
       {/* Machine Selector */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-        <label className="text-slate-400 text-sm whitespace-nowrap">Machine:</label>
+        <label className="text-muted-foreground text-sm whitespace-nowrap">Machine:</label>
         <Select value={machineId} onValueChange={setMachineId}>
-          <SelectTrigger className="w-full sm:w-[280px] bg-slate-900/60 border-slate-800 text-foreground">
+          <SelectTrigger className="w-full sm:w-[280px] bg-background border-border text-foreground">
             <SelectValue placeholder="Select Machine" />
           </SelectTrigger>
-          <SelectContent className="bg-slate-900 border-slate-800">
+          <SelectContent className="bg-background border-border">
             {(machines || [
               { machine_id: 'MACHINE_001', name: 'Hydraulic Press' },
               { machine_id: 'MACHINE_002', name: 'Conveyor Belt' },
               { machine_id: 'MACHINE_003', name: 'Industrial Motor' }
             ]).map((machine) => (
-              <SelectItem key={machine.machine_id} value={machine.machine_id} className="text-foreground hover:bg-slate-800">
+              <SelectItem key={machine.machine_id} value={machine.machine_id} className="text-foreground hover:bg-muted">
                 {machine.machine_id} - {machine.name}
               </SelectItem>
             ))}

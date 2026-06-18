@@ -105,17 +105,17 @@ export default function AnomalyPage() {
       {/* Machine Selector & Action Button */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
-          <label className="text-slate-400 text-sm whitespace-nowrap">Machine:</label>
+          <label className="text-muted-foreground text-sm whitespace-nowrap">Machine:</label>
           <Select value={machineId} onValueChange={setMachineId}>
-            <SelectTrigger className="w-full sm:w-[280px] bg-slate-900/60 border-slate-800 text-foreground">
+            <SelectTrigger className="w-full sm:w-[280px] bg-background border-border text-foreground">
               <SelectValue placeholder="Select Machine" />
             </SelectTrigger>
-            <SelectContent className="bg-slate-900 border-slate-800">
+            <SelectContent className="bg-background border-border">
               {(machines || [
                 { machine_id: 'MACHINE_002', name: 'Conveyor Belt' },
                 { machine_id: 'MACHINE_003', name: 'Industrial Motor' }
               ]).map((machine) => (
-                <SelectItem key={machine.machine_id} value={machine.machine_id} className="text-foreground hover:bg-slate-800">
+                <SelectItem key={machine.machine_id} value={machine.machine_id} className="text-foreground hover:bg-muted">
                   {machine.machine_id} - {machine.name}
                 </SelectItem>
               ))}
@@ -143,10 +143,10 @@ export default function AnomalyPage() {
               <AlertTriangle className="w-6 h-6 text-orange-600 shrink-0 mt-1" />
               <div>
                 <h3 className="text-lg font-semibold text-orange-600">Anomaly Detected!</h3>
-                <p className="text-slate-300 mt-1">
+                <p className="text-muted-foreground mt-1">
                   The AI system has detected abnormal behavior. Click "Take Action" to create a maintenance task.
                 </p>
-                <div className="mt-2 text-sm text-slate-400">
+                <div className="mt-2 text-sm text-muted-foreground">
                   <div>Health Score: <span className="text-foreground font-medium">{liveData.health?.score}%</span></div>
                   <div>Status: <span className="text-orange-600 font-medium">{liveData.status}</span></div>
                 </div>
@@ -177,8 +177,8 @@ export default function AnomalyPage() {
             <Card>
               <CardContent className="p-8 h-full flex items-center justify-center">
                 <div className="text-center">
-                  <Activity className="w-12 h-12 text-slate-700 mx-auto mb-3 animate-pulse" />
-                  <p className="text-slate-500">Loading health data...</p>
+                  <Activity className="w-12 h-12 text-muted-foreground mx-auto mb-3 animate-pulse" />
+                  <p className="text-muted-foreground">Loading health data...</p>
                 </div>
               </CardContent>
             </Card>
@@ -200,7 +200,7 @@ export default function AnomalyPage() {
             {historyData && historyData.length > 0 ? (
               <LiveChart data={historyData} />
             ) : (
-              <div className="h-full flex items-center justify-center text-slate-500">Waiting for data...</div>
+              <div className="h-full flex items-center justify-center text-muted-foreground">Waiting for data...</div>
             )}
           </CardContent>
         </Card>
@@ -228,51 +228,51 @@ export default function AnomalyPage() {
 
           <div className="space-y-4 py-4">
             <div>
-              <label className="text-sm font-medium text-slate-400 mb-2 block">
+              <label className="text-sm font-medium text-muted-foreground mb-2 block">
                 Task Title
               </label>
               <Input
                 value={taskTitle}
                 onChange={(e) => setTaskTitle(e.target.value)}
                 placeholder="Enter task title..."
-                className="bg-slate-950 border-slate-800 text-foreground"
+                className="bg-background border-border text-foreground"
               />
             </div>
 
             <div>
-              <label className="text-sm font-medium text-slate-400 mb-2 block">
+              <label className="text-sm font-medium text-muted-foreground mb-2 block">
                 Description
               </label>
               <Textarea
                 value={taskDescription}
                 onChange={(e) => setTaskDescription(e.target.value)}
                 placeholder="Enter detailed description..."
-                className="min-h-[120px] bg-slate-950 border-slate-800 text-foreground"
+                className="min-h-[120px] bg-background border-border text-foreground"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-sm font-medium text-slate-400 mb-2 block">
+                <label className="text-sm font-medium text-muted-foreground mb-2 block">
                   Due Date
                 </label>
                 <Input
                   type="date"
                   value={taskDueDate}
                   onChange={(e) => setTaskDueDate(e.target.value)}
-                  className="bg-slate-950 border-slate-800 text-foreground"
+                  className="bg-background border-border text-foreground"
                 />
               </div>
 
               <div>
-                <label className="text-sm font-medium text-slate-400 mb-2 block">
+                <label className="text-sm font-medium text-muted-foreground mb-2 block">
                   Priority
                 </label>
                 <Select value={taskPriority} onValueChange={(v) => setTaskPriority(v as any)}>
-                  <SelectTrigger className="bg-slate-950 border-slate-800 text-foreground">
+                  <SelectTrigger className="bg-background border-border text-foreground">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800">
+                  <SelectContent className="bg-background border-border">
                     <SelectItem value="LOW" className="text-foreground">Low</SelectItem>
                     <SelectItem value="MEDIUM" className="text-foreground">Medium</SelectItem>
                     <SelectItem value="HIGH" className="text-foreground">High</SelectItem>
@@ -282,19 +282,19 @@ export default function AnomalyPage() {
             </div>
 
             {liveData && (
-              <div className="p-3 bg-slate-900 rounded-md border border-slate-800">
-                <h4 className="text-sm font-medium text-slate-400 mb-2">Current Sensor Readings:</h4>
+              <div className="p-3 bg-background rounded-md border border-border">
+                <h4 className="text-sm font-medium text-muted-foreground mb-2">Current Sensor Readings:</h4>
                 <div className="grid grid-cols-3 gap-2 text-sm">
                   <div>
-                    <span className="text-slate-500">Vibration:</span>
+                    <span className="text-muted-foreground">Vibration:</span>
                     <span className="text-foreground ml-2">{liveData.vibration}</span>
                   </div>
                   <div>
-                    <span className="text-slate-500">Temperature:</span>
+                    <span className="text-muted-foreground">Temperature:</span>
                     <span className="text-foreground ml-2">{liveData.temperature}°C</span>
                   </div>
                   <div>
-                    <span className="text-slate-500">Health:</span>
+                    <span className="text-muted-foreground">Health:</span>
                     <span className="text-foreground ml-2">{liveData.health?.score}%</span>
                   </div>
                 </div>
@@ -306,7 +306,7 @@ export default function AnomalyPage() {
             <Button
               variant="outline"
               onClick={() => setIsCreateTaskOpen(false)}
-              className="bg-slate-800 hover:bg-slate-700 border-slate-700"
+              className="bg-muted hover:bg-muted border-border"
             >
               Cancel
             </Button>

@@ -42,10 +42,10 @@ export default function TelemetryCharts({ data }: TelemetryChartsProps) {
                     <stop offset="95%" stopColor="#60a5fa" stopOpacity={0.1}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
-                <XAxis dataKey="time" stroke="#64748b" tick={{ fill: '#94a3b8' }} tickLine={{ stroke: '#334155' }} />
-                <YAxis stroke="#64748b" tick={{ fill: '#94a3b8' }} tickLine={{ stroke: '#334155' }} label={{ value: 'Vibration', angle: -90, position: 'insideLeft', fill: '#94a3b8' }} />
-                <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f1f5f9' }} labelStyle={{ color: '#94a3b8' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e6e8eb" opacity={0.3} />
+                <XAxis dataKey="time" stroke="#5b6470" tick={{ fill: '#5b6470' }} tickLine={{ stroke: '#e6e8eb' }} />
+                <YAxis stroke="#5b6470" tick={{ fill: '#5b6470' }} tickLine={{ stroke: '#e6e8eb' }} label={{ value: 'Vibration', angle: -90, position: 'insideLeft', fill: '#5b6470' }} />
+                <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e6e8eb', borderRadius: '8px', color: '#0b0f12' }} labelStyle={{ color: '#5b6470' }} />
                 <Area type="monotone" dataKey="vibration" stroke="#60a5fa" strokeWidth={2} isAnimationActive={false} fillOpacity={1} fill="url(#vibGrad)" />
               </AreaChart>
             </ResponsiveContainer>
@@ -67,10 +67,10 @@ export default function TelemetryCharts({ data }: TelemetryChartsProps) {
                     <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.1}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
-                <XAxis dataKey="time" stroke="#64748b" tick={{ fill: '#94a3b8' }} tickLine={{ stroke: '#334155' }} />
-                <YAxis stroke="#64748b" tick={{ fill: '#94a3b8' }} tickLine={{ stroke: '#334155' }} label={{ value: 'Temperature (°C)', angle: -90, position: 'insideLeft', fill: '#94a3b8' }} />
-                <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f1f5f9' }} labelStyle={{ color: '#94a3b8' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e6e8eb" opacity={0.3} />
+                <XAxis dataKey="time" stroke="#5b6470" tick={{ fill: '#5b6470' }} tickLine={{ stroke: '#e6e8eb' }} />
+                <YAxis stroke="#5b6470" tick={{ fill: '#5b6470' }} tickLine={{ stroke: '#e6e8eb' }} label={{ value: 'Temperature (°C)', angle: -90, position: 'insideLeft', fill: '#5b6470' }} />
+                <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e6e8eb', borderRadius: '8px', color: '#0b0f12' }} labelStyle={{ color: '#5b6470' }} />
                 <Area type="monotone" dataKey="temperature" stroke="#f59e0b" strokeWidth={2} isAnimationActive={false} fillOpacity={1} fill="url(#tempGrad)" />
               </AreaChart>
             </ResponsiveContainer>
@@ -92,10 +92,10 @@ export default function TelemetryCharts({ data }: TelemetryChartsProps) {
                     <stop offset="95%" stopColor="#22c55e" stopOpacity={0.1}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
-                <XAxis dataKey="time" stroke="#64748b" tick={{ fill: '#94a3b8' }} tickLine={{ stroke: '#334155' }} />
-                <YAxis stroke="#64748b" tick={{ fill: '#94a3b8' }} tickLine={{ stroke: '#334155' }} label={{ value: 'Humidity (%)', angle: -90, position: 'insideLeft', fill: '#94a3b8' }} />
-                <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f1f5f9' }} labelStyle={{ color: '#94a3b8' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e6e8eb" opacity={0.3} />
+                <XAxis dataKey="time" stroke="#5b6470" tick={{ fill: '#5b6470' }} tickLine={{ stroke: '#e6e8eb' }} />
+                <YAxis stroke="#5b6470" tick={{ fill: '#5b6470' }} tickLine={{ stroke: '#e6e8eb' }} label={{ value: 'Humidity (%)', angle: -90, position: 'insideLeft', fill: '#5b6470' }} />
+                <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e6e8eb', borderRadius: '8px', color: '#0b0f12' }} labelStyle={{ color: '#5b6470' }} />
                 <Area type="monotone" dataKey="humidity" stroke="#22c55e" strokeWidth={2} isAnimationActive={false} fillOpacity={1} fill="url(#humGrad)" />
               </AreaChart>
             </ResponsiveContainer>

@@ -124,7 +124,7 @@ function PriorityBadge({ priority }: { priority: Task['priority'] }) {
 
 function StatusBadge({ status }: { status: Task['status'] }) {
   const variants = {
-    NOT_STARTED: 'bg-slate-500/10 text-slate-300 border-slate-500/30',
+    NOT_STARTED: 'bg-muted text-muted-foreground border-border',
     IN_PROGRESS: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30',
     DONE: 'bg-green-500/10 text-emerald-600 border-green-500/30',
   }
@@ -327,7 +327,7 @@ export default function MaintenancePage() {
             </div>
 
             <TabsContent value="calendar">
-              <div className="h-[600px] sm:h-[700px] bg-slate-950 rounded-lg p-2 sm:p-4 border border-slate-800 overflow-x-auto">
+              <div className="h-[600px] sm:h-[700px] bg-background rounded-lg p-2 sm:p-4 border border-border overflow-x-auto">
                 <div className="min-w-[600px] h-full">
                   <Calendar
                     localizer={localizer}
@@ -345,40 +345,40 @@ export default function MaintenancePage() {
                 </div>
                 <style jsx global>{`
                   .rbc-calendar {
-                    color: #e2e8f0;
+                    color: #5b6470;
                     font-family: inherit;
                   }
                   .rbc-header {
                     padding: 10px 3px;
                     font-weight: 600;
-                    color: #94a3b8;
-                    background: #0f172a;
-                    border-bottom: 1px solid #334155;
+                    color: #5b6470;
+                    background: #ffffff;
+                    border-bottom: 1px solid #e6e8eb;
                   }
                   .rbc-month-view, .rbc-time-view {
-                    background: #0f172a;
-                    border: 1px solid #334155;
+                    background: #ffffff;
+                    border: 1px solid #e6e8eb;
                     border-radius: 8px;
                   }
                   .rbc-day-bg {
-                    background: #0f172a;
-                    border-color: #1e293b;
+                    background: #ffffff;
+                    border-color: #ffffff;
                   }
                   .rbc-today {
-                    background: #1e293b;
+                    background: #ffffff;
                   }
                   .rbc-off-range-bg {
-                    background: #020617;
+                    background: #ffffff;
                   }
                   .rbc-date-cell {
                     padding: 8px;
-                    color: #cbd5e1;
+                    color: #5b6470;
                   }
                   .rbc-off-range {
-                    color: #475569;
+                    color: #e6e8eb;
                   }
                   .rbc-current {
-                    color: #22d3ee;
+                    color: #10b981;
                   }
                   .rbc-event {
                     padding: 2px 5px;
@@ -391,22 +391,22 @@ export default function MaintenancePage() {
                     margin-bottom: 10px;
                   }
                   .rbc-toolbar button {
-                    color: #e2e8f0;
-                    background: #1e293b;
-                    border: 1px solid #334155;
+                    color: #5b6470;
+                    background: #ffffff;
+                    border: 1px solid #e6e8eb;
                     padding: 6px 12px;
                     border-radius: 6px;
                     font-weight: 500;
                   }
                   .rbc-toolbar button:hover {
-                    background: #334155;
+                    background: #e6e8eb;
                   }
                   .rbc-toolbar button.rbc-active {
-                    background: #0ea5e9;
-                    border-color: #0284c7;
+                    background: #10b981;
+                    border-color: #059669;
                   }
                   .rbc-toolbar-label {
-                    color: #f1f5f9;
+                    color: #0b0f12;
                     font-weight: 600;
                     font-size: 1.125rem;
                   }
@@ -440,8 +440,8 @@ export default function MaintenancePage() {
               <div className="overflow-x-auto -mx-2 sm:mx-0">
                 <div className="min-w-[700px] px-2 sm:px-0">
                   <table className="w-full text-sm">
-                    <thead className="bg-slate-900/60">
-                      <tr className="text-slate-400">
+                    <thead className="bg-background">
+                      <tr className="text-muted-foreground">
                         <th className="text-left px-3 py-2 whitespace-nowrap">Task</th>
                         <th className="text-left px-3 py-2 whitespace-nowrap">Equipment</th>
                         <th className="text-left px-3 py-2 whitespace-nowrap">Due Date</th>
@@ -454,22 +454,22 @@ export default function MaintenancePage() {
                     </thead>
                     <tbody>
                       {tasks.map(t => (
-                        <tr key={t.id} className="border-t border-slate-800">
+                        <tr key={t.id} className="border-t border-border">
                           <td className="px-3 py-2 text-foreground font-medium whitespace-nowrap">{t.title}</td>
-                          <td className="px-3 py-2 text-slate-300 whitespace-nowrap">{t.equipmentId}</td>
-                          <td className="px-3 py-2 text-slate-300 whitespace-nowrap">{t.dueDate}</td>
-                          <td className="px-3 py-2 text-slate-300 whitespace-nowrap">{t.nextDueDate || '-'}</td>
+                          <td className="px-3 py-2 text-muted-foreground whitespace-nowrap">{t.equipmentId}</td>
+                          <td className="px-3 py-2 text-muted-foreground whitespace-nowrap">{t.dueDate}</td>
+                          <td className="px-3 py-2 text-muted-foreground whitespace-nowrap">{t.nextDueDate || '-'}</td>
                           <td className="px-3 py-2"><PriorityBadge priority={t.priority} /></td>
                           <td className="px-3 py-2"><StatusBadge status={t.status} /></td>
-                          <td className="px-3 py-2 text-slate-300 whitespace-nowrap">
-                            {t.assignedTo || <span className="text-slate-500">Unassigned</span>}
+                          <td className="px-3 py-2 text-muted-foreground whitespace-nowrap">
+                            {t.assignedTo || <span className="text-muted-foreground">Unassigned</span>}
                           </td>
                           <td className="px-3 py-2">
                             <Button
                               onClick={() => handleViewTask(t)}
                               variant="outline"
                               size="sm"
-                              className="bg-slate-800 hover:bg-slate-700 text-foreground border-slate-700"
+                              className="bg-muted hover:bg-muted text-foreground border-border"
                             >
                               View
                             </Button>
@@ -479,7 +479,7 @@ export default function MaintenancePage() {
                     </tbody>
                   </table>
                   {error && (
-                    <p className="text-xs text-slate-500 mt-2">Showing sample tasks (API unavailable).</p>
+                    <p className="text-xs text-muted-foreground mt-2">Showing sample tasks (API unavailable).</p>
                   )}
                 </div>
               </div>
@@ -500,17 +500,17 @@ export default function MaintenancePage() {
                       .map(t => (
                         <div
                           key={t.id}
-                          className="p-3 bg-slate-900/80 border border-slate-700 rounded cursor-pointer hover:bg-slate-800 transition-colors"
+                          className="p-3 bg-background border border-border rounded cursor-pointer hover:bg-muted transition-colors"
                           onClick={() => handleViewTask(t)}
                         >
                           <div className="flex justify-between items-start mb-1">
                             <span className="font-medium text-foreground text-sm">{t.title}</span>
                             <StatusBadge status={t.status} />
                           </div>
-                          <div className="text-xs text-slate-400">{t.equipmentId}</div>
-                          <div className="text-xs text-slate-500 mt-1">
-                            <span className="font-medium text-slate-300">A faire:</span> {t.dueDate}
-                            {t.nextDueDate && <span className="ml-2"><span className="font-medium text-slate-300">A refaire:</span> {t.nextDueDate}</span>}
+                          <div className="text-xs text-muted-foreground">{t.equipmentId}</div>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            <span className="font-medium text-muted-foreground">A faire:</span> {t.dueDate}
+                            {t.nextDueDate && <span className="ml-2"><span className="font-medium text-muted-foreground">A refaire:</span> {t.nextDueDate}</span>}
                           </div>
                           {t.autoCreated && (
                             <div className="text-xs text-amber-600 mt-1">⚡ Auto-created</div>
@@ -518,7 +518,7 @@ export default function MaintenancePage() {
                         </div>
                       ))}
                     {tasks.filter(t => t.eisenhowerQuadrant === 'DO_FIRST' || (!t.eisenhowerQuadrant && t.priority === 'HIGH')).length === 0 && (
-                      <p className="text-slate-500 text-sm italic">No urgent & important tasks</p>
+                      <p className="text-muted-foreground text-sm italic">No urgent & important tasks</p>
                     )}
                   </div>
                 </div>
@@ -536,17 +536,17 @@ export default function MaintenancePage() {
                       .map(t => (
                         <div
                           key={t.id}
-                          className="p-3 bg-slate-900/80 border border-slate-700 rounded cursor-pointer hover:bg-slate-800 transition-colors"
+                          className="p-3 bg-background border border-border rounded cursor-pointer hover:bg-muted transition-colors"
                           onClick={() => handleViewTask(t)}
                         >
                           <div className="flex justify-between items-start mb-1">
                             <span className="font-medium text-foreground text-sm">{t.title}</span>
                             <StatusBadge status={t.status} />
                           </div>
-                          <div className="text-xs text-slate-400">{t.equipmentId}</div>
-                          <div className="text-xs text-slate-500 mt-1">
-                            <span className="font-medium text-slate-300">A faire:</span> {t.dueDate}
-                            {t.nextDueDate && <span className="ml-2"><span className="font-medium text-slate-300">A refaire:</span> {t.nextDueDate}</span>}
+                          <div className="text-xs text-muted-foreground">{t.equipmentId}</div>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            <span className="font-medium text-muted-foreground">A faire:</span> {t.dueDate}
+                            {t.nextDueDate && <span className="ml-2"><span className="font-medium text-muted-foreground">A refaire:</span> {t.nextDueDate}</span>}
                           </div>
                           {t.autoCreated && (
                             <div className="text-xs text-amber-600 mt-1">⚡ Auto-created</div>
@@ -554,7 +554,7 @@ export default function MaintenancePage() {
                         </div>
                       ))}
                     {tasks.filter(t => t.eisenhowerQuadrant === 'SCHEDULE' || (!t.eisenhowerQuadrant && t.priority === 'MEDIUM')).length === 0 && (
-                      <p className="text-slate-500 text-sm italic">No scheduled tasks</p>
+                      <p className="text-muted-foreground text-sm italic">No scheduled tasks</p>
                     )}
                   </div>
                 </div>
@@ -572,17 +572,17 @@ export default function MaintenancePage() {
                       .map(t => (
                         <div
                           key={t.id}
-                          className="p-3 bg-slate-900/80 border border-slate-700 rounded cursor-pointer hover:bg-slate-800 transition-colors"
+                          className="p-3 bg-background border border-border rounded cursor-pointer hover:bg-muted transition-colors"
                           onClick={() => handleViewTask(t)}
                         >
                           <div className="flex justify-between items-start mb-1">
                             <span className="font-medium text-foreground text-sm">{t.title}</span>
                             <StatusBadge status={t.status} />
                           </div>
-                          <div className="text-xs text-slate-400">{t.equipmentId}</div>
-                          <div className="text-xs text-slate-500 mt-1">
-                            <span className="font-medium text-slate-300">A faire:</span> {t.dueDate}
-                            {t.nextDueDate && <span className="ml-2"><span className="font-medium text-slate-300">A refaire:</span> {t.nextDueDate}</span>}
+                          <div className="text-xs text-muted-foreground">{t.equipmentId}</div>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            <span className="font-medium text-muted-foreground">A faire:</span> {t.dueDate}
+                            {t.nextDueDate && <span className="ml-2"><span className="font-medium text-muted-foreground">A refaire:</span> {t.nextDueDate}</span>}
                           </div>
                           {t.autoCreated && (
                             <div className="text-xs text-amber-600 mt-1">⚡ Auto-created</div>
@@ -590,14 +590,14 @@ export default function MaintenancePage() {
                         </div>
                       ))}
                     {tasks.filter(t => t.eisenhowerQuadrant === 'DELEGATE').length === 0 && (
-                      <p className="text-slate-500 text-sm italic">No tasks to delegate</p>
+                      <p className="text-muted-foreground text-sm italic">No tasks to delegate</p>
                     )}
                   </div>
                 </div>
 
                 {/* ELIMINATE - Not Urgent & Not Important (Quadrant 4) */}
-                <div className="p-4 bg-slate-950/40 border-2 border-slate-600/30 rounded-lg">
-                  <h3 className="text-slate-400 font-bold mb-3 flex items-center gap-2">
+                <div className="p-4 bg-background border-2 border-border rounded-lg">
+                  <h3 className="text-muted-foreground font-bold mb-3 flex items-center gap-2">
                     <span className="text-xl">🗑️</span>
                     ELIMINATE (Not Urgent & Not Important)
                   </h3>
@@ -608,17 +608,17 @@ export default function MaintenancePage() {
                       .map(t => (
                         <div
                           key={t.id}
-                          className="p-3 bg-slate-900/80 border border-slate-700 rounded cursor-pointer hover:bg-slate-800 transition-colors"
+                          className="p-3 bg-background border border-border rounded cursor-pointer hover:bg-muted transition-colors"
                           onClick={() => handleViewTask(t)}
                         >
                           <div className="flex justify-between items-start mb-1">
                             <span className="font-medium text-foreground text-sm">{t.title}</span>
                             <StatusBadge status={t.status} />
                           </div>
-                          <div className="text-xs text-slate-400">{t.equipmentId}</div>
-                          <div className="text-xs text-slate-500 mt-1">
-                            <span className="font-medium text-slate-300">A faire:</span> {t.dueDate}
-                            {t.nextDueDate && <span className="ml-2"><span className="font-medium text-slate-300">A refaire:</span> {t.nextDueDate}</span>}
+                          <div className="text-xs text-muted-foreground">{t.equipmentId}</div>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            <span className="font-medium text-muted-foreground">A faire:</span> {t.dueDate}
+                            {t.nextDueDate && <span className="ml-2"><span className="font-medium text-muted-foreground">A refaire:</span> {t.nextDueDate}</span>}
                           </div>
                           {t.autoCreated && (
                             <div className="text-xs text-amber-600 mt-1">⚡ Auto-created</div>
@@ -626,7 +626,7 @@ export default function MaintenancePage() {
                         </div>
                       ))}
                     {tasks.filter(t => t.eisenhowerQuadrant === 'ELIMINATE' || (!t.eisenhowerQuadrant && t.priority === 'LOW')).length === 0 && (
-                      <p className="text-slate-500 text-sm italic">No low priority tasks</p>
+                      <p className="text-muted-foreground text-sm italic">No low priority tasks</p>
                     )}
                   </div>
                 </div>
@@ -642,7 +642,7 @@ export default function MaintenancePage() {
                   showCost={true}
                 />
 
-                <Card className="border-slate-800 bg-slate-900/40">
+                <Card className="border-border bg-background">
                   <CardHeader>
                     <CardTitle className="text-lg">Cost Analysis Summary</CardTitle>
                     <CardDescription>
@@ -650,7 +650,7 @@ export default function MaintenancePage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-sm text-slate-300 space-y-2">
+                    <div className="text-sm text-muted-foreground space-y-2">
                       <p>• Each maintenance task is estimated at $500 baseline cost</p>
                       <p>• High vibration and bearing issues typically require specialist intervention</p>
                       <p>• Temperature-related problems may indicate cooling system failures</p>
@@ -683,18 +683,18 @@ export default function MaintenancePage() {
                 {/* Task Info */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-slate-400">Priority</label>
+                    <label className="text-sm font-medium text-muted-foreground">Priority</label>
                     <div className="mt-1"><PriorityBadge priority={selectedTask.priority} /></div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-slate-400 flex items-center gap-1">
+                    <label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
                       <CalendarIcon className="w-4 h-4" />
                       Date à faire (Due)
                     </label>
                     <div className="mt-1 text-foreground">{selectedTask.dueDate}</div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-slate-400 flex items-center gap-1">
+                    <label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
                       <CalendarIcon className="w-4 h-4 text-emerald-500" />
                       Date pour la refaire (Next)
                     </label>
@@ -704,17 +704,17 @@ export default function MaintenancePage() {
 
                 {/* Eisenhower Matrix Classification */}
                 {selectedTask.eisenhowerQuadrant && (
-                  <div className="p-4 bg-slate-900/60 border border-slate-700 rounded-lg">
-                    <label className="text-sm font-medium text-slate-400 block mb-2">
+                  <div className="p-4 bg-background border border-border rounded-lg">
+                    <label className="text-sm font-medium text-muted-foreground block mb-2">
                       Eisenhower Matrix Classification
                     </label>
                     <div className="grid grid-cols-3 gap-3">
                       <div>
-                        <span className="text-xs text-slate-500">Quadrant</span>
+                        <span className="text-xs text-muted-foreground">Quadrant</span>
                         <div className="mt-1 font-medium text-foreground">{selectedTask.eisenhowerQuadrant}</div>
                       </div>
                       <div>
-                        <span className="text-xs text-slate-500">Urgency</span>
+                        <span className="text-xs text-muted-foreground">Urgency</span>
                         <div className="mt-1">
                           <Badge variant="outline" className={
                             selectedTask.urgency === 'URGENT'
@@ -726,12 +726,12 @@ export default function MaintenancePage() {
                         </div>
                       </div>
                       <div>
-                        <span className="text-xs text-slate-500">Importance</span>
+                        <span className="text-xs text-muted-foreground">Importance</span>
                         <div className="mt-1">
                           <Badge variant="outline" className={
                             selectedTask.importance === 'IMPORTANT'
                               ? 'bg-purple-500/10 text-purple-600 border-purple-500/30'
-                              : 'bg-slate-500/10 text-slate-400 border-slate-500/30'
+                              : 'bg-muted text-muted-foreground border-border'
                           }>
                             {selectedTask.importance || 'N/A'}
                           </Badge>
@@ -748,7 +748,7 @@ export default function MaintenancePage() {
 
                 {/* Description */}
                 <div>
-                  <label className="text-sm font-medium text-slate-400">Description</label>
+                  <label className="text-sm font-medium text-muted-foreground">Description</label>
                   <p className="mt-1 text-foreground">{selectedTask.description}</p>
                 </div>
 
@@ -761,22 +761,22 @@ export default function MaintenancePage() {
                     </label>
                     <p className="mt-2 text-foreground text-sm">{selectedTask.aiDetectedCause}</p>
                     {selectedTask.anomalyId && (
-                      <p className="mt-1 text-xs text-slate-400">Anomaly ID: {selectedTask.anomalyId}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">Anomaly ID: {selectedTask.anomalyId}</p>
                     )}
                   </div>
                 )}
 
                 {/* Assignment */}
                 <div>
-                  <label className="text-sm font-medium text-slate-400 flex items-center gap-1 mb-2">
+                  <label className="text-sm font-medium text-muted-foreground flex items-center gap-1 mb-2">
                     <User className="w-4 h-4" />
                     Assign To
                   </label>
                   <Select value={assignTo} onValueChange={setAssignTo}>
-                    <SelectTrigger className="bg-slate-950 border-slate-800 text-foreground">
+                    <SelectTrigger className="bg-background border-border text-foreground">
                       <SelectValue placeholder="Select technician" />
                     </SelectTrigger>
-                    <SelectContent className="bg-slate-900 border-slate-800">
+                    <SelectContent className="bg-background border-border">
                       <SelectItem value="John Smith" className="text-foreground">John Smith</SelectItem>
                       <SelectItem value="Mike Johnson" className="text-foreground">Mike Johnson</SelectItem>
                       <SelectItem value="Sarah Williams" className="text-foreground">Sarah Williams</SelectItem>
@@ -788,7 +788,7 @@ export default function MaintenancePage() {
                 {/* Completion Notes (for DONE status) */}
                 {selectedTask.status === 'DONE' || selectedTask.completionNotes ? (
                   <div>
-                    <label className="text-sm font-medium text-slate-400 mb-2 block">
+                    <label className="text-sm font-medium text-muted-foreground mb-2 block">
                       Completion Notes
                     </label>
                     {selectedTask.status === 'DONE' && !selectedTask.completionNotes ? (
@@ -799,19 +799,19 @@ export default function MaintenancePage() {
                         className="min-h-[100px]"
                       />
                     ) : (
-                      <p className="text-foreground text-sm p-3 bg-slate-900 rounded-md border border-slate-800">
+                      <p className="text-foreground text-sm p-3 bg-background rounded-md border border-border">
                         {selectedTask.completionNotes}
                       </p>
                     )}
                     {selectedTask.completedBy && (
-                      <p className="mt-2 text-xs text-slate-400">
+                      <p className="mt-2 text-xs text-muted-foreground">
                         Completed by: {selectedTask.completedBy} on {selectedTask.completedAt}
                       </p>
                     )}
                   </div>
                 ) : selectedTask.status === 'IN_PROGRESS' ? (
                   <div>
-                    <label className="text-sm font-medium text-slate-400 mb-2 block">
+                    <label className="text-sm font-medium text-muted-foreground mb-2 block">
                       Completion Notes (optional)
                     </label>
                     <Textarea
@@ -857,7 +857,7 @@ export default function MaintenancePage() {
                   onClick={handleGenerateReport}
                   variant="outline"
                   size="sm"
-                  className="bg-slate-800 hover:bg-slate-700 border-slate-700"
+                  className="bg-muted hover:bg-muted border-border"
                 >
                   <Download className="w-4 h-4 mr-2" />
                   Download PDF Report
@@ -881,22 +881,22 @@ export default function MaintenancePage() {
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="title" className="text-slate-200">Titre de la tâche</Label>
+                <Label htmlFor="title" className="text-muted-foreground">Titre de la tâche</Label>
                 <Input
                   id="title"
                   value={newTaskForm.title}
                   onChange={(e) => setNewTaskForm(prev => ({ ...prev, title: e.target.value }))}
                   placeholder="Ex: Remplacement du filtre"
-                  className="bg-slate-950 border-slate-800 text-foreground"
+                  className="bg-background border-border text-foreground"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="equipment" className="text-slate-200">Equipement</Label>
+                <Label htmlFor="equipment" className="text-muted-foreground">Equipement</Label>
                 <Select value={newTaskForm.equipmentId} onValueChange={(val) => setNewTaskForm(prev => ({ ...prev, equipmentId: val }))}>
-                  <SelectTrigger className="bg-slate-950 border-slate-800 text-foreground">
+                  <SelectTrigger className="bg-background border-border text-foreground">
                     <SelectValue placeholder="Choisir un équipement" />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800 text-foreground">
+                  <SelectContent className="bg-background border-border text-foreground">
                     <SelectItem value="PRESS_001">PRESS_001</SelectItem>
                     <SelectItem value="CONV_014">CONV_014</SelectItem>
                     <SelectItem value="MOTOR_207">MOTOR_207</SelectItem>
@@ -908,32 +908,32 @@ export default function MaintenancePage() {
 
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="dueDate" className="text-slate-200">Date à faire</Label>
+                <Label htmlFor="dueDate" className="text-muted-foreground">Date à faire</Label>
                 <Input
                   id="dueDate"
                   type="date"
                   value={newTaskForm.dueDate}
                   onChange={(e) => setNewTaskForm(prev => ({ ...prev, dueDate: e.target.value }))}
-                  className="bg-slate-950 border-slate-800 text-foreground"
+                  className="bg-background border-border text-foreground"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="nextDueDate" className="text-slate-200">A refaire le</Label>
+                <Label htmlFor="nextDueDate" className="text-muted-foreground">A refaire le</Label>
                 <Input
                   id="nextDueDate"
                   type="date"
                   value={newTaskForm.nextDueDate}
                   onChange={(e) => setNewTaskForm(prev => ({ ...prev, nextDueDate: e.target.value }))}
-                  className="bg-slate-950 border-slate-800 text-foreground"
+                  className="bg-background border-border text-foreground"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="priority" className="text-slate-200">Priorité</Label>
+                <Label htmlFor="priority" className="text-muted-foreground">Priorité</Label>
                 <Select value={newTaskForm.priority} onValueChange={(val) => setNewTaskForm(prev => ({ ...prev, priority: val }))}>
-                  <SelectTrigger className="bg-slate-950 border-slate-800 text-foreground">
+                  <SelectTrigger className="bg-background border-border text-foreground">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800 text-foreground">
+                  <SelectContent className="bg-background border-border text-foreground">
                     <SelectItem value="LOW">Basse (LOW)</SelectItem>
                     <SelectItem value="MEDIUM">Moyenne (MEDIUM)</SelectItem>
                     <SelectItem value="HIGH">Haute (HIGH)</SelectItem>
@@ -943,12 +943,12 @@ export default function MaintenancePage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="assignedTo" className="text-slate-200">Assigner au technicien (Optionnel)</Label>
+              <Label htmlFor="assignedTo" className="text-muted-foreground">Assigner au technicien (Optionnel)</Label>
               <Select value={newTaskForm.assignedTo} onValueChange={(val) => setNewTaskForm(prev => ({ ...prev, assignedTo: val }))}>
-                <SelectTrigger className="bg-slate-950 border-slate-800 text-foreground">
+                <SelectTrigger className="bg-background border-border text-foreground">
                   <SelectValue placeholder="Non assigné" />
                 </SelectTrigger>
-                <SelectContent className="bg-slate-900 border-slate-800 text-foreground">
+                <SelectContent className="bg-background border-border text-foreground">
                   <SelectItem value="John Smith">John Smith</SelectItem>
                   <SelectItem value="Mike Johnson">Mike Johnson</SelectItem>
                   <SelectItem value="Sarah Williams">Sarah Williams</SelectItem>
@@ -958,19 +958,19 @@ export default function MaintenancePage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="desc" className="text-slate-200">Description</Label>
+              <Label htmlFor="desc" className="text-muted-foreground">Description</Label>
               <Textarea
                 id="desc"
                 value={newTaskForm.description}
                 onChange={(e) => setNewTaskForm(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Détails de l'intervention..."
-                className="bg-slate-950 border-slate-800 text-foreground min-h-[100px]"
+                className="bg-background border-border text-foreground min-h-[100px]"
               />
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCreateOpen(false)} className="bg-transparent text-slate-300 border-slate-700 hover:bg-slate-800">
+            <Button variant="outline" onClick={() => setIsCreateOpen(false)} className="bg-transparent text-muted-foreground border-border hover:bg-muted">
               Annuler
             </Button>
             <Button onClick={handleCreateTask} disabled={isCreating} className="bg-blue-600 hover:bg-blue-700 text-foreground">
@@ -986,7 +986,7 @@ export default function MaintenancePage() {
           <CardDescription>Guidelines for scheduling maintenance</CardDescription>
         </CardHeader>
         <CardContent>
-          <ul className="list-disc list-inside text-slate-300 space-y-1">
+          <ul className="list-disc list-inside text-muted-foreground space-y-1">
             <li>Prioritize HIGH tasks within 72 hours.</li>
             <li>Group tasks by equipment to minimize downtime.</li>
             <li>Verify parts availability before scheduling replacements.</li>

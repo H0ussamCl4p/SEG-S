@@ -21,14 +21,14 @@ export default function StatCard({
   variant = 'default'
 }: StatCardProps) {
   const variantStyles = {
-    default: 'bg-slate-900/50 border-slate-700',
+    default: 'bg-background border-border',
     success: 'bg-emerald-500/10 border-emerald-500/30',
     warning: 'bg-yellow-500/10 border-yellow-500/30',
     danger: 'bg-red-500/10 border-red-500/30'
   }
 
   const variantTextColors = {
-    default: 'text-slate-400',
+    default: 'text-muted-foreground',
     success: 'text-emerald-600',
     warning: 'text-amber-600',
     danger: 'text-red-600'
@@ -50,11 +50,11 @@ export default function StatCard({
             )}
           </div>
           {subtitle && (
-            <p className="text-xs text-slate-500 mt-1">{subtitle}</p>
+            <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>
           )}
         </div>
         {icon && (
-          <div className={`p-2 rounded-lg ${variant === 'default' ? 'bg-slate-800' : ''}`}>
+          <div className={`p-2 rounded-lg ${variant === 'default' ? 'bg-muted' : ''}`}>
             {icon}
           </div>
         )}
