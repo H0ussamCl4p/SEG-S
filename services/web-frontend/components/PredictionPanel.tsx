@@ -123,9 +123,9 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
   const getRiskColor = (risk: string) => {
     switch (risk) {
       case 'CRITICAL': return 'text-red-500 bg-red-500/10 border-red-500/30'
-      case 'HIGH': return 'text-orange-500 bg-orange-500/10 border-orange-500/30'
-      case 'MEDIUM': return 'text-yellow-500 bg-yellow-500/10 border-yellow-500/30'
-      case 'LOW': return 'text-green-500 bg-green-500/10 border-green-500/30'
+      case 'HIGH': return 'text-orange-600 bg-orange-500/10 border-orange-500/30'
+      case 'MEDIUM': return 'text-amber-600 bg-yellow-500/10 border-yellow-500/30'
+      case 'LOW': return 'text-emerald-600 bg-green-500/10 border-green-500/30'
       default: return 'text-slate-500 bg-slate-500/10 border-slate-500/30'
     }
   }
@@ -146,7 +146,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Zap className="w-6 h-6 text-emerald-500" />
-          <h2 className="text-xl font-bold text-white">AI Predictions</h2>
+          <h2 className="text-xl font-bold text-foreground">AI Predictions</h2>
         </div>
         <div className={`px-3 py-1 rounded-lg border font-semibold text-sm ${getRiskColor(overall_assessment.risk_level)}`}>
           {overall_assessment.risk_level}
@@ -160,7 +160,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
             {getRiskIcon(overall_assessment.risk_level)}
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-white mb-2">Overall Assessment</h3>
+            <h3 className="text-lg font-semibold text-foreground mb-2">Overall Assessment</h3>
             <p className="text-slate-300 mb-3">{overall_assessment.recommendation}</p>
             <p className="text-sm text-slate-400">{overall_assessment.analysis}</p>
           </div>
@@ -172,7 +172,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
         <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
           <div className="flex items-center gap-3 mb-4">
             <Activity className="w-5 h-5 text-blue-500" />
-            <h3 className="text-lg font-semibold text-white">Real-time Detection</h3>
+            <h3 className="text-lg font-semibold text-foreground">Real-time Detection</h3>
           </div>
 
           <div className="space-y-3">
@@ -185,7 +185,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
 
             <div className="flex items-center justify-between">
               <span className="text-slate-400">Anomaly Score</span>
-              <span className="text-white font-semibold">{current_state.anomaly_score}/100</span>
+              <span className="text-foreground font-semibold">{current_state.anomaly_score}/100</span>
             </div>
 
             {Array.isArray(current_state.warnings) && current_state.warnings.length > 0 && (
@@ -193,7 +193,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
                 <p className="text-sm font-semibold text-slate-300">Warnings:</p>
                 {current_state.warnings.map((warning, idx) => (
                   <div key={idx} className="flex items-start gap-2 text-sm text-slate-300 bg-slate-900/50 p-2 rounded">
-                    <AlertTriangle className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
+                    <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
                     <span>{warning}</span>
                   </div>
                 ))}
@@ -210,7 +210,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
         <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
           <div className="flex items-center gap-3 mb-4">
             <TrendingUp className="w-5 h-5 text-purple-500" />
-            <h3 className="text-lg font-semibold text-white">Future Forecast</h3>
+            <h3 className="text-lg font-semibold text-foreground">Future Forecast</h3>
           </div>
 
           {future_prediction.model_loaded ? (
@@ -226,12 +226,12 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
                 <>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-400">Predicted MTTF</span>
-                    <span className="text-white font-semibold">{future_prediction.predicted_mttf.toFixed(2)} hrs</span>
+                    <span className="text-foreground font-semibold">{future_prediction.predicted_mttf.toFixed(2)} hrs</span>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <span className="text-slate-400">Time to Failure</span>
-                    <span className="text-white font-semibold flex items-center gap-1">
+                    <span className="text-foreground font-semibold flex items-center gap-1">
                       <Clock className="w-4 h-4" />
                       ~{future_prediction.estimated_days_until_failure?.toFixed(1)} days
                     </span>
@@ -242,7 +242,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
               {future_prediction.most_critical_factor && (
                 <div className="mt-4 p-3 bg-slate-900/50 rounded-lg">
                   <p className="text-xs text-slate-400 mb-1">Most Critical Factor</p>
-                  <p className="text-sm font-semibold text-white">
+                  <p className="text-sm font-semibold text-foreground">
                     {future_prediction.most_critical_factor.name}
                   </p>
                   <p className="text-xs text-slate-500">
@@ -259,7 +259,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
               </div>
             </div>
           ) : (
-            <div className="flex items-center gap-3 text-yellow-500">
+            <div className="flex items-center gap-3 text-amber-600">
               <AlertTriangle className="w-5 h-5" />
               <div>
                 <p className="font-semibold">Model Not Loaded</p>

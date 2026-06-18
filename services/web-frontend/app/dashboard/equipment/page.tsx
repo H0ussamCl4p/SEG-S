@@ -65,7 +65,7 @@ export default function EquipmentPage() {
               <tbody>
                 {equipment.map(eq => (
                   <tr key={eq.id} className="border-t border-slate-800">
-                    <td className="px-3 py-2 text-white font-medium">
+                    <td className="px-3 py-2 text-foreground font-medium">
                       <a href={`/dashboard/equipment/${encodeURIComponent(eq.id)}`} className="hover:underline">
                         {eq.id}
                       </a>

@@ -21,9 +21,9 @@ type Shift = {
 }
 
 function StatusIcon({ status }: { status: Shift['status'] }) {
-  if (status === 'ACTIVE') return <CheckCircle className="w-4 h-4 text-green-500" />
+  if (status === 'ACTIVE') return <CheckCircle className="w-4 h-4 text-emerald-600" />
   if (status === 'COMPLETED') return <XCircle className="w-4 h-4 text-slate-500" />
-  return <Clock className="w-4 h-4 text-yellow-500" />
+  return <Clock className="w-4 h-4 text-amber-600" />
 }
 
 export default function ShiftManagementPage() {
@@ -57,14 +57,14 @@ export default function ShiftManagementPage() {
                   <div className="flex items-center gap-4">
                     <StatusIcon status={shift.status} />
                     <div>
-                      <p className="text-white font-medium">{shift.name}</p>
+                      <p className="text-foreground font-medium">{shift.name}</p>
                       <p className="text-slate-400 text-sm">{shift.startTime} - {shift.endTime}</p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
                     <div className="text-left sm:text-right">
                       <p className="text-slate-400 text-xs">Operator</p>
-                      <p className="text-white text-sm">{shift.operator}</p>
+                      <p className="text-foreground text-sm">{shift.operator}</p>
                     </div>
                     <Badge variant="outline" className="border-slate-700 text-slate-300">
                       {shift.status}
@@ -83,7 +83,7 @@ export default function ShiftManagementPage() {
             <CardTitle className="text-base">Production Count</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-white">{productionCount.toLocaleString()}</div>
+            <div className="text-3xl font-bold text-foreground">{productionCount.toLocaleString()}</div>
             <p className="text-slate-400 text-sm mt-1">units this shift</p>
           </CardContent>
         </Card>
@@ -93,7 +93,7 @@ export default function ShiftManagementPage() {
             <CardTitle className="text-base">Downtime</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-yellow-500">{downtime} min</div>
+            <div className="text-3xl font-bold text-amber-600">{downtime} min</div>
             <p className="text-slate-400 text-sm mt-1">total this shift</p>
           </CardContent>
         </Card>
@@ -103,7 +103,7 @@ export default function ShiftManagementPage() {
             <CardTitle className="text-base">Efficiency</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-green-500">{efficiency.toFixed(1)}%</div>
+            <div className="text-3xl font-bold text-emerald-600">{efficiency.toFixed(1)}%</div>
             <p className="text-slate-400 text-sm mt-1">OEE score</p>
           </CardContent>
         </Card>

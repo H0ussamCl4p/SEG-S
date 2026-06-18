@@ -29,9 +29,9 @@ export default function StatCard({
 
   const variantTextColors = {
     default: 'text-slate-400',
-    success: 'text-emerald-400',
-    warning: 'text-yellow-400',
-    danger: 'text-red-400'
+    success: 'text-emerald-600',
+    warning: 'text-amber-600',
+    danger: 'text-red-600'
   }
 
   return (
@@ -42,7 +42,7 @@ export default function StatCard({
             {title}
           </p>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold text-white">{value}</span>
+            <span className="text-3xl font-bold text-foreground">{value}</span>
             {trend && (
               <span className={`text-sm font-medium ${trend.isPositive ? 'text-emerald-500' : 'text-red-500'}`}>
                 {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%

@@ -107,7 +107,7 @@ export default function AnomalyPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
           <label className="text-slate-400 text-sm whitespace-nowrap">Machine:</label>
           <Select value={machineId} onValueChange={setMachineId}>
-            <SelectTrigger className="w-full sm:w-[280px] bg-slate-900/60 border-slate-800 text-white">
+            <SelectTrigger className="w-full sm:w-[280px] bg-slate-900/60 border-slate-800 text-foreground">
               <SelectValue placeholder="Select Machine" />
             </SelectTrigger>
             <SelectContent className="bg-slate-900 border-slate-800">
@@ -115,7 +115,7 @@ export default function AnomalyPage() {
                 { machine_id: 'MACHINE_002', name: 'Conveyor Belt' },
                 { machine_id: 'MACHINE_003', name: 'Industrial Motor' }
               ]).map((machine) => (
-                <SelectItem key={machine.machine_id} value={machine.machine_id} className="text-white hover:bg-slate-800">
+                <SelectItem key={machine.machine_id} value={machine.machine_id} className="text-foreground hover:bg-slate-800">
                   {machine.machine_id} - {machine.name}
                 </SelectItem>
               ))}
@@ -126,7 +126,7 @@ export default function AnomalyPage() {
         {isAnomalyDetected && (
           <Button
             onClick={handleTakeAction}
-            className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-center gap-2"
+            className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-foreground flex items-center justify-center gap-2"
           >
             <Wrench className="w-4 h-4" />
             Take Action
@@ -140,15 +140,15 @@ export default function AnomalyPage() {
         <Card className="border-orange-500/50 bg-orange-500/10">
           <CardContent className="pt-6">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="w-6 h-6 text-orange-500 shrink-0 mt-1" />
+              <AlertTriangle className="w-6 h-6 text-orange-600 shrink-0 mt-1" />
               <div>
-                <h3 className="text-lg font-semibold text-orange-400">Anomaly Detected!</h3>
+                <h3 className="text-lg font-semibold text-orange-600">Anomaly Detected!</h3>
                 <p className="text-slate-300 mt-1">
                   The AI system has detected abnormal behavior. Click "Take Action" to create a maintenance task.
                 </p>
                 <div className="mt-2 text-sm text-slate-400">
-                  <div>Health Score: <span className="text-white font-medium">{liveData.health?.score}%</span></div>
-                  <div>Status: <span className="text-orange-400 font-medium">{liveData.status}</span></div>
+                  <div>Health Score: <span className="text-foreground font-medium">{liveData.health?.score}%</span></div>
+                  <div>Status: <span className="text-orange-600 font-medium">{liveData.status}</span></div>
                 </div>
               </div>
             </div>
@@ -235,7 +235,7 @@ export default function AnomalyPage() {
                 value={taskTitle}
                 onChange={(e) => setTaskTitle(e.target.value)}
                 placeholder="Enter task title..."
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-slate-950 border-slate-800 text-foreground"
               />
             </div>
 
@@ -247,7 +247,7 @@ export default function AnomalyPage() {
                 value={taskDescription}
                 onChange={(e) => setTaskDescription(e.target.value)}
                 placeholder="Enter detailed description..."
-                className="min-h-[120px] bg-slate-950 border-slate-800 text-white"
+                className="min-h-[120px] bg-slate-950 border-slate-800 text-foreground"
               />
             </div>
 
@@ -260,7 +260,7 @@ export default function AnomalyPage() {
                   type="date"
                   value={taskDueDate}
                   onChange={(e) => setTaskDueDate(e.target.value)}
-                  className="bg-slate-950 border-slate-800 text-white"
+                  className="bg-slate-950 border-slate-800 text-foreground"
                 />
               </div>
 
@@ -269,13 +269,13 @@ export default function AnomalyPage() {
                   Priority
                 </label>
                 <Select value={taskPriority} onValueChange={(v) => setTaskPriority(v as any)}>
-                  <SelectTrigger className="bg-slate-950 border-slate-800 text-white">
+                  <SelectTrigger className="bg-slate-950 border-slate-800 text-foreground">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-slate-800">
-                    <SelectItem value="LOW" className="text-white">Low</SelectItem>
-                    <SelectItem value="MEDIUM" className="text-white">Medium</SelectItem>
-                    <SelectItem value="HIGH" className="text-white">High</SelectItem>
+                    <SelectItem value="LOW" className="text-foreground">Low</SelectItem>
+                    <SelectItem value="MEDIUM" className="text-foreground">Medium</SelectItem>
+                    <SelectItem value="HIGH" className="text-foreground">High</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -287,15 +287,15 @@ export default function AnomalyPage() {
                 <div className="grid grid-cols-3 gap-2 text-sm">
                   <div>
                     <span className="text-slate-500">Vibration:</span>
-                    <span className="text-white ml-2">{liveData.vibration}</span>
+                    <span className="text-foreground ml-2">{liveData.vibration}</span>
                   </div>
                   <div>
                     <span className="text-slate-500">Temperature:</span>
-                    <span className="text-white ml-2">{liveData.temperature}°C</span>
+                    <span className="text-foreground ml-2">{liveData.temperature}°C</span>
                   </div>
                   <div>
                     <span className="text-slate-500">Health:</span>
-                    <span className="text-white ml-2">{liveData.health?.score}%</span>
+                    <span className="text-foreground ml-2">{liveData.health?.score}%</span>
                   </div>
                 </div>
               </div>

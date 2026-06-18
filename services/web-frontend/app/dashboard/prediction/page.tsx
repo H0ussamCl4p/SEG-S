@@ -19,7 +19,7 @@ export default function PredictionPage() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
         <label className="text-slate-400 text-sm whitespace-nowrap">Machine:</label>
         <Select value={machineId} onValueChange={setMachineId}>
-          <SelectTrigger className="w-full sm:w-[280px] bg-slate-900/60 border-slate-800 text-white">
+          <SelectTrigger className="w-full sm:w-[280px] bg-slate-900/60 border-slate-800 text-foreground">
             <SelectValue placeholder="Select Machine" />
           </SelectTrigger>
           <SelectContent className="bg-slate-900 border-slate-800">
@@ -27,7 +27,7 @@ export default function PredictionPage() {
               { machine_id: 'MACHINE_002', name: 'Conveyor Belt' },
               { machine_id: 'MACHINE_003', name: 'Industrial Motor' }
             ]).map((machine) => (
-              <SelectItem key={machine.machine_id} value={machine.machine_id} className="text-white hover:bg-slate-800">
+              <SelectItem key={machine.machine_id} value={machine.machine_id} className="text-foreground hover:bg-slate-800">
                 {machine.machine_id} - {machine.machine_id}
               </SelectItem>
             ))}

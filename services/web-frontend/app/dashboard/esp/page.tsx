@@ -64,26 +64,26 @@ function MetricCard({ icon: Icon, label, value, unit, tone = 'neutral' }: {
   icon: React.ElementType; label: string; value: string; unit?: string; tone?: 'neutral' | 'warn' | 'danger' | 'ok'
 }) {
   const tones: Record<string, string> = {
-    neutral: 'border-white/10',
+    neutral: 'border-border',
     ok: 'border-emerald-500/40',
     warn: 'border-amber-500/50',
     danger: 'border-red-500/60',
   }
   const iconTones: Record<string, string> = {
-    neutral: 'text-zinc-400',
-    ok: 'text-emerald-400',
-    warn: 'text-amber-400',
-    danger: 'text-red-400',
+    neutral: 'text-muted-foreground',
+    ok: 'text-emerald-600',
+    warn: 'text-amber-600',
+    danger: 'text-red-600',
   }
   return (
-    <div className={`p-5 rounded-2xl bg-white/5 border ${tones[tone]}`}>
+    <div className={`p-5 rounded-2xl bg-background border ${tones[tone]}`}>
       <div className="flex items-center gap-2 mb-3">
         <Icon className={`w-5 h-5 ${iconTones[tone]}`} />
-        <span className="text-xs uppercase tracking-wider text-zinc-400">{label}</span>
+        <span className="text-xs uppercase tracking-wider text-muted-foreground">{label}</span>
       </div>
       <div className="flex items-baseline gap-1">
-        <span className="text-3xl font-bold text-white tabular-nums">{value}</span>
-        {unit && <span className="text-sm text-zinc-500">{unit}</span>}
+        <span className="text-3xl font-bold text-foreground tabular-nums">{value}</span>
+        {unit && <span className="text-sm text-muted-foreground">{unit}</span>}
       </div>
     </div>
   )
@@ -162,11 +162,11 @@ export default function ESPPage() {
     : '—'
 
   const mttfTone =
-    !mttf ? 'text-zinc-400'
-      : mttf.status === 'critical' ? 'text-red-400'
-      : mttf.status === 'warning' ? 'text-amber-400'
+    !mttf ? 'text-muted-foreground'
+      : mttf.status === 'critical' ? 'text-red-600'
+      : mttf.status === 'warning' ? 'text-amber-600'
       : mttf.status === 'failed' ? 'text-red-500'
-      : 'text-emerald-400'
+      : 'text-emerald-600'
 
   const t = mttf?.thermal
   const v = mttf?.vibration
@@ -202,28 +202,28 @@ export default function ESPPage() {
     <div className="space-y-6">
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-white">Motor Telemetry</h1>
-          <p className="text-zinc-400 text-sm mt-1">
-            Live readings from ESP32 · device: <span className="text-zinc-300 font-mono">{r?.device_id ?? '—'}</span>
+          <h1 className="text-3xl font-bold text-foreground">Motor Telemetry</h1>
+          <p className="text-muted-foreground text-sm mt-1">
+            Live readings from ESP32 · device: <span className="text-foreground font-mono">{r?.device_id ?? '—'}</span>
           </p>
         </div>
         {r?.timestamp && (
-          <div className="text-xs text-zinc-500 font-mono">
+          <div className="text-xs text-muted-foreground font-mono">
             Last reading: {new Date(r.timestamp).toLocaleTimeString()}
           </div>
         )}
       </div>
 
       {error && (
-        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
+        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-700 text-sm">
           {error}
         </div>
       )}
 
       {!r && !error && (
-        <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-zinc-400 text-sm">
+        <div className="p-4 rounded-xl bg-background border border-border text-muted-foreground text-sm">
           Waiting for the first ESP32 reading… Make sure the board is powered, on Wi-Fi, and POSTing to
-          <span className="font-mono text-zinc-200"> {API_URL}/api/esp/ingest</span>.
+          <span className="font-mono text-foreground"> {API_URL}/api/esp/ingest</span>.
         </div>
       )}
 
@@ -239,42 +239,42 @@ export default function ESPPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
+        <div className="p-5 rounded-2xl bg-background border border-border">
           <div className="flex items-center gap-2 mb-3">
-            <Gauge className="w-5 h-5 text-zinc-400" />
-            <span className="text-xs uppercase tracking-wider text-zinc-400">Motor command</span>
+            <Gauge className="w-5 h-5 text-muted-foreground" />
+            <span className="text-xs uppercase tracking-wider text-muted-foreground">Motor command</span>
           </div>
           <div className="flex items-baseline gap-3 mb-2">
-            <span className="text-3xl font-bold text-white">{cmd?.action?.toUpperCase() ?? '—'}</span>
-            <span className="text-zinc-400">{cmd?.speed_percent ?? 0}%</span>
+            <span className="text-3xl font-bold text-foreground">{cmd?.action?.toUpperCase() ?? '—'}</span>
+            <span className="text-muted-foreground">{cmd?.speed_percent ?? 0}%</span>
             {cmd?.source === 'override' && (
-              <span className="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">manual</span>
+              <span className="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-700">manual</span>
             )}
           </div>
-          <p className="text-sm text-zinc-500">{cmd?.reason ?? 'No reading yet.'}</p>
+          <p className="text-sm text-muted-foreground">{cmd?.reason ?? 'No reading yet.'}</p>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
+        <div className="p-5 rounded-2xl bg-background border border-border">
           <div className="flex items-center gap-2 mb-3">
-            <Zap className="w-5 h-5 text-zinc-400" />
-            <span className="text-xs uppercase tracking-wider text-zinc-400">MTTF estimate</span>
+            <Zap className="w-5 h-5 text-muted-foreground" />
+            <span className="text-xs uppercase tracking-wider text-muted-foreground">MTTF estimate</span>
           </div>
           <div className={`text-3xl font-bold ${mttfTone}`}>{mttfText}</div>
-          <p className="text-xs text-zinc-500 mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             {mttfDetail ?? 'Exponential thermal model + linear vibration trend, EMA-smoothed.'}
           </p>
           {t?.status_hint === 'stabilizing' && t.asymptote_c != null && (
-            <p className="text-xs text-emerald-400 mt-1">
+            <p className="text-xs text-emerald-600 mt-1">
               Asymptoting to {t.asymptote_c}°C — below failure threshold ({th?.temp_failure ?? 110}°C).
             </p>
           )}
         </div>
       </div>
 
-      <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
+      <div className="p-5 rounded-2xl bg-background border border-border">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-white">Manual override</h2>
-          <span className="text-xs text-zinc-500">
+          <h2 className="text-lg font-semibold text-foreground">Manual override</h2>
+          <span className="text-xs text-muted-foreground">
             {status?.override ? `Active: ${status.override.action.toUpperCase()}` : 'Auto (threshold logic)'}
           </span>
         </div>
@@ -282,48 +282,48 @@ export default function ESPPage() {
           <button
             disabled={sending}
             onClick={() => sendCommand('stop')}
-            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-red-500/20 border border-red-500/40 text-red-300 hover:bg-red-500/30 transition disabled:opacity-50"
+            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-red-500/20 border border-red-500/40 text-red-700 hover:bg-red-500/30 transition disabled:opacity-50"
           >
             <Power className="w-4 h-4" /> STOP
           </button>
           <button
             disabled={sending}
             onClick={() => sendCommand('slow')}
-            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500/30 transition disabled:opacity-50"
+            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-700 hover:bg-amber-500/30 transition disabled:opacity-50"
           >
             <Turtle className="w-4 h-4" /> SLOW
           </button>
           <button
             disabled={sending}
             onClick={() => sendCommand('normal')}
-            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/30 transition disabled:opacity-50"
+            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-700 hover:bg-emerald-500/30 transition disabled:opacity-50"
           >
             <Zap className="w-4 h-4" /> NORMAL
           </button>
           <button
             disabled={sending}
             onClick={() => sendCommand('auto')}
-            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-white/5 border border-white/20 text-zinc-300 hover:bg-white/10 transition disabled:opacity-50"
+            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-background border border-white/20 text-foreground hover:bg-muted transition disabled:opacity-50"
           >
             <RotateCcw className="w-4 h-4" /> AUTO
           </button>
         </div>
       </div>
 
-      <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
-        <h2 className="text-lg font-semibold text-white mb-3">Thermocouple (last 30 min)</h2>
+      <div className="p-5 rounded-2xl bg-background border border-border">
+        <h2 className="text-lg font-semibold text-foreground mb-3">Thermocouple (last 30 min)</h2>
         <div className="h-64">
           {chartData.length === 0 ? (
-            <div className="h-full flex items-center justify-center text-zinc-500 text-sm">No data yet.</div>
+            <div className="h-full flex items-center justify-center text-muted-foreground text-sm">No data yet.</div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                <XAxis dataKey="t" stroke="#888" fontSize={11} />
-                <YAxis stroke="#888" fontSize={11} domain={['auto', 'auto']} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e6e8eb" />
+                <XAxis dataKey="t" stroke="#9aa3ad" fontSize={11} />
+                <YAxis stroke="#9aa3ad" fontSize={11} domain={['auto', 'auto']} />
                 <Tooltip
-                  contentStyle={{ background: '#18181b', border: '1px solid #3f3f46', borderRadius: 8 }}
-                  labelStyle={{ color: '#d4d4d8' }}
+                  contentStyle={{ background: '#ffffff', border: '1px solid #e6e8eb', borderRadius: 8 }}
+                  labelStyle={{ color: '#0b0f12' }}
                 />
                 {th && <ReferenceLine y={th.temp_warn} stroke="#f59e0b" strokeDasharray="4 4" label={{ value: 'warn', fill: '#f59e0b', fontSize: 10 }} />}
                 {th && <ReferenceLine y={th.temp_critical} stroke="#ef4444" strokeDasharray="4 4" label={{ value: 'critical', fill: '#ef4444', fontSize: 10 }} />}

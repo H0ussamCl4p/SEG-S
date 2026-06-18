@@ -26,7 +26,7 @@ export default function LiveChart({ data }: LiveChartProps) {
       return (
         <div className="p-2 bg-slate-900/90 border border-slate-700 rounded-md">
           <div className="text-xs text-slate-400">{label}</div>
-          <div className="text-sm text-white">AI Health: {value}%</div>
+          <div className="text-sm text-foreground">AI Health: {value}%</div>
         </div>
       )
     }

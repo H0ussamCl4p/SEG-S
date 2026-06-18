@@ -27,7 +27,7 @@ export default function AlertTimeline({ alerts }: AlertTimelineProps) {
         const isAnomaly = alert.severity === 'ANOMALY'
         const bgColor = isAnomaly ? 'bg-red-500/10' : 'bg-yellow-500/10'
         const borderColor = isAnomaly ? 'border-red-500/30' : 'border-yellow-500/30'
-        const textColor = isAnomaly ? 'text-red-500' : 'text-yellow-500'
+        const textColor = isAnomaly ? 'text-red-500' : 'text-amber-600'
         const Icon = isAnomaly ? AlertCircle : AlertTriangle
 
         return (
@@ -48,7 +48,7 @@ export default function AlertTimeline({ alerts }: AlertTimelineProps) {
                     {formatDistanceToNow(new Date(alert.timestamp), { addSuffix: true })}
                   </span>
                 </div>
-                <p className="text-sm text-white mb-2">{alert.message}</p>
+                <p className="text-sm text-foreground mb-2">{alert.message}</p>
                 <div className="flex gap-4 text-xs text-slate-400">
                   <span>Vibration: {alert.vibration}</span>
                   <span>Temp: {alert.temperature}°C</span>

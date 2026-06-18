@@ -17,7 +17,7 @@ export default function StatusBadge({ status, size = 'md' }: StatusBadgeProps) {
     },
     WARNING: {
       color: 'bg-yellow-500',
-      text: 'text-yellow-500',
+      text: 'text-amber-600',
       border: 'border-yellow-500',
       glow: 'shadow-yellow-500/50'
     },

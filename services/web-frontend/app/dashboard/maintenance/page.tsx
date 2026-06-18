@@ -116,7 +116,7 @@ const upcomingTasks: Task[] = [
 function PriorityBadge({ priority }: { priority: Task['priority'] }) {
   const variants = {
     LOW: 'bg-blue-500/10 text-blue-500 border-blue-500/30',
-    MEDIUM: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/30',
+    MEDIUM: 'bg-yellow-500/10 text-amber-600 border-yellow-500/30',
     HIGH: 'bg-red-500/10 text-red-500 border-red-500/30',
   }
   return <Badge variant="outline" className={variants[priority]}>{priority}</Badge>
@@ -126,7 +126,7 @@ function StatusBadge({ status }: { status: Task['status'] }) {
   const variants = {
     NOT_STARTED: 'bg-slate-500/10 text-slate-300 border-slate-500/30',
     IN_PROGRESS: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30',
-    DONE: 'bg-green-500/10 text-green-500 border-green-500/30',
+    DONE: 'bg-green-500/10 text-emerald-600 border-green-500/30',
   }
   return <Badge variant="outline" className={variants[status]}>{status.replace('_', ' ')}</Badge>
 }
@@ -455,7 +455,7 @@ export default function MaintenancePage() {
                     <tbody>
                       {tasks.map(t => (
                         <tr key={t.id} className="border-t border-slate-800">
-                          <td className="px-3 py-2 text-white font-medium whitespace-nowrap">{t.title}</td>
+                          <td className="px-3 py-2 text-foreground font-medium whitespace-nowrap">{t.title}</td>
                           <td className="px-3 py-2 text-slate-300 whitespace-nowrap">{t.equipmentId}</td>
                           <td className="px-3 py-2 text-slate-300 whitespace-nowrap">{t.dueDate}</td>
                           <td className="px-3 py-2 text-slate-300 whitespace-nowrap">{t.nextDueDate || '-'}</td>
@@ -469,7 +469,7 @@ export default function MaintenancePage() {
                               onClick={() => handleViewTask(t)}
                               variant="outline"
                               size="sm"
-                              className="bg-slate-800 hover:bg-slate-700 text-white border-slate-700"
+                              className="bg-slate-800 hover:bg-slate-700 text-foreground border-slate-700"
                             >
                               View
                             </Button>
@@ -489,7 +489,7 @@ export default function MaintenancePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* DO FIRST - Urgent & Important (Quadrant 1) */}
                 <div className="p-4 bg-red-950/20 border-2 border-red-500/30 rounded-lg">
-                  <h3 className="text-red-400 font-bold mb-3 flex items-center gap-2">
+                  <h3 className="text-red-600 font-bold mb-3 flex items-center gap-2">
                     <span className="text-xl">🔥</span>
                     DO FIRST (Urgent & Important)
                   </h3>
@@ -504,7 +504,7 @@ export default function MaintenancePage() {
                           onClick={() => handleViewTask(t)}
                         >
                           <div className="flex justify-between items-start mb-1">
-                            <span className="font-medium text-white text-sm">{t.title}</span>
+                            <span className="font-medium text-foreground text-sm">{t.title}</span>
                             <StatusBadge status={t.status} />
                           </div>
                           <div className="text-xs text-slate-400">{t.equipmentId}</div>
@@ -513,7 +513,7 @@ export default function MaintenancePage() {
                             {t.nextDueDate && <span className="ml-2"><span className="font-medium text-slate-300">A refaire:</span> {t.nextDueDate}</span>}
                           </div>
                           {t.autoCreated && (
-                            <div className="text-xs text-yellow-400 mt-1">⚡ Auto-created</div>
+                            <div className="text-xs text-amber-600 mt-1">⚡ Auto-created</div>
                           )}
                         </div>
                       ))}
@@ -525,7 +525,7 @@ export default function MaintenancePage() {
 
                 {/* SCHEDULE - Not Urgent & Important (Quadrant 2) */}
                 <div className="p-4 bg-blue-950/20 border-2 border-blue-500/30 rounded-lg">
-                  <h3 className="text-blue-400 font-bold mb-3 flex items-center gap-2">
+                  <h3 className="text-blue-600 font-bold mb-3 flex items-center gap-2">
                     <span className="text-xl">📅</span>
                     SCHEDULE (Not Urgent & Important)
                   </h3>
@@ -540,7 +540,7 @@ export default function MaintenancePage() {
                           onClick={() => handleViewTask(t)}
                         >
                           <div className="flex justify-between items-start mb-1">
-                            <span className="font-medium text-white text-sm">{t.title}</span>
+                            <span className="font-medium text-foreground text-sm">{t.title}</span>
                             <StatusBadge status={t.status} />
                           </div>
                           <div className="text-xs text-slate-400">{t.equipmentId}</div>
@@ -549,7 +549,7 @@ export default function MaintenancePage() {
                             {t.nextDueDate && <span className="ml-2"><span className="font-medium text-slate-300">A refaire:</span> {t.nextDueDate}</span>}
                           </div>
                           {t.autoCreated && (
-                            <div className="text-xs text-yellow-400 mt-1">⚡ Auto-created</div>
+                            <div className="text-xs text-amber-600 mt-1">⚡ Auto-created</div>
                           )}
                         </div>
                       ))}
@@ -561,7 +561,7 @@ export default function MaintenancePage() {
 
                 {/* DELEGATE - Urgent & Not Important (Quadrant 3) */}
                 <div className="p-4 bg-yellow-950/20 border-2 border-yellow-500/30 rounded-lg">
-                  <h3 className="text-yellow-400 font-bold mb-3 flex items-center gap-2">
+                  <h3 className="text-amber-600 font-bold mb-3 flex items-center gap-2">
                     <span className="text-xl">👥</span>
                     DELEGATE (Urgent & Not Important)
                   </h3>
@@ -576,7 +576,7 @@ export default function MaintenancePage() {
                           onClick={() => handleViewTask(t)}
                         >
                           <div className="flex justify-between items-start mb-1">
-                            <span className="font-medium text-white text-sm">{t.title}</span>
+                            <span className="font-medium text-foreground text-sm">{t.title}</span>
                             <StatusBadge status={t.status} />
                           </div>
                           <div className="text-xs text-slate-400">{t.equipmentId}</div>
@@ -585,7 +585,7 @@ export default function MaintenancePage() {
                             {t.nextDueDate && <span className="ml-2"><span className="font-medium text-slate-300">A refaire:</span> {t.nextDueDate}</span>}
                           </div>
                           {t.autoCreated && (
-                            <div className="text-xs text-yellow-400 mt-1">⚡ Auto-created</div>
+                            <div className="text-xs text-amber-600 mt-1">⚡ Auto-created</div>
                           )}
                         </div>
                       ))}
@@ -612,7 +612,7 @@ export default function MaintenancePage() {
                           onClick={() => handleViewTask(t)}
                         >
                           <div className="flex justify-between items-start mb-1">
-                            <span className="font-medium text-white text-sm">{t.title}</span>
+                            <span className="font-medium text-foreground text-sm">{t.title}</span>
                             <StatusBadge status={t.status} />
                           </div>
                           <div className="text-xs text-slate-400">{t.equipmentId}</div>
@@ -621,7 +621,7 @@ export default function MaintenancePage() {
                             {t.nextDueDate && <span className="ml-2"><span className="font-medium text-slate-300">A refaire:</span> {t.nextDueDate}</span>}
                           </div>
                           {t.autoCreated && (
-                            <div className="text-xs text-yellow-400 mt-1">⚡ Auto-created</div>
+                            <div className="text-xs text-amber-600 mt-1">⚡ Auto-created</div>
                           )}
                         </div>
                       ))}
@@ -691,14 +691,14 @@ export default function MaintenancePage() {
                       <CalendarIcon className="w-4 h-4" />
                       Date à faire (Due)
                     </label>
-                    <div className="mt-1 text-white">{selectedTask.dueDate}</div>
+                    <div className="mt-1 text-foreground">{selectedTask.dueDate}</div>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-slate-400 flex items-center gap-1">
                       <CalendarIcon className="w-4 h-4 text-emerald-500" />
                       Date pour la refaire (Next)
                     </label>
-                    <div className="mt-1 text-emerald-400 font-medium">{selectedTask.nextDueDate || 'Non définie'}</div>
+                    <div className="mt-1 text-emerald-600 font-medium">{selectedTask.nextDueDate || 'Non définie'}</div>
                   </div>
                 </div>
 
@@ -711,15 +711,15 @@ export default function MaintenancePage() {
                     <div className="grid grid-cols-3 gap-3">
                       <div>
                         <span className="text-xs text-slate-500">Quadrant</span>
-                        <div className="mt-1 font-medium text-white">{selectedTask.eisenhowerQuadrant}</div>
+                        <div className="mt-1 font-medium text-foreground">{selectedTask.eisenhowerQuadrant}</div>
                       </div>
                       <div>
                         <span className="text-xs text-slate-500">Urgency</span>
                         <div className="mt-1">
                           <Badge variant="outline" className={
                             selectedTask.urgency === 'URGENT'
-                              ? 'bg-red-500/10 text-red-400 border-red-500/30'
-                              : 'bg-blue-500/10 text-blue-400 border-blue-500/30'
+                              ? 'bg-red-500/10 text-red-600 border-red-500/30'
+                              : 'bg-blue-500/10 text-blue-600 border-blue-500/30'
                           }>
                             {selectedTask.urgency || 'N/A'}
                           </Badge>
@@ -730,7 +730,7 @@ export default function MaintenancePage() {
                         <div className="mt-1">
                           <Badge variant="outline" className={
                             selectedTask.importance === 'IMPORTANT'
-                              ? 'bg-purple-500/10 text-purple-400 border-purple-500/30'
+                              ? 'bg-purple-500/10 text-purple-600 border-purple-500/30'
                               : 'bg-slate-500/10 text-slate-400 border-slate-500/30'
                           }>
                             {selectedTask.importance || 'N/A'}
@@ -739,7 +739,7 @@ export default function MaintenancePage() {
                       </div>
                     </div>
                     {selectedTask.autoCreated && (
-                      <div className="mt-2 text-xs text-yellow-400 flex items-center gap-1">
+                      <div className="mt-2 text-xs text-amber-600 flex items-center gap-1">
                         <span>⚡</span> Auto-created from AI anomaly detection
                       </div>
                     )}
@@ -749,17 +749,17 @@ export default function MaintenancePage() {
                 {/* Description */}
                 <div>
                   <label className="text-sm font-medium text-slate-400">Description</label>
-                  <p className="mt-1 text-white">{selectedTask.description}</p>
+                  <p className="mt-1 text-foreground">{selectedTask.description}</p>
                 </div>
 
                 {/* AI Detected Cause */}
                 {selectedTask.aiDetectedCause && (
                   <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-                    <label className="text-sm font-medium text-yellow-400 flex items-center gap-2">
+                    <label className="text-sm font-medium text-amber-600 flex items-center gap-2">
                       <FileText className="w-4 h-4" />
                       AI Detected Cause
                     </label>
-                    <p className="mt-2 text-white text-sm">{selectedTask.aiDetectedCause}</p>
+                    <p className="mt-2 text-foreground text-sm">{selectedTask.aiDetectedCause}</p>
                     {selectedTask.anomalyId && (
                       <p className="mt-1 text-xs text-slate-400">Anomaly ID: {selectedTask.anomalyId}</p>
                     )}
@@ -773,14 +773,14 @@ export default function MaintenancePage() {
                     Assign To
                   </label>
                   <Select value={assignTo} onValueChange={setAssignTo}>
-                    <SelectTrigger className="bg-slate-950 border-slate-800 text-white">
+                    <SelectTrigger className="bg-slate-950 border-slate-800 text-foreground">
                       <SelectValue placeholder="Select technician" />
                     </SelectTrigger>
                     <SelectContent className="bg-slate-900 border-slate-800">
-                      <SelectItem value="John Smith" className="text-white">John Smith</SelectItem>
-                      <SelectItem value="Mike Johnson" className="text-white">Mike Johnson</SelectItem>
-                      <SelectItem value="Sarah Williams" className="text-white">Sarah Williams</SelectItem>
-                      <SelectItem value="David Brown" className="text-white">David Brown</SelectItem>
+                      <SelectItem value="John Smith" className="text-foreground">John Smith</SelectItem>
+                      <SelectItem value="Mike Johnson" className="text-foreground">Mike Johnson</SelectItem>
+                      <SelectItem value="Sarah Williams" className="text-foreground">Sarah Williams</SelectItem>
+                      <SelectItem value="David Brown" className="text-foreground">David Brown</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -799,7 +799,7 @@ export default function MaintenancePage() {
                         className="min-h-[100px]"
                       />
                     ) : (
-                      <p className="text-white text-sm p-3 bg-slate-900 rounded-md border border-slate-800">
+                      <p className="text-foreground text-sm p-3 bg-slate-900 rounded-md border border-slate-800">
                         {selectedTask.completionNotes}
                       </p>
                     )}
@@ -846,7 +846,7 @@ export default function MaintenancePage() {
                     </Button>
                   )}
                   {selectedTask.status === 'DONE' && (
-                    <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/30">
+                    <Badge variant="outline" className="bg-green-500/10 text-emerald-600 border-green-500/30">
                       Task Completed
                     </Badge>
                   )}
@@ -887,16 +887,16 @@ export default function MaintenancePage() {
                   value={newTaskForm.title}
                   onChange={(e) => setNewTaskForm(prev => ({ ...prev, title: e.target.value }))}
                   placeholder="Ex: Remplacement du filtre"
-                  className="bg-slate-950 border-slate-800 text-white"
+                  className="bg-slate-950 border-slate-800 text-foreground"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="equipment" className="text-slate-200">Equipement</Label>
                 <Select value={newTaskForm.equipmentId} onValueChange={(val) => setNewTaskForm(prev => ({ ...prev, equipmentId: val }))}>
-                  <SelectTrigger className="bg-slate-950 border-slate-800 text-white">
+                  <SelectTrigger className="bg-slate-950 border-slate-800 text-foreground">
                     <SelectValue placeholder="Choisir un équipement" />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800 text-white">
+                  <SelectContent className="bg-slate-900 border-slate-800 text-foreground">
                     <SelectItem value="PRESS_001">PRESS_001</SelectItem>
                     <SelectItem value="CONV_014">CONV_014</SelectItem>
                     <SelectItem value="MOTOR_207">MOTOR_207</SelectItem>
@@ -914,7 +914,7 @@ export default function MaintenancePage() {
                   type="date"
                   value={newTaskForm.dueDate}
                   onChange={(e) => setNewTaskForm(prev => ({ ...prev, dueDate: e.target.value }))}
-                  className="bg-slate-950 border-slate-800 text-white"
+                  className="bg-slate-950 border-slate-800 text-foreground"
                 />
               </div>
               <div className="space-y-2">
@@ -924,16 +924,16 @@ export default function MaintenancePage() {
                   type="date"
                   value={newTaskForm.nextDueDate}
                   onChange={(e) => setNewTaskForm(prev => ({ ...prev, nextDueDate: e.target.value }))}
-                  className="bg-slate-950 border-slate-800 text-white"
+                  className="bg-slate-950 border-slate-800 text-foreground"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="priority" className="text-slate-200">Priorité</Label>
                 <Select value={newTaskForm.priority} onValueChange={(val) => setNewTaskForm(prev => ({ ...prev, priority: val }))}>
-                  <SelectTrigger className="bg-slate-950 border-slate-800 text-white">
+                  <SelectTrigger className="bg-slate-950 border-slate-800 text-foreground">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800 text-white">
+                  <SelectContent className="bg-slate-900 border-slate-800 text-foreground">
                     <SelectItem value="LOW">Basse (LOW)</SelectItem>
                     <SelectItem value="MEDIUM">Moyenne (MEDIUM)</SelectItem>
                     <SelectItem value="HIGH">Haute (HIGH)</SelectItem>
@@ -945,10 +945,10 @@ export default function MaintenancePage() {
             <div className="space-y-2">
               <Label htmlFor="assignedTo" className="text-slate-200">Assigner au technicien (Optionnel)</Label>
               <Select value={newTaskForm.assignedTo} onValueChange={(val) => setNewTaskForm(prev => ({ ...prev, assignedTo: val }))}>
-                <SelectTrigger className="bg-slate-950 border-slate-800 text-white">
+                <SelectTrigger className="bg-slate-950 border-slate-800 text-foreground">
                   <SelectValue placeholder="Non assigné" />
                 </SelectTrigger>
-                <SelectContent className="bg-slate-900 border-slate-800 text-white">
+                <SelectContent className="bg-slate-900 border-slate-800 text-foreground">
                   <SelectItem value="John Smith">John Smith</SelectItem>
                   <SelectItem value="Mike Johnson">Mike Johnson</SelectItem>
                   <SelectItem value="Sarah Williams">Sarah Williams</SelectItem>
@@ -964,7 +964,7 @@ export default function MaintenancePage() {
                 value={newTaskForm.description}
                 onChange={(e) => setNewTaskForm(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Détails de l'intervention..."
-                className="bg-slate-950 border-slate-800 text-white min-h-[100px]"
+                className="bg-slate-950 border-slate-800 text-foreground min-h-[100px]"
               />
             </div>
           </div>
@@ -973,7 +973,7 @@ export default function MaintenancePage() {
             <Button variant="outline" onClick={() => setIsCreateOpen(false)} className="bg-transparent text-slate-300 border-slate-700 hover:bg-slate-800">
               Annuler
             </Button>
-            <Button onClick={handleCreateTask} disabled={isCreating} className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button onClick={handleCreateTask} disabled={isCreating} className="bg-blue-600 hover:bg-blue-700 text-foreground">
               {isCreating ? "Création..." : "Créer la tâche"}
             </Button>
           </DialogFooter>

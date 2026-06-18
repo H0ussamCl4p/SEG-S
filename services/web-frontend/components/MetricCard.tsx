@@ -34,7 +34,7 @@ export default function MetricCard({
       </CardHeader>
       <CardContent>
         <div className="flex items-baseline space-x-2">
-          <span className="text-4xl font-bold text-white">{value.toFixed(2)}</span>
+          <span className="text-4xl font-bold text-foreground">{value.toFixed(2)}</span>
           <span className="text-lg text-slate-500">{unit}</span>
         </div>
         {trend !== undefined && (

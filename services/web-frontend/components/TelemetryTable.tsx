@@ -65,7 +65,7 @@ export default function TelemetryTable({ data }: TelemetryTableProps) {
                 <TableCell className="text-right">{(row as any).humidity != null ? Number((row as any).humidity).toFixed(2) : ''}</TableCell>
                 <TableCell className="text-right">{Math.max(0, Math.min(100, Math.round((row.score || 0) * 100)))}</TableCell>
                 <TableCell>
-                  <span className={`px-2 py-1 rounded-full text-xs ${row.status === 'ANOMALY' ? 'bg-red-500/10 text-red-400 border border-red-500/30' : row.status === 'WARNING' ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/30' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'}`}>{row.status}</span>
+                  <span className={`px-2 py-1 rounded-full text-xs ${row.status === 'ANOMALY' ? 'bg-red-500/10 text-red-600 border border-red-500/30' : row.status === 'WARNING' ? 'bg-yellow-500/10 text-amber-600 border border-yellow-500/30' : 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/30'}`}>{row.status}</span>
                 </TableCell>
               </TableRow>
             ))}

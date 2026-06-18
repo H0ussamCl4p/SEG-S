@@ -27,9 +27,9 @@ export default function MaintenanceForecast({
 
   const getUrgencyColor = (days: number) => {
     if (days <= 3) return 'bg-red-500/10 text-red-500 border-red-500/30'
-    if (days <= 7) return 'bg-orange-500/10 text-orange-500 border-orange-500/30'
-    if (days <= 14) return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/30'
-    return 'bg-green-500/10 text-green-500 border-green-500/30'
+    if (days <= 7) return 'bg-orange-500/10 text-orange-600 border-orange-500/30'
+    if (days <= 14) return 'bg-yellow-500/10 text-amber-600 border-yellow-500/30'
+    return 'bg-green-500/10 text-emerald-600 border-green-500/30'
   }
 
   const getUrgencyIcon = (days: number) => {
@@ -127,7 +127,7 @@ export default function MaintenanceForecast({
             <div className="space-y-2">
               {criticalFactors.map((factor, idx) => (
                 <div key={idx} className="flex items-center gap-2 text-sm text-slate-400 bg-slate-900/50 p-2 rounded">
-                  <span className="text-red-400">•</span>
+                  <span className="text-red-600">•</span>
                   {factor}
                 </div>
               ))}
@@ -139,7 +139,7 @@ export default function MaintenanceForecast({
         <Button
           onClick={handleAddToCalendar}
           disabled={isAdding}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-foreground"
         >
           {isAdding ? (
             <>

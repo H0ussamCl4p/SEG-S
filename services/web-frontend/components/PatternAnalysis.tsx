@@ -23,7 +23,7 @@ export default function PatternAnalysis({ patterns }: PatternAnalysisProps) {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'HIGH': return { bg: 'bg-red-500/10', border: 'border-red-500/30', text: 'text-red-500', icon: 'text-red-500' }
-      case 'MEDIUM': return { bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', text: 'text-yellow-500', icon: 'text-yellow-500' }
+      case 'MEDIUM': return { bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', text: 'text-amber-600', icon: 'text-amber-600' }
       case 'LOW': return { bg: 'bg-blue-500/10', border: 'border-blue-500/30', text: 'text-blue-500', icon: 'text-blue-500' }
       case 'INFO': return { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-500', icon: 'text-emerald-500' }
       default: return { bg: 'bg-slate-500/10', border: 'border-slate-500/30', text: 'text-slate-500', icon: 'text-slate-500' }
@@ -56,7 +56,7 @@ export default function PatternAnalysis({ patterns }: PatternAnalysisProps) {
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="text-sm font-semibold text-white">{pattern.title}</h4>
+                  <h4 className="text-sm font-semibold text-foreground">{pattern.title}</h4>
                   <div className="flex items-center gap-2">
                     <span className={`text-xs font-medium ${colors.text}`}>
                       {pattern.confidence.toFixed(0)}% confidence

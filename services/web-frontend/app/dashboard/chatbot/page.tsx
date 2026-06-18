@@ -45,7 +45,7 @@ export default function ChatbotPage() {
                 {/* Decorative border glow on hover */}
                 <div className="absolute -inset-0.5 bg-gradient-to-br from-emerald-500/20 to-blue-500/20 rounded-[2rem] blur opacity-0 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
 
-                <div className="relative h-full w-full bg-zinc-950/40 border border-white/10 rounded-[1.5rem] overflow-hidden backdrop-blur-xl shadow-2xl">
+                <div className="relative h-full w-full bg-page/40 border border-border rounded-[1.5rem] overflow-hidden backdrop-blur-xl shadow-2xl">
                     <ChatInterface fullHeight />
                 </div>
             </motion.div>

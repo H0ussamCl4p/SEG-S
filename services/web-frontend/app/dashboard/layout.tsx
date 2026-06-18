@@ -1,121 +1,94 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Activity, LogOut, Menu, X } from "lucide-react"
+import { Activity, Home, Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import DashboardNav from "@/components/DashboardNav"
 import Link from "next/link"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false)
-  const [userName, setUserName] = useState<string | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  
-  useEffect(() => setMounted(true), [])
 
-  useEffect(() => {
-    const storedUser = typeof window !== 'undefined' ? window.localStorage.getItem('user') : null
-    if (storedUser) {
-      try {
-        const parsed = JSON.parse(storedUser)
-        setUserName(parsed.name || parsed.email || null)
-      } catch {
-        setUserName(null)
-      }
-    }
-  }, [])
+  useEffect(() => setMounted(true), [])
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-page">
         <div className="text-center">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full mx-auto mb-4"
+            className="mx-auto mb-4 h-12 w-12 rounded-full border-[3px] border-emerald-500 border-t-transparent"
           />
-          <p className="text-zinc-400">Loading dashboard...</p>
+          <p className="text-sm text-muted-foreground">Loading dashboard…</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
+    <div className="min-h-screen bg-page text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/50 backdrop-blur-xl">
-        <div className="container mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <Link href="/dashboard" className="flex items-center space-x-3 group">
-              <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-colors">
-                <Activity className="w-6 h-6 text-emerald-500" />
-              </div>
-              <div className="hidden sm:block">
-                <h1 className="text-xl font-bold tracking-tight">Smart Energy Guardien</h1>
-                <p className="text-xs text-zinc-500">Real-time Industrial Monitoring</p>
-              </div>
-            </Link>
-
-            {/* Right Side */}
-            <div className="flex items-center gap-3">
-              {/* Demo badge */}
-              <div className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-xs font-medium text-emerald-400">Live Demo</span>
-              </div>
-
-              {/* Home Button */}
-              <Link
-                href="/"
-                className="p-2.5 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors border border-white/10"
-                title="Back to home"
-              >
-                <LogOut className="w-5 h-5" />
-              </Link>
-
-              {/* Mobile Menu Toggle */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2.5 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors border border-white/10"
-              >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
+      <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6">
+          <Link href="/dashboard" className="flex items-center gap-3">
+            <span className="inline-flex rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-2">
+              <Activity className="h-5 w-5 text-emerald-600" />
+            </span>
+            <div className="hidden sm:block">
+              <h1 className="text-base font-semibold tracking-tight">EneGuardian</h1>
+              <p className="text-xs text-muted-foreground">Real-time industrial monitoring</p>
             </div>
+          </Link>
+
+          <div className="flex items-center gap-2.5">
+            <div className="hidden items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3.5 py-1.5 lg:flex">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+              <span className="text-xs font-medium text-emerald-700">Live demo</span>
+            </div>
+            <Link
+              href="/"
+              title="Back to home"
+              className="rounded-xl border border-border bg-background p-2.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <Home className="h-5 w-5" />
+            </Link>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="rounded-xl border border-border bg-background p-2.5 text-muted-foreground transition-colors hover:bg-muted lg:hidden"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden border-b border-white/10 bg-zinc-900/95 backdrop-blur-xl overflow-hidden"
+            className="overflow-hidden border-b border-border bg-background lg:hidden"
           >
-            <div className="container mx-auto px-4 py-4">
+            <div className="mx-auto max-w-7xl px-4 py-4">
               <DashboardNav mobile onNavigate={() => setMobileMenuOpen(false)} />
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 sm:px-6 py-6 lg:py-8">
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Desktop Sidebar */}
-          <aside className="hidden lg:block w-64 shrink-0">
+      {/* Content */}
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:py-8">
+        <div className="flex flex-col gap-6 lg:flex-row">
+          <aside className="hidden w-60 shrink-0 lg:block">
             <div className="sticky top-24">
               <DashboardNav />
             </div>
           </aside>
-
-          {/* Content Area */}
-          <div className="flex-1 min-w-0">
-            {children}
-          </div>
+          <div className="min-w-0 flex-1">{children}</div>
         </div>
       </main>
     </div>

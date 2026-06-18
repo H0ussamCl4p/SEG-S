@@ -112,10 +112,10 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
-      case 'IMMEDIATE': return 'text-red-400 bg-red-500/10 border-red-500/30'
-      case 'HIGH': return 'text-orange-400 bg-orange-500/10 border-orange-500/30'
-      case 'MEDIUM': return 'text-yellow-400 bg-yellow-500/10 border-yellow-500/30'
-      case 'LOW': return 'text-green-400 bg-green-500/10 border-green-500/30'
+      case 'IMMEDIATE': return 'text-red-600 bg-red-500/10 border-red-500/30'
+      case 'HIGH': return 'text-orange-600 bg-orange-500/10 border-orange-500/30'
+      case 'MEDIUM': return 'text-amber-600 bg-yellow-500/10 border-yellow-500/30'
+      case 'LOW': return 'text-emerald-600 bg-green-500/10 border-green-500/30'
       default: return 'text-gray-400 bg-gray-500/10 border-gray-500/30'
     }
   }
@@ -266,7 +266,7 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
             {/* Critical Factors */}
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <TrendingDown className="w-4 h-4 text-orange-400" />
+                <TrendingDown className="w-4 h-4 text-orange-600" />
                 <span className="text-sm font-medium">Critical Factors</span>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -282,13 +282,13 @@ export default function RULPrediction({ machineId, compact = false }: RULPredict
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
               <div className="flex items-center justify-between p-3 bg-slate-900/40 rounded">
                 <span className="text-slate-400">Avg Vibration</span>
-                <span className={`font-semibold ${data.avg_vibration > 75 ? 'text-red-400' : 'text-white'}`}>
+                <span className={`font-semibold ${data.avg_vibration > 75 ? 'text-red-600' : 'text-foreground'}`}>
                   {data.avg_vibration}
                 </span>
               </div>
               <div className="flex items-center justify-between p-3 bg-slate-900/40 rounded">
                 <span className="text-slate-400">Avg Temperature</span>
-                <span className={`font-semibold ${data.avg_temperature > 70 ? 'text-red-400' : 'text-white'}`}>
+                <span className={`font-semibold ${data.avg_temperature > 70 ? 'text-red-600' : 'text-foreground'}`}>
                   {data.avg_temperature}°C
                 </span>
               </div>

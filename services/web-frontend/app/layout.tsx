@@ -1,13 +1,24 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  weight: ["500", "600", "700"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "IIoT Predictive Maintenance",
-  description: "Real-time AI-powered industrial monitoring and anomaly detection",
+  title: "EneGuardian — Predictive Maintenance",
+  description: "Real-time AI-powered industrial monitoring, anomaly detection and condition monitoring.",
 };
 
 export default function RootLayout({
@@ -16,15 +27,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+      <body className="font-sans antialiased bg-background text-foreground">
         <Providers>{children}</Providers>
-        <footer className="w-full py-8 bg-black border-t border-white/10 text-center text-zinc-500 text-sm">
-          <div className="container mx-auto px-6">
-            <p>&copy; {new Date().getFullYear()} Smart Energy Guardien. All rights reserved.</p>
-            <p className="mt-2">Optimisation Energetique et Maintenance predicitve pour l industrie 4.0</p>
-          </div>
-        </footer>
       </body>
     </html>
   );

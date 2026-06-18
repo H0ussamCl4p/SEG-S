@@ -61,7 +61,7 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'HIGH': return { bg: 'bg-red-500/10', border: 'border-red-500/30', text: 'text-red-500', badge: 'bg-red-500' }
-      case 'MEDIUM': return { bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', text: 'text-yellow-500', badge: 'bg-yellow-500' }
+      case 'MEDIUM': return { bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', text: 'text-amber-600', badge: 'bg-yellow-500' }
       case 'LOW': return { bg: 'bg-blue-500/10', border: 'border-blue-500/30', text: 'text-blue-500', badge: 'bg-blue-500' }
       default: return { bg: 'bg-slate-500/10', border: 'border-slate-500/30', text: 'text-slate-500', badge: 'bg-slate-500' }
     }
@@ -71,7 +71,7 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
     switch (status) {
       case 'COMPLETED': return 'text-emerald-500'
       case 'IN_PROGRESS': return 'text-blue-500'
-      case 'OPEN': return 'text-yellow-500'
+      case 'OPEN': return 'text-amber-600'
       case 'SCHEDULED': return 'text-slate-500'
       default: return 'text-slate-500'
     }
@@ -93,7 +93,7 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200">
           {/* Glassy Background */}
           <div 
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-background/60 backdrop-blur-sm"
             onClick={closeModal}
           />
           
@@ -101,7 +101,7 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
           <div className="relative w-full max-w-lg bg-slate-900/95 backdrop-blur-xl border border-slate-700 rounded-xl sm:rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-800 sticky top-0 bg-slate-900/95 backdrop-blur-xl z-10">
-              <h3 className="text-base sm:text-lg font-semibold text-white flex items-center gap-2">
+              <h3 className="text-base sm:text-lg font-semibold text-foreground flex items-center gap-2">
                 {modal.type === 'details' && <><FileText className="w-4 h-4 sm:w-5 sm:h-5" /> Details</>}
                 {modal.type === 'start' && <><PlayCircle className="w-4 h-4 sm:w-5 sm:h-5" /> Start Work</>}
                 {modal.type === 'complete' && <><CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" /> Complete</>}
@@ -120,11 +120,11 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
               <div className="space-y-2 sm:space-y-3">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-mono text-slate-500">{modal.workOrder?.id}</span>
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getPriorityColor(modal.workOrder?.priority || '').badge} text-white`}>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getPriorityColor(modal.workOrder?.priority || '').badge} text-foreground`}>
                     {modal.workOrder?.priority}
                   </span>
                 </div>
-                <h4 className="text-lg sm:text-xl font-bold text-white break-words">{modal.workOrder?.title}</h4>
+                <h4 className="text-lg sm:text-xl font-bold text-foreground break-words">{modal.workOrder?.title}</h4>
                 <p className="text-xs sm:text-sm text-slate-400">{modal.workOrder?.description}</p>
               </div>
 
@@ -136,25 +136,25 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
                       <p className="text-xs text-slate-500 mb-1">Assigned To</p>
                       <div className="flex items-center gap-2">
                         <User className="w-4 h-4 text-slate-400" />
-                        <p className="text-sm text-white">{modal.workOrder?.assigned_to}</p>
+                        <p className="text-sm text-foreground">{modal.workOrder?.assigned_to}</p>
                       </div>
                     </div>
                     <div>
                       <p className="text-xs text-slate-500 mb-1">Status</p>
-                      <p className="text-sm text-white">{modal.workOrder?.status.replace('_', ' ')}</p>
+                      <p className="text-sm text-foreground">{modal.workOrder?.status.replace('_', ' ')}</p>
                     </div>
                     <div>
                       <p className="text-xs text-slate-500 mb-1">Category</p>
                       <div className="flex items-center gap-2">
                         <Wrench className="w-4 h-4 text-slate-400" />
-                        <p className="text-sm text-white">{modal.workOrder?.category}</p>
+                        <p className="text-sm text-foreground">{modal.workOrder?.category}</p>
                       </div>
                     </div>
                     <div>
                       <p className="text-xs text-slate-500 mb-1">Estimated Time</p>
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-slate-400" />
-                        <p className="text-sm text-white">{modal.workOrder?.estimated_hours}h</p>
+                        <p className="text-sm text-foreground">{modal.workOrder?.estimated_hours}h</p>
                       </div>
                     </div>
                   </div>
@@ -162,7 +162,7 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
                     <p className="text-xs text-slate-500 mb-1">Due Date</p>
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-slate-400" />
-                      <p className="text-sm text-white">
+                      <p className="text-sm text-foreground">
                         {modal.workOrder?.due_date && formatDistanceToNow(new Date(modal.workOrder.due_date), { addSuffix: true })}
                       </p>
                     </div>
@@ -174,10 +174,10 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
               {modal.type === 'start' && (
                 <div className="space-y-3 sm:space-y-4 pt-3 sm:pt-4 border-t border-slate-800">
                   <div className="p-3 sm:p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-                    <p className="text-xs sm:text-sm text-emerald-400">
+                    <p className="text-xs sm:text-sm text-emerald-600">
                       Ready to start this work order? This will:
                     </p>
-                    <ul className="mt-2 space-y-1 text-xs sm:text-sm text-emerald-300">
+                    <ul className="mt-2 space-y-1 text-xs sm:text-sm text-emerald-700">
                       <li>• Change status to IN_PROGRESS</li>
                       <li>• Start time tracking</li>
                       <li>• Notify assigned technician</li>
@@ -191,7 +191,7 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
               {modal.type === 'complete' && (
                 <div className="space-y-3 sm:space-y-4 pt-3 sm:pt-4 border-t border-slate-800">
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-white mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-foreground mb-2">
                       Actual Hours Worked *
                     </label>
                     <input
@@ -200,14 +200,14 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
                       value={hoursWorked}
                       onChange={(e) => setHoursWorked(e.target.value)}
                       placeholder="e.g., 3.5"
-                      className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-foreground text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <p className="text-xs text-slate-500 mt-1">
                       Estimated: {modal.workOrder?.estimated_hours}h
                     </p>
                   </div>
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-white mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-foreground mb-2">
                       Completion Notes
                     </label>
                     <textarea
@@ -215,7 +215,7 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
                       onChange={(e) => setCompletionNotes(e.target.value)}
                       placeholder="Describe work performed, parts replaced, observations..."
                       rows={3}
-                      className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                      className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-foreground text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                     />
                   </div>
                 </div>
@@ -226,14 +226,14 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 p-4 sm:p-6 border-t border-slate-800 sticky bottom-0 bg-slate-900/95 backdrop-blur-xl">
               <button
                 onClick={closeModal}
-                className="flex-1 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition-colors font-medium text-sm sm:text-base"
+                className="flex-1 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-foreground rounded-lg transition-colors font-medium text-sm sm:text-base"
               >
                 Cancel
               </button>
               {modal.type === 'start' && (
                 <button
                   onClick={handleStartWork}
-                  className="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors font-medium flex items-center justify-center gap-2 text-sm sm:text-base"
+                  className="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-foreground rounded-lg transition-colors font-medium flex items-center justify-center gap-2 text-sm sm:text-base"
                 >
                   <PlayCircle className="w-4 h-4" />
                   Start Work
@@ -242,7 +242,7 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
               {modal.type === 'complete' && (
                 <button
                   onClick={handleCompleteWork}
-                  className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors font-medium flex items-center justify-center gap-2 text-sm sm:text-base"
+                  className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-foreground rounded-lg transition-colors font-medium flex items-center justify-center gap-2 text-sm sm:text-base"
                 >
                   <CheckCircle className="w-4 h-4" />
                   Complete
@@ -267,7 +267,7 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
             <div className="flex items-start justify-between mb-2">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-mono text-slate-400">{order.id}</span>
-                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${priorityColors.badge} text-white`}>
+                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${priorityColors.badge} text-foreground`}>
                   {order.priority}
                 </span>
               </div>
@@ -277,7 +277,7 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
               </div>
             </div>
 
-            <h4 className="text-sm font-semibold text-white mb-1">{order.title}</h4>
+            <h4 className="text-sm font-semibold text-foreground mb-1">{order.title}</h4>
             <p className="text-xs text-slate-400 mb-3 line-clamp-2">{order.description}</p>
 
             <div className="grid grid-cols-2 gap-2 text-xs">
@@ -320,7 +320,7 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
               {order.status === 'OPEN' && (
                 <button
                   onClick={() => openModal('start', order)}
-                  className="flex-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-medium transition-colors flex items-center justify-center gap-1"
+                  className="flex-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-foreground rounded text-xs font-medium transition-colors flex items-center justify-center gap-1"
                 >
                   <PlayCircle className="w-3 h-3" />
                   Start Work
@@ -330,7 +330,7 @@ export default function WorkOrderList({ workOrders }: WorkOrderListProps) {
               {order.status === 'IN_PROGRESS' && (
                 <button
                   onClick={() => openModal('complete', order)}
-                  className="flex-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded text-xs font-medium transition-colors flex items-center justify-center gap-1"
+                  className="flex-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-foreground rounded text-xs font-medium transition-colors flex items-center justify-center gap-1"
                 >
                   <CheckCircle className="w-3 h-3" />
                   Complete

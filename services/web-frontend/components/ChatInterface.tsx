@@ -45,9 +45,9 @@ function formatAgentMessage(content: string) {
                         key={i}
                         className={cn(
                             "leading-relaxed",
-                            isHeading && "font-bold text-emerald-300 mt-4 mb-1 first:mt-0 tracking-wide",
-                            isBullet && "pl-4 text-zinc-300 relative before:content-[''] before:absolute before:left-1.5 before:top-2.5 before:w-1 before:h-1 before:bg-emerald-500/50 before:rounded-full",
-                            !isHeading && !isBullet && "text-zinc-200"
+                            isHeading && "font-bold text-emerald-700 mt-4 mb-1 first:mt-0 tracking-wide",
+                            isBullet && "pl-4 text-foreground relative before:content-[''] before:absolute before:left-1.5 before:top-2.5 before:w-1 before:h-1 before:bg-emerald-500/50 before:rounded-full",
+                            !isHeading && !isBullet && "text-foreground"
                         )}
                     >
                         {isBullet ? trimmed.substring(1).trim() : line}
@@ -188,21 +188,21 @@ export function ChatInterface({ fullHeight = false }: ChatInterfaceProps) {
 
     return (
         <Card className={cn(
-            "flex flex-col w-full mx-auto shadow-2xl border-white/10 bg-zinc-950/50 backdrop-blur-3xl relative overflow-hidden",
+            "flex flex-col w-full mx-auto shadow-2xl border-border bg-muted backdrop-blur-3xl relative overflow-hidden",
             fullHeight ? "h-full max-w-none" : "h-[700px] max-w-xl"
         )}>
             {/* Background Decorative Glow */}
             <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-emerald-500/5 blur-[100px] -z-10 pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-blue-500/5 blur-[100px] -z-10 pointer-events-none" />
 
-            <CardHeader className="border-b border-white/5 bg-black/20 px-6 py-4 flex flex-row items-center justify-between">
+            <CardHeader className="border-b border-border bg-background/20 px-6 py-4 flex flex-row items-center justify-between">
                 <CardTitle className="flex items-center gap-3 text-xl font-bold">
                     <div className="relative">
                         <div className="absolute inset-0 bg-emerald-500/20 blur-lg rounded-full" />
                         <Bot className="w-6 h-6 text-emerald-500 relative z-10" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-foreground to-white/60 bg-clip-text text-transparent">
                             AI Engine Assistant
                         </span>
                         <div className="flex items-center gap-1.5">
@@ -235,8 +235,8 @@ export function ChatInterface({ fullHeight = false }: ChatInterfaceProps) {
                                     msg.role === 'assistant'
                                         ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
                                         : msg.role === 'user'
-                                            ? "bg-zinc-800 border-white/10 text-zinc-300"
-                                            : "bg-zinc-900 border-white/5 text-zinc-500"
+                                            ? "bg-muted border-border text-foreground"
+                                            : "bg-background border-border text-muted-foreground"
                                 )}>
                                     {msg.role === 'assistant' ? <Sparkles className="w-5 h-5" /> : <User className="w-5 h-5" />}
                                 </div>
@@ -249,14 +249,14 @@ export function ChatInterface({ fullHeight = false }: ChatInterfaceProps) {
                                     <div className={cn(
                                         "rounded-2xl px-5 py-4 text-sm shadow-xl border transition-all",
                                         msg.role === 'user'
-                                            ? "bg-gradient-to-br from-emerald-600 to-teal-700 border-emerald-500/30 text-white rounded-tr-none hover:shadow-emerald-500/10 whitespace-pre-wrap"
+                                            ? "bg-gradient-to-br from-emerald-600 to-teal-700 border-emerald-500/30 text-foreground rounded-tr-none hover:shadow-emerald-500/10 whitespace-pre-wrap"
                                             : msg.role === 'system'
-                                                ? "bg-zinc-900/80 border-red-500/20 text-red-400 italic font-mono text-xs rounded-tl-none whitespace-pre-wrap"
-                                                : "bg-white/5 border-white/10 rounded-tl-none hover:bg-white/[0.07]"
+                                                ? "bg-background/80 border-red-500/20 text-red-600 italic font-mono text-xs rounded-tl-none whitespace-pre-wrap"
+                                                : "bg-background border-border rounded-tl-none hover:bg-white/[0.07]"
                                     )}>
                                         {msg.role === 'assistant' ? formatAgentMessage(msg.content) : msg.content}
                                     </div>
-                                    <span className="text-[10px] text-zinc-600 mt-1 opacity-0 group-hover:opacity-100 transition-opacity uppercase font-mono tracking-widest px-1">
+                                    <span className="text-[10px] text-muted-foreground mt-1 opacity-0 group-hover:opacity-100 transition-opacity uppercase font-mono tracking-widest px-1">
                                         {msg.role === 'assistant' ? 'Agent' : 'User'}
                                     </span>
                                 </div>
@@ -282,9 +282,9 @@ export function ChatInterface({ fullHeight = false }: ChatInterfaceProps) {
                 </div>
 
                 {/* Input Area */}
-                <div className="p-4 sm:p-6 bg-gradient-to-t from-zinc-950/80 to-transparent border-t border-white/5 backdrop-blur-md">
+                <div className="p-4 sm:p-6 bg-gradient-to-t from-zinc-950/80 to-transparent border-t border-border backdrop-blur-md">
                     <div className="relative max-w-4xl mx-auto flex flex-col gap-3">
-                        <div className="relative group bg-zinc-900/80 border border-white/10 rounded-2xl transition-all focus-within:border-emerald-500/50 focus-within:bg-zinc-900 focus-within:shadow-lg focus-within:shadow-emerald-500/5 overflow-hidden backdrop-blur-xl">
+                        <div className="relative group bg-background/80 border border-border rounded-2xl transition-all focus-within:border-emerald-500/50 focus-within:bg-background focus-within:shadow-lg focus-within:shadow-emerald-500/5 overflow-hidden backdrop-blur-xl">
                             <textarea
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
@@ -296,10 +296,10 @@ export function ChatInterface({ fullHeight = false }: ChatInterfaceProps) {
                                 }}
                                 placeholder="Ask about equipment status, anomalies, or technical docs..."
                                 disabled={isLoading}
-                                className="w-full bg-transparent border-none focus:ring-0 text-sm text-zinc-100 placeholder:text-zinc-500 resize-none max-h-48 min-h-[60px] p-4 custom-scrollbar"
+                                className="w-full bg-transparent border-none focus:ring-0 text-sm text-zinc-100 placeholder:text-muted-foreground resize-none max-h-48 min-h-[60px] p-4 custom-scrollbar"
                             />
 
-                            <div className="flex items-center justify-between px-3 pb-3 pt-1 border-t border-white/5 bg-white/[0.02]">
+                            <div className="flex items-center justify-between px-3 pb-3 pt-1 border-t border-border bg-white/[0.02]">
                                 <div className="flex items-center gap-2">
                                     <input
                                         type="file"
@@ -312,7 +312,7 @@ export function ChatInterface({ fullHeight = false }: ChatInterfaceProps) {
                                         variant="outline"
                                         disabled={isUploading || isLoading}
                                         onClick={() => fileInputRef.current?.click()}
-                                        className="h-9 shrink-0 border-white/10 bg-white/5 text-zinc-400 hover:text-emerald-400 hover:border-emerald-500/30 hover:bg-emerald-500/10 rounded-lg transition-all flex items-center gap-2 px-3 group"
+                                        className="h-9 shrink-0 border-border bg-background text-muted-foreground hover:text-emerald-600 hover:border-emerald-500/30 hover:bg-emerald-500/10 rounded-lg transition-all flex items-center gap-2 px-3 group"
                                         title="Upload Technical Manual (PDF)"
                                     >
                                         {isUploading ? (
@@ -327,7 +327,7 @@ export function ChatInterface({ fullHeight = false }: ChatInterfaceProps) {
                                         variant="ghost"
                                         size="sm"
                                         onClick={clearChat}
-                                        className="h-9 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg px-3 transition-colors flex items-center gap-2"
+                                        className="h-9 text-muted-foreground hover:text-red-600 hover:bg-red-400/10 rounded-lg px-3 transition-colors flex items-center gap-2"
                                         title="Clear Chat History"
                                     >
                                         <Trash2 className="w-4 h-4" />
@@ -336,7 +336,7 @@ export function ChatInterface({ fullHeight = false }: ChatInterfaceProps) {
                                 </div>
 
                                 <div className="flex items-center gap-3">
-                                    <span className="hidden sm:inline text-[10px] text-zinc-500 uppercase tracking-widest font-mono">
+                                    <span className="hidden sm:inline text-[10px] text-muted-foreground uppercase tracking-widest font-mono">
                                         Shift + Enter for new line
                                     </span>
                                     <Button
@@ -345,8 +345,8 @@ export function ChatInterface({ fullHeight = false }: ChatInterfaceProps) {
                                         className={cn(
                                             "h-9 px-4 shrink-0 rounded-lg transition-all duration-300 shadow-lg flex items-center gap-2 font-semibold tracking-wider text-xs uppercase",
                                             input.trim()
-                                                ? "bg-emerald-500 text-white hover:bg-emerald-400 shadow-emerald-500/20"
-                                                : "bg-zinc-800 text-zinc-500"
+                                                ? "bg-emerald-500 text-foreground hover:bg-emerald-400 shadow-emerald-500/20"
+                                                : "bg-muted text-muted-foreground"
                                         )}
                                     >
                                         <span>Send</span>

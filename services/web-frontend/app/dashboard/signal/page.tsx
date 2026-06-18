@@ -29,22 +29,22 @@ function Card({ icon: Icon, label, value, unit, tone = 'neutral', sub }: {
   tone?: 'neutral' | 'ok' | 'warn' | 'danger'; sub?: string
 }) {
   const borders: Record<string, string> = {
-    neutral: 'border-white/10', ok: 'border-emerald-500/40', warn: 'border-amber-500/50', danger: 'border-red-500/60',
+    neutral: 'border-border', ok: 'border-emerald-500/40', warn: 'border-amber-500/50', danger: 'border-red-500/60',
   }
   const icons: Record<string, string> = {
-    neutral: 'text-zinc-400', ok: 'text-emerald-400', warn: 'text-amber-400', danger: 'text-red-400',
+    neutral: 'text-muted-foreground', ok: 'text-emerald-600', warn: 'text-amber-600', danger: 'text-red-600',
   }
   return (
-    <div className={`p-5 rounded-2xl bg-white/5 border ${borders[tone]}`}>
+    <div className={`p-5 rounded-2xl bg-background border ${borders[tone]}`}>
       <div className="flex items-center gap-2 mb-3">
         <Icon className={`w-5 h-5 ${icons[tone]}`} />
-        <span className="text-xs uppercase tracking-wider text-zinc-400">{label}</span>
+        <span className="text-xs uppercase tracking-wider text-muted-foreground">{label}</span>
       </div>
       <div className="flex items-baseline gap-1">
-        <span className="text-3xl font-bold text-white tabular-nums">{value}</span>
-        {unit && <span className="text-sm text-zinc-500">{unit}</span>}
+        <span className="text-3xl font-bold text-foreground tabular-nums">{value}</span>
+        {unit && <span className="text-sm text-muted-foreground">{unit}</span>}
       </div>
-      {sub && <p className="text-xs text-zinc-500 mt-2">{sub}</p>}
+      {sub && <p className="text-xs text-muted-foreground mt-2">{sub}</p>}
     </div>
   )
 }
@@ -100,22 +100,22 @@ export default function SignalPage() {
     <div className="space-y-6">
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-white">Signal Analysis</h1>
-          <p className="text-zinc-400 text-sm mt-1">
+          <h1 className="text-3xl font-bold text-foreground">Signal Analysis</h1>
+          <p className="text-muted-foreground text-sm mt-1">
             FFT + envelope vibration diagnostics · device{' '}
-            <span className="text-zinc-300 font-mono">{r?.device_id ?? '—'}</span>
+            <span className="text-foreground font-mono">{r?.device_id ?? '—'}</span>
             {r?.fs && <> · {(r.fs / 1000).toFixed(0)} kHz · shaft {r?.shaft_hz} Hz</>}
           </p>
         </div>
-        <div className={`px-3 py-1.5 rounded-full text-sm font-medium border ${faulty ? 'bg-red-500/15 border-red-500/40 text-red-300' : 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'}`}>
+        <div className={`px-3 py-1.5 rounded-full text-sm font-medium border ${faulty ? 'bg-red-500/15 border-red-500/40 text-red-700' : 'bg-emerald-500/15 border-emerald-500/40 text-emerald-700'}`}>
           {faulty ? `⚠ ${fault?.type}` : '● Healthy'}
           {fault?.confidence != null && faulty && <span className="ml-2 text-xs opacity-80">conf {(fault.confidence * 100).toFixed(0)}%</span>}
         </div>
       </div>
 
-      {error && <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-sm">{error}</div>}
+      {error && <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-700 text-sm">{error}</div>}
       {!r && !error && (
-        <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-zinc-400 text-sm">
+        <div className="p-4 rounded-xl bg-background border border-border text-muted-foreground text-sm">
           Waiting for the first vibration window from the analyzer…
         </div>
       )}
@@ -132,20 +132,20 @@ export default function SignalPage() {
       </div>
 
       {/* FFT spectrum */}
-      <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
+      <div className="p-5 rounded-2xl bg-background border border-border">
         <div className="flex items-center gap-2 mb-3">
-          <Waves className="w-5 h-5 text-emerald-400" />
-          <h2 className="text-lg font-semibold text-white">FFT spectrum</h2>
-          <span className="text-xs text-zinc-500 ml-2">amplitude vs frequency (Hz)</span>
+          <Waves className="w-5 h-5 text-emerald-600" />
+          <h2 className="text-lg font-semibold text-foreground">FFT spectrum</h2>
+          <span className="text-xs text-muted-foreground ml-2">amplitude vs frequency (Hz)</span>
         </div>
         <div className="h-56">
           {!r?.spectrum?.length ? <Empty /> : (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={r.spectrum}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                <XAxis dataKey="f" stroke="#888" fontSize={11} tickFormatter={(v) => `${v}`} />
-                <YAxis stroke="#888" fontSize={11} />
-                <Tooltip contentStyle={{ background: '#18181b', border: '1px solid #3f3f46', borderRadius: 8 }} labelStyle={{ color: '#d4d4d8' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e6e8eb" />
+                <XAxis dataKey="f" stroke="#9aa3ad" fontSize={11} tickFormatter={(v) => `${v}`} />
+                <YAxis stroke="#9aa3ad" fontSize={11} />
+                <Tooltip contentStyle={{ background: '#ffffff', border: '1px solid #e6e8eb', borderRadius: 8 }} labelStyle={{ color: '#0b0f12' }} />
                 <Line type="monotone" dataKey="m" stroke="#10b981" strokeWidth={1.5} dot={false} name="amplitude" />
               </LineChart>
             </ResponsiveContainer>
@@ -154,20 +154,20 @@ export default function SignalPage() {
       </div>
 
       {/* Envelope spectrum with bearing-frequency markers */}
-      <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
+      <div className="p-5 rounded-2xl bg-background border border-border">
         <div className="flex items-center gap-2 mb-3">
-          <Activity className="w-5 h-5 text-amber-400" />
-          <h2 className="text-lg font-semibold text-white">Envelope spectrum</h2>
-          <span className="text-xs text-zinc-500 ml-2">reveals bearing defect frequencies</span>
+          <Activity className="w-5 h-5 text-amber-600" />
+          <h2 className="text-lg font-semibold text-foreground">Envelope spectrum</h2>
+          <span className="text-xs text-muted-foreground ml-2">reveals bearing defect frequencies</span>
         </div>
         <div className="h-56">
           {!r?.envelope?.length ? <Empty /> : (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={r.envelope}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                <XAxis dataKey="f" stroke="#888" fontSize={11} />
-                <YAxis stroke="#888" fontSize={11} />
-                <Tooltip contentStyle={{ background: '#18181b', border: '1px solid #3f3f46', borderRadius: 8 }} labelStyle={{ color: '#d4d4d8' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e6e8eb" />
+                <XAxis dataKey="f" stroke="#9aa3ad" fontSize={11} />
+                <YAxis stroke="#9aa3ad" fontSize={11} />
+                <Tooltip contentStyle={{ background: '#ffffff', border: '1px solid #e6e8eb', borderRadius: 8 }} labelStyle={{ color: '#0b0f12' }} />
                 {bf && <ReferenceLine x={Math.round(bf.BPFO)} stroke="#ef4444" strokeDasharray="4 4" label={{ value: `BPFO ${bf.BPFO.toFixed(0)}`, fill: '#ef4444', fontSize: 10, position: 'top' }} />}
                 {bf && <ReferenceLine x={Math.round(bf.BPFI)} stroke="#f59e0b" strokeDasharray="4 4" label={{ value: `BPFI ${bf.BPFI.toFixed(0)}`, fill: '#f59e0b', fontSize: 10, position: 'top' }} />}
                 <Line type="monotone" dataKey="m" stroke="#60a5fa" strokeWidth={1.5} dot={false} name="envelope" />
@@ -176,7 +176,7 @@ export default function SignalPage() {
           )}
         </div>
         {bf && (
-          <p className="text-xs text-zinc-500 mt-3">
+          <p className="text-xs text-muted-foreground mt-3">
             Bearing freqs — BPFO {bf.BPFO.toFixed(1)} Hz · BPFI {bf.BPFI.toFixed(1)} Hz · BSF {bf.BSF.toFixed(1)} Hz · FTF {bf.FTF.toFixed(1)} Hz
             {fault?.ratios && <> · SNR BPFO {fault.ratios.BPFO}× / BPFI {fault.ratios.BPFI}×</>}
           </p>
@@ -184,16 +184,16 @@ export default function SignalPage() {
       </div>
 
       {/* Kurtosis / crest trend */}
-      <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
-        <h2 className="text-lg font-semibold text-white mb-3">Kurtosis & crest factor (last 30 min)</h2>
+      <div className="p-5 rounded-2xl bg-background border border-border">
+        <h2 className="text-lg font-semibold text-foreground mb-3">Kurtosis & crest factor (last 30 min)</h2>
         <div className="h-56">
           {trend.length === 0 ? <Empty /> : (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={trend}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                <XAxis dataKey="t" stroke="#888" fontSize={11} />
-                <YAxis stroke="#888" fontSize={11} />
-                <Tooltip contentStyle={{ background: '#18181b', border: '1px solid #3f3f46', borderRadius: 8 }} labelStyle={{ color: '#d4d4d8' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e6e8eb" />
+                <XAxis dataKey="t" stroke="#9aa3ad" fontSize={11} />
+                <YAxis stroke="#9aa3ad" fontSize={11} />
+                <Tooltip contentStyle={{ background: '#ffffff', border: '1px solid #e6e8eb', borderRadius: 8 }} labelStyle={{ color: '#0b0f12' }} />
                 <ReferenceLine y={th?.kurtosis_warn ?? 4} stroke="#f59e0b" strokeDasharray="4 4" label={{ value: 'kurtosis warn', fill: '#f59e0b', fontSize: 10 }} />
                 <Line type="monotone" dataKey="kurtosis" stroke="#10b981" strokeWidth={2} dot={false} name="kurtosis" />
                 <Line type="monotone" dataKey="crest_factor" stroke="#a78bfa" strokeWidth={1.5} dot={false} name="crest factor" />
@@ -207,5 +207,5 @@ export default function SignalPage() {
 }
 
 function Empty() {
-  return <div className="h-full flex items-center justify-center text-zinc-500 text-sm">No data yet.</div>
+  return <div className="h-full flex items-center justify-center text-muted-foreground text-sm">No data yet.</div>
 }

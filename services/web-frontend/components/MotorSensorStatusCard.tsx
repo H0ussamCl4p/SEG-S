@@ -72,12 +72,12 @@ export default function MotorSensorStatusCard() {
         <div className="flex items-center justify-between">
           <span className="text-slate-400">Device</span>
           <div className="flex items-center gap-2">
-            <span className="text-white font-mono text-sm">{r?.device_id ?? '—'}</span>
+            <span className="text-foreground font-mono text-sm">{r?.device_id ?? '—'}</span>
             <Badge variant="outline" className={
-              error ? 'bg-red-500/10 text-red-400 border-red-500/30'
+              error ? 'bg-red-500/10 text-red-600 border-red-500/30'
               : !r ? 'bg-slate-500/10 text-slate-400 border-slate-500/30'
-              : online ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-              : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+              : online ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30'
+              : 'bg-amber-500/10 text-amber-600 border-amber-500/30'
             }>{onlineBadge}</Badge>
           </div>
         </div>
@@ -87,26 +87,26 @@ export default function MotorSensorStatusCard() {
             <span className="text-slate-400 flex items-center gap-2 text-sm">
               <Thermometer className="w-4 h-4" /> Thermocouple
             </span>
-            <p className="text-white font-medium">{r?.thermocouple != null ? `${r.thermocouple.toFixed(1)} °C` : '—'}</p>
+            <p className="text-foreground font-medium">{r?.thermocouple != null ? `${r.thermocouple.toFixed(1)} °C` : '—'}</p>
           </div>
           <div className="space-y-1">
             <span className="text-slate-400 flex items-center gap-2 text-sm">
               <Activity className="w-4 h-4" /> Vibration
             </span>
-            <p className="text-white font-medium">{r?.vibration != null ? r.vibration.toFixed(1) : '—'}</p>
+            <p className="text-foreground font-medium">{r?.vibration != null ? r.vibration.toFixed(1) : '—'}</p>
           </div>
           <div className="space-y-1">
             <span className="text-slate-400 text-sm">Motor command</span>
-            <p className="text-white font-medium">
+            <p className="text-foreground font-medium">
               {cmd?.action?.toUpperCase() ?? '—'} <span className="text-slate-500">{cmd?.speed_percent ?? 0}%</span>
               {cmd?.source === 'override' && (
-                <span className="ml-2 text-xs text-amber-400">(manual)</span>
+                <span className="ml-2 text-xs text-amber-600">(manual)</span>
               )}
             </p>
           </div>
           <div className="space-y-1">
             <span className="text-slate-400 text-sm">MTTF estimate</span>
-            <p className="text-white font-medium">{mttfText}</p>
+            <p className="text-foreground font-medium">{mttfText}</p>
             {mttf?.thermal?.model && mttf.samples != null && (
               <p className="text-xs text-slate-500">
                 {mttf.thermal.model} fit · R²={mttf.thermal.r_squared ?? 0} · n={mttf.samples}

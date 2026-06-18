@@ -44,7 +44,7 @@ export default function DashboardNav({ mobile = false, onNavigate }: DashboardNa
   return (
     <nav className={cn(
       "flex flex-col gap-1",
-      mobile ? "space-y-1" : "p-4 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-sm"
+      mobile ? "space-y-1" : "rounded-2xl border border-border bg-background p-3 shadow-sm"
     )}>
       {items.map((item) => {
         const active = pathname === item.href
@@ -56,20 +56,18 @@ export default function DashboardNav({ mobile = false, onNavigate }: DashboardNa
             href={item.href}
             onClick={onNavigate}
             className={cn(
-              "flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium group",
+              "group flex items-center gap-3 rounded-xl px-3.5 py-2.5 font-medium transition-colors",
               active
-                ? "bg-white text-black shadow-lg"
-                : "text-zinc-400 hover:text-white hover:bg-white/10"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
             )}
           >
             <Icon className={cn(
-              "w-5 h-5 transition-colors",
-              active ? "text-emerald-600" : "text-zinc-500 group-hover:text-emerald-500"
+              "h-[18px] w-[18px] transition-colors",
+              active ? "text-emerald-600" : "text-zinc-400 group-hover:text-emerald-600"
             )} />
             <span className="text-sm">{item.label}</span>
-            {active && (
-              <div className="ml-auto w-2 h-2 rounded-full bg-emerald-500" />
-            )}
+            {active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-400" />}
           </Link>
         )
       })}

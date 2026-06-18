@@ -18,9 +18,9 @@ export default function HealthScoreCard({
   // Determine colors based on score
   const getColors = () => {
     if (score >= 80) return { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-500', ring: 'stroke-emerald-500' }
-    if (score >= 60) return { bg: 'bg-green-500/10', border: 'border-green-500/30', text: 'text-green-500', ring: 'stroke-green-500' }
-    if (score >= 40) return { bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', text: 'text-yellow-500', ring: 'stroke-yellow-500' }
-    if (score >= 20) return { bg: 'bg-orange-500/10', border: 'border-orange-500/30', text: 'text-orange-500', ring: 'stroke-orange-500' }
+    if (score >= 60) return { bg: 'bg-green-500/10', border: 'border-green-500/30', text: 'text-emerald-600', ring: 'stroke-green-500' }
+    if (score >= 40) return { bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', text: 'text-amber-600', ring: 'stroke-yellow-500' }
+    if (score >= 20) return { bg: 'bg-orange-500/10', border: 'border-orange-500/30', text: 'text-orange-600', ring: 'stroke-orange-500' }
     return { bg: 'bg-red-500/10', border: 'border-red-500/30', text: 'text-red-500', ring: 'stroke-red-500' }
   }
 
@@ -44,7 +44,7 @@ export default function HealthScoreCard({
 
   return (
     <div className={`p-4 sm:p-6 lg:p-8 rounded-xl border ${colors.bg} ${colors.border} backdrop-blur-sm transition-all hover:scale-105`}>
-      <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-white mb-4 sm:mb-6 text-center">Machine Health</h3>
+      <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-foreground mb-4 sm:mb-6 text-center">Machine Health</h3>
       
       {/* Circular Progress */}
       <div className="relative flex items-center justify-center mb-4 sm:mb-6">
@@ -91,7 +91,7 @@ export default function HealthScoreCard({
 
       {/* Maintenance info */}
       <div className="text-center">
-        <p className={`text-xs sm:text-sm font-medium ${maintenanceUrgency === 'immediate' ? 'text-red-400' : 'text-slate-400'}`}>
+        <p className={`text-xs sm:text-sm font-medium ${maintenanceUrgency === 'immediate' ? 'text-red-600' : 'text-slate-400'}`}>
           {getMaintenanceText()}
         </p>
       </div>

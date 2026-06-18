@@ -81,13 +81,13 @@ export default function ParetoChart({
           <div className="flex items-center gap-2 shrink-0">
             <label className="text-xs text-slate-400">Timeframe:</label>
             <Select value={timeframe} onValueChange={setTimeframe}>
-              <SelectTrigger className="w-[120px] h-8 bg-slate-900/60 border-slate-800 text-white text-xs">
+              <SelectTrigger className="w-[120px] h-8 bg-slate-900/60 border-slate-800 text-foreground text-xs">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-slate-900 border-slate-800">
-                <SelectItem value="7" className="text-white text-xs">Last 7 days</SelectItem>
-                <SelectItem value="30" className="text-white text-xs">Last 30 days</SelectItem>
-                <SelectItem value="90" className="text-white text-xs">Last 90 days</SelectItem>
+                <SelectItem value="7" className="text-foreground text-xs">Last 7 days</SelectItem>
+                <SelectItem value="30" className="text-foreground text-xs">Last 30 days</SelectItem>
+                <SelectItem value="90" className="text-foreground text-xs">Last 90 days</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -107,10 +107,10 @@ export default function ParetoChart({
             {/* Cost Summary for Maintenance */}
             {showCost && totalCost > 0 && (
               <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
-                <DollarSign className="w-5 h-5 text-green-400" />
+                <DollarSign className="w-5 h-5 text-emerald-600" />
                 <div>
-                  <p className="text-sm font-semibold text-green-400">Total Estimated Cost</p>
-                  <p className="text-lg font-bold text-white">${totalCost.toLocaleString()}</p>
+                  <p className="text-sm font-semibold text-emerald-600">Total Estimated Cost</p>
+                  <p className="text-lg font-bold text-foreground">${totalCost.toLocaleString()}</p>
                 </div>
               </div>
             )}
@@ -121,7 +121,7 @@ export default function ParetoChart({
                 {/* 80% Reference Line - Horizontal */}
                 <div className="absolute left-0 right-0 border-t-2 border-dashed border-red-500/60 pointer-events-none" 
                      style={{ bottom: 'calc(80% + 1rem)' }}>
-                  <span className="absolute -right-2 -top-3 text-xs font-bold text-red-400 bg-slate-900 px-1">80%</span>
+                  <span className="absolute -right-2 -top-3 text-xs font-bold text-red-600 bg-slate-900 px-1">80%</span>
                 </div>
 
                 {data.map((item, idx) => {
@@ -139,7 +139,7 @@ export default function ParetoChart({
                         </div>
                         
                         {/* Count label */}
-                        <div className="absolute -top-14 text-xs font-bold text-white bg-slate-800 px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute -top-14 text-xs font-bold text-foreground bg-slate-800 px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
                           {item.count}
                         </div>
 
@@ -190,7 +190,7 @@ export default function ParetoChart({
                 </div>
 
                 {/* Right Y-axis labels (Cumulative %) */}
-                <div className="absolute -right-12 inset-y-0 flex flex-col justify-between text-xs text-orange-400 pl-2">
+                <div className="absolute -right-12 inset-y-0 flex flex-col justify-between text-xs text-orange-600 pl-2">
                   <span>100%</span>
                   <span>75%</span>
                   <span>50%</span>
@@ -210,7 +210,7 @@ export default function ParetoChart({
                       <div className={`w-3 h-3 rounded shrink-0 ${isVital ? 'bg-red-500' : 'bg-blue-500'}`} />
                       <span className="text-slate-300 font-medium">{item.factor}</span>
                       {isVital && (
-                        <span className="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 border border-red-500/30 rounded">
+                        <span className="text-xs px-2 py-0.5 bg-red-500/20 text-red-600 border border-red-500/30 rounded">
                           VITAL 20%
                         </span>
                       )}
@@ -219,9 +219,9 @@ export default function ParetoChart({
                       <span className="text-slate-400">{item.count} occurrences</span>
                       <span className="text-slate-400">({item.percentage}%)</span>
                       {item.cost_estimate && (
-                        <span className="text-green-400 font-semibold">${item.cost_estimate.toLocaleString()}</span>
+                        <span className="text-emerald-600 font-semibold">${item.cost_estimate.toLocaleString()}</span>
                       )}
-                      <span className="text-orange-400 font-semibold flex items-center gap-1">
+                      <span className="text-orange-600 font-semibold flex items-center gap-1">
                         <span className="text-xs text-slate-500">Σ</span>{item.cumulative}%
                       </span>
                     </div>
@@ -235,19 +235,19 @@ export default function ParetoChart({
               {/* 80/20 Rule Summary */}
               <div className="p-4 bg-linear-to-br from-red-500/10 to-purple-500/10 border border-red-500/30 rounded-lg">
                 <div className="flex items-start gap-2">
-                  <TrendingUp className="w-5 h-5 text-red-400 mt-0.5 shrink-0" />
+                  <TrendingUp className="w-5 h-5 text-red-600 mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-sm font-bold text-red-300 mb-1">
+                    <p className="text-sm font-bold text-red-700 mb-1">
                       Pareto Principle (80/20 Rule)
                     </p>
                     <p className="text-xs text-slate-300 leading-relaxed">
-                      <span className="font-semibold text-red-400">
+                      <span className="font-semibold text-red-600">
                         {data.filter(d => d.cumulative <= 80).length} cause{data.filter(d => d.cumulative <= 80).length !== 1 ? 's' : ''}
                       </span>
                       {' '}(~{Math.round((data.filter(d => d.cumulative <= 80).length / data.length) * 100)}% of causes) generate{' '}
-                      <span className="font-semibold text-red-400">~80%</span> of all {type === 'anomalies' ? 'anomalies' : 'maintenance issues'}.
+                      <span className="font-semibold text-red-600">~80%</span> of all {type === 'anomalies' ? 'anomalies' : 'maintenance issues'}.
                     </p>
-                    <p className="text-xs text-red-300/60 mt-2 italic">
+                    <p className="text-xs text-red-700/60 mt-2 italic">
                       → These are the <strong>"vital few"</strong> that require immediate attention.
                     </p>
                   </div>
@@ -257,15 +257,15 @@ export default function ParetoChart({
               {/* Action Recommendation */}
               <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
                 <div className="flex items-start gap-2">
-                  <BarChart3 className="w-5 h-5 text-blue-400 mt-0.5 shrink-0" />
+                  <BarChart3 className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-sm font-bold text-blue-300 mb-1">
+                    <p className="text-sm font-bold text-blue-700 mb-1">
                       Recommended Action
                     </p>
                     <p className="text-xs text-slate-300 leading-relaxed">
-                      Prioritize resources on the <span className="text-red-400 font-semibold">red bars</span> (vital causes) for maximum efficiency.
+                      Prioritize resources on the <span className="text-red-600 font-semibold">red bars</span> (vital causes) for maximum efficiency.
                     </p>
-                    <p className="text-xs text-blue-300/70 mt-2">
+                    <p className="text-xs text-blue-700/70 mt-2">
                       <span className="font-semibold">Impact:</span> Solving these {data.filter(d => d.cumulative <= 80).length} root causes will eliminate 80% of problems with minimal effort.
                     </p>
                   </div>
