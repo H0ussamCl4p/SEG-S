@@ -340,9 +340,11 @@ module simulator 'modules/containerApp.bicep' = {
       { name: 'MQTT_PORT', value: '1883' }
       { name: 'SIMULATION_INTERVAL', value: '1' }
       { name: 'PYTHONUNBUFFERED', value: '1' }
+      // Fake ESP32 motor telemetry is POSTed to the ai-engine (Motor Telemetry page).
+      { name: 'AI_ENGINE_URL', value: 'http://ai-engine' }
     ]
   }
-  dependsOn: [ mosquitto ]
+  dependsOn: [ mosquitto, aiEngine ]
 }
 
 module webFrontend 'modules/containerApp.bicep' = {

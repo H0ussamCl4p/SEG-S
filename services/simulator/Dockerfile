@@ -15,7 +15,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --no-compile -r requirements.txt
 
 # Copy simulator code
-COPY simulate_wear.py .
+COPY simulate_wear.py simulate_esp.py run.py ./
 
-# Run the simulator
-CMD ["python", "simulate_wear.py"]
+# Run both simulators (machine telemetry over MQTT + fake ESP32 motor telemetry over HTTP)
+CMD ["python", "-u", "run.py"]
