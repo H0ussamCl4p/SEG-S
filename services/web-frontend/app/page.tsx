@@ -2,7 +2,9 @@ import Link from 'next/link'
 import { Activity, ArrowRight } from 'lucide-react'
 import Hero from '@/components/landing/Hero'
 import BentoGrid from '@/components/landing/BentoGrid'
+import Timeline from '@/components/landing/Timeline'
 import StackMarquee from '@/components/landing/StackMarquee'
+import FAQ from '@/components/landing/FAQ'
 
 function Logo() {
   return (
@@ -40,7 +42,9 @@ export default function LandingPage() {
       <main>
         <Hero />
         <BentoGrid />
+        <Timeline />
         <StackMarquee />
+        <FAQ />
 
         {/* Final CTA */}
         <section className="bg-background py-24 sm:py-32">

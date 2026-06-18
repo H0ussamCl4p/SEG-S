@@ -101,15 +101,15 @@ export default function Hero() {
                 </div>
               ))}
             </div>
-            <div className="relative h-44 overflow-hidden rounded-xl border border-border bg-muted/40 p-5">
+            <div className="rounded-xl border border-border bg-muted/40 p-5">
               <span className="font-mono text-xs text-muted-foreground">VIBRATION TREND</span>
-              <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-2">
+              <div className="mt-4 flex h-28 items-end justify-between gap-1.5">
                 {[38, 52, 46, 61, 55, 72, 64, 80, 70, 58, 49, 44].map((h, i) => (
                   <motion.div
                     key={i}
                     initial={{ scaleY: 0 }}
                     animate={{ scaleY: 1 }}
-                    transition={{ delay: 0.5 + i * 0.04 }}
+                    transition={{ delay: 0.5 + i * 0.04, duration: 0.4 }}
                     className="w-full origin-bottom rounded-t bg-emerald-500/80"
                     style={{ height: `${h}%` }}
                   />
