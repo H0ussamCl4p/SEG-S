@@ -6,24 +6,20 @@ import { Plus } from 'lucide-react'
 
 const faqs = [
   {
-    q: 'What hardware do I need?',
-    a: 'An ESP32 (or any PLC) publishing sensor data over MQTT — thermocouple, vibration, temperature and humidity. No hardware on hand? The built-in simulator streams realistic telemetry so you can explore everything immediately.',
+    q: 'How long does it take to install the solution?',
+    a: 'Under one week — from the first sensor to a live, monitoring dashboard.',
   },
   {
-    q: 'How does the anomaly detection work?',
-    a: 'Isolation-Forest models score every reading in real time. On top of that, vibration windows run through FFT and envelope analysis to detect bearing characteristic frequencies (BPFO/BPFI) — catching incipient faults before they escalate.',
+    q: 'Is it adapted to old machines?',
+    a: 'Yes. We install a small sensor box that streams data continuously to the AI — no retrofit or downtime required.',
   },
   {
-    q: 'Can the AI assistant use my own equipment manuals?',
-    a: 'Yes. Upload your PDFs and the retrieval-augmented chatbot answers strictly from them — diagnoses, procedures and safety notes grounded in your documentation.',
+    q: 'Is it adapted to modern machines?',
+    a: 'Yes. We tap directly into your existing protocols (MQTT, PLC) to read live data straight from the machine.',
   },
   {
-    q: 'Where does it run and what does it cost?',
-    a: 'It runs as containerised microservices on Azure Container Apps with managed TLS. The chatbot uses a pay-as-you-go, OpenAI-compatible LLM API, so you only pay for what you use.',
-  },
-  {
-    q: 'Is it open source?',
-    a: 'Yes — the whole stack is MIT-licensed. Self-host it, extend it, or deploy it to your own cloud.',
+    q: 'What is the return on investment?',
+    a: 'Payback is typically under 7 months, driven by avoided unplanned downtime and optimized, condition-based maintenance.',
   },
 ]
 
