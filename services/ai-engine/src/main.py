@@ -3,6 +3,7 @@ import joblib
 import json
 import numpy as np
 import os
+import time
 import pandas as pd # Added for timestamp handling
 from influxdb import InfluxDBClient
 
@@ -160,16 +161,33 @@ def on_message(client, userdata, msg):
 client = mqtt.Client()
 client.on_message = on_message
 
-try:
-    print(f"🔌 Connecting to MQTT broker: {BROKER}...")
-    client.connect(BROKER, 1883, 60)
-    client.subscribe(TOPIC)
-    print(f"✅ Subscribed to topic: {TOPIC}")
-    print("🎧 Listening for sensor data...")
-    client.loop_forever()
-except ConnectionRefusedError:
-    print(f"❌ Error: Could not connect to MQTT broker at {BROKER}")
-except Exception as e:
-    print(f"❌ MQTT Error: {e}")
-except KeyboardInterrupt:
-    print("\n🛑 Stopping Detector.")
+
+# Subscribe inside on_connect so the subscription is re-established on every
+# (re)connect. paho's loop_forever auto-reconnects the TCP socket after a broker
+# restart, but it does NOT re-subscribe automatically — without this the consumer
+# silently stops receiving data after any broker blip.
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        client.subscribe(TOPIC)
+        print(f"✅ Connected & subscribed to topic: {TOPIC}")
+        print("🎧 Listening for sensor data...")
+    else:
+        print(f"❌ MQTT connect failed (rc={rc})")
+
+
+client.on_connect = on_connect
+
+# Back off and retry automatically instead of exiting on transient broker outages.
+client.reconnect_delay_set(min_delay=1, max_delay=30)
+
+while True:
+    try:
+        print(f"🔌 Connecting to MQTT broker: {BROKER}...")
+        client.connect(BROKER, 1883, 60)
+        client.loop_forever()  # blocks; auto-reconnects + re-fires on_connect
+    except KeyboardInterrupt:
+        print("\n🛑 Stopping Detector.")
+        break
+    except Exception as e:
+        print(f"❌ MQTT connection error: {e} — retrying in 5s...")
+        time.sleep(5)

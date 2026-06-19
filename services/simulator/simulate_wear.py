@@ -9,6 +9,10 @@ BROKER = os.getenv("MQTT_BROKER", "localhost")
 TOPIC = "factory/plc/data"
 client = mqtt.Client()
 client.connect(BROKER, 1883, 60)
+# Run the network loop in a background thread. Without this, paho never services
+# keepalive PINGs, so the broker drops the connection after ~60s and every
+# subsequent publish() silently goes nowhere. loop_start() also auto-reconnects.
+client.loop_start()
 
 print("🏭 Simulating 2 Equipment with Different States...")
 print("=" * 80)
@@ -129,4 +133,5 @@ try:
 
 except KeyboardInterrupt:
     print("\n\n✋ Simulation stopped.")
+    client.loop_stop()
     client.disconnect()

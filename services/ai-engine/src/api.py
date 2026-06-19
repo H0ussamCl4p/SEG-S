@@ -1260,7 +1260,11 @@ async def get_live_data(machine_id: str = "MACHINE_001"):
             "timestamp": datetime.utcnow().isoformat() + "Z",
             "health": health_data
         }
-        
+
+    except HTTPException:
+        # Don't swallow intentional responses (e.g. the 404 "no data" above)
+        # into a misleading 500.
+        raise
     except Exception as e:
         raise HTTPException(
             status_code=500,
