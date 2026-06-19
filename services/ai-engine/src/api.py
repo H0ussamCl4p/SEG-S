@@ -1767,7 +1767,7 @@ async def get_remaining_useful_life(machine_id: Optional[str] = None):
                 SELECT mean("vibration") as vibration,
                        mean("temperature") as temperature,
                        mean("humidity") as humidity,
-                       mean("health_score") as health_score
+                       mean("ai_score") as ai_score
                 FROM "{MEASUREMENT}"
                 WHERE "machine_id" = '{mid}'
                   AND time > now() - 7d
@@ -1793,38 +1793,62 @@ async def get_remaining_useful_life(machine_id: Optional[str] = None):
                 })
                 continue
             
-            # Extract time series data
-            health_scores = [p.get('health_score', 80) for p in reversed(points) if p.get('health_score') is not None]
-            vibrations = [p.get('vibration', 50) for p in reversed(points) if p.get('vibration') is not None]
-            temperatures = [p.get('temperature', 50) for p in reversed(points) if p.get('temperature') is not None]
-            
+            # health_score is NOT persisted to InfluxDB (only vibration/temperature/
+            # humidity/ai_score are). Derive a real per-bucket health series from the
+            # stored telemetry using the same calculate_health_score() the live
+            # dashboard uses, so RUL stays consistent with the displayed health.
+            chrono = list(reversed(points))  # oldest -> newest
+            health_scores, vibrations, temperatures = [], [], []
+            for p in chrono:
+                v = p.get('vibration')
+                t = p.get('temperature')
+                if v is None or t is None:
+                    continue
+                s = normalize_score(p.get('ai_score')) if p.get('ai_score') is not None else 0.5
+                vibrations.append(float(v))
+                temperatures.append(float(t))
+                health_scores.append(calculate_health_score(float(v), float(t), s)['score'])
+
             if not health_scores:
-                health_scores = [80]
-            
-            current_health = health_scores[-1] if health_scores else 80
-            
-            # Calculate degradation rate using linear regression
+                # No usable telemetry in window — fall back to a neutral estimate.
+                health_scores, vibrations, temperatures = [80.0], [50.0], [50.0]
+
+            current_health = health_scores[-1]
+
+            # Degradation trend via linear regression on the derived health series.
+            # Only a DOWNWARD trend counts as degradation (improving health must not
+            # shorten RUL), so we negate the slope and floor at zero.
             if len(health_scores) >= 4:
-                x = np.arange(len(health_scores)).reshape(-1, 1)
-                y = np.array(health_scores)
-                
-                # Simple linear regression for trend
-                x_mean = x.mean()
-                y_mean = y.mean()
-                slope = np.sum((x.flatten() - x_mean) * (y - y_mean)) / np.sum((x.flatten() - x_mean) ** 2)
-                
-                # Convert slope to daily degradation rate (6h intervals to daily)
-                degradation_rate = abs(slope * 4)  # 4 intervals per day
+                x = np.arange(len(health_scores), dtype=float)
+                y = np.array(health_scores, dtype=float)
+                denom = float(np.sum((x - x.mean()) ** 2))
+                slope = float(np.sum((x - x.mean()) * (y - y.mean())) / denom) if denom > 0 else 0.0
+                # slope is health-points per 6h bucket; 4 buckets/day -> %/day decline
+                measured_decline = max(0.0, -slope) * 4.0
             else:
-                degradation_rate = 0.5  # Default moderate degradation
-            
-            # Calculate RUL based on degradation rate
-            critical_threshold = 20  # Health score below 20% requires immediate maintenance
-            
-            if degradation_rate > 0.1:
-                rul_days = max(1, int((current_health - critical_threshold) / degradation_rate))
+                measured_decline = 0.0
+
+            # Stress-based baseline wear: a machine running hot / vibrating heavily
+            # ages faster even without a visible long-term trend. stress in [0,1]
+            # reuses the same vib/temp weighting as estimate_score.
+            max_vib = _calibrated_max_vibration if (_calibrated_max_vibration and _calibrated_max_vibration > 0) else EXPECTED_MAX_VIBRATION
+            max_temp = _calibrated_max_temperature if (_calibrated_max_temperature and _calibrated_max_temperature > 0) else EXPECTED_MAX_TEMPERATURE
+            vib_norm = 0.0 if max_vib <= 0 else min(max(vibrations[-1] / max_vib, 0.0), 1.0)
+            temp_norm = 0.0 if max_temp <= 0 else min(max(temperatures[-1] / max_temp, 0.0), 1.0)
+            stress = 0.6 * vib_norm + 0.4 * temp_norm
+            baseline_wear = 0.2 + 4.0 * (stress ** 2)  # %/day; healthy ~0.5-1, critical ~3
+
+            # Effective wear rate honors whichever is worse: measured decline or stress.
+            degradation_rate = max(measured_decline, baseline_wear)
+
+            # RUL: days for health to fall from its current level to the 20% critical
+            # threshold at the effective wear rate. degradation_rate >= 0.2 always, so
+            # no division-by-zero, and we cap the horizon at 120 days.
+            critical_threshold = 20  # Health below 20% requires immediate maintenance
+            if current_health <= critical_threshold:
+                rul_days = 1
             else:
-                rul_days = 90  # Stable system - predict 90 days
+                rul_days = int(max(1, min(120, (current_health - critical_threshold) / degradation_rate)))
             
             # Analyze critical factors
             critical_factors = []
@@ -1835,8 +1859,8 @@ async def get_remaining_useful_life(machine_id: Optional[str] = None):
                 critical_factors.append(f"High vibration ({avg_vibration:.1f})")
             if avg_temperature > 70:
                 critical_factors.append(f"Elevated temperature ({avg_temperature:.1f}°C)")
-            if degradation_rate > 1.5:
-                critical_factors.append(f"Rapid health decline ({degradation_rate:.2f}%/day)")
+            if measured_decline > 1.5:
+                critical_factors.append(f"Rapid health decline ({measured_decline:.2f}%/day)")
             
             # Check for accelerating degradation
             if len(health_scores) >= 8:
