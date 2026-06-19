@@ -92,8 +92,11 @@ def estimate_score(vibration: float, temperature: float) -> float:
         temp_norm = 0.0 if max_temp <= 0 else min(max(temperature / max_temp, 0.0), 1.0)
         # Weighted impact: vibration more important
         impact = 0.6 * vib_norm + 0.4 * temp_norm
-        # Convert impact to score: high impact => lower score
-        score = 1.0 - impact
+        # Convert impact to a score spanning the FULL [-1, 1] range (high impact
+        # => lower/worse score). Using `1 - impact` only reaches [0, 1], which
+        # normalize_score() then maps into [0.5, 1.0] — always above the WARNING/
+        # ANOMALY thresholds, so an unhealthy machine could never be flagged.
+        score = 1.0 - 2.0 * impact
         return float(max(-1.0, min(1.0, score)))
     except Exception:
         return 0.0
