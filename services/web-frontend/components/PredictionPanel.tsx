@@ -62,6 +62,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             data: {
+              Vibration: liveData.vibration || 0,
               Humidity: liveData.humidity || 50,
               Temperature: liveData.temperature || 45,
               Age: 12,  // Default age in months
@@ -201,7 +202,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
             )}
 
             {!current_state.model_loaded && (
-              <p className="text-xs text-muted-foreground mt-2">Model not loaded</p>
+              <p className="text-xs text-muted-foreground mt-2">Heuristic estimate (no ML model)</p>
             )}
           </div>
         </div>
@@ -213,7 +214,7 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
             <h3 className="text-lg font-semibold text-foreground">Future Forecast</h3>
           </div>
 
-          {future_prediction.model_loaded ? (
+          {future_prediction.estimated_days_until_failure !== null ? (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Risk Level</span>
@@ -255,6 +256,9 @@ export default function PredictionPanel({ equipmentId }: { equipmentId?: string 
                 <p className="text-sm text-muted-foreground">{future_prediction.recommended_action}</p>
                 {future_prediction.confidence && (
                   <p className="text-xs text-muted-foreground mt-2">Confidence: {future_prediction.confidence}</p>
+                )}
+                {!future_prediction.model_loaded && (
+                  <p className="text-xs text-muted-foreground mt-1">Heuristic estimate (no ML model)</p>
                 )}
               </div>
             </div>

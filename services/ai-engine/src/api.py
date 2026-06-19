@@ -375,12 +375,12 @@ def calculate_health_score(vibration: float, temperature: float, ai_score: float
     elif temperature > 65:
         health_score -= 5
     
-    # AI score impact (most important factor)
-    if ai_score < -0.5:  # Anomaly
-        health_score -= 35
-    elif ai_score < 0.0:  # Warning
-        health_score -= 15
-    elif ai_score < 0.1:
+    # AI score impact. Callers pass the NORMALIZED score in [0,1] (low = bad), so
+    # thresholds use that scale. Kept light because vibration/temperature are
+    # already penalized above and the AI score is largely derived from them.
+    if ai_score < 0.1:  # Anomaly range
+        health_score -= 10
+    elif ai_score < 0.3:  # Warning range
         health_score -= 5
     
     # Ensure score is between 0-100
@@ -1492,20 +1492,23 @@ async def get_statistics(equipmentId: Optional[str] = None):
         data = points[0]
         total_readings = int(data.get('total_readings', 0))
         
-        # Count anomalies and warnings in last 24h
+        # Count anomalies and warnings in last 24h. Thresholds match the
+        # normalized status convention used by /api/live ((score+1)/2):
+        # ANOMALY = normalized < 0.1 (raw < -0.8), WARNING = normalized < 0.3
+        # (raw in [-0.8, -0.4)).
         anomaly_query = f'''
             SELECT count("ai_score") as count
             FROM "{MEASUREMENT}"
-            WHERE time > now() - 24h AND "ai_score" < -0.5
+            WHERE time > now() - 24h AND "ai_score" < -0.8
         '''
         anomaly_result = influx_client.query(anomaly_query)
         anomaly_points = list(anomaly_result.get_points())
         anomalies = int(anomaly_points[0].get('count', 0)) if anomaly_points else 0
-        
+
         warning_query = f'''
             SELECT count("ai_score") as count
             FROM "{MEASUREMENT}"
-            WHERE time > now() - 24h AND "ai_score" >= -0.5 AND "ai_score" < 0.1
+            WHERE time > now() - 24h AND "ai_score" >= -0.8 AND "ai_score" < -0.4
         '''
         warning_result = influx_client.query(warning_query)
         warning_points = list(warning_result.get_points())
@@ -1515,23 +1518,14 @@ async def get_statistics(equipmentId: Optional[str] = None):
         normal_readings = total_readings - anomalies - warnings
         uptime_percentage = (normal_readings / total_readings * 100) if total_readings > 0 else 100
         
-        # Slight per-equipment variation (mock) when scoped
-        vib_adjust = 0.0
-        temp_adjust = 0.0
-        if equipmentId:
-            if equipmentId.endswith("001"):
-                vib_adjust = 1.5
-            elif equipmentId.endswith("014"):
-                temp_adjust = 1.0
-
         return {
             "vibration": {
-                "average": round(float(data.get('avg_vibration', 0)) + vib_adjust, 2),
-                "max": round(float(data.get('max_vibration', 0)) + vib_adjust, 2)
+                "average": round(float(data.get('avg_vibration', 0)), 2),
+                "max": round(float(data.get('max_vibration', 0)), 2)
             },
             "temperature": {
-                "average": round(float(data.get('avg_temperature', 0)) + temp_adjust, 2),
-                "max": round(float(data.get('max_temperature', 0)) + temp_adjust, 2)
+                "average": round(float(data.get('avg_temperature', 0)), 2),
+                "max": round(float(data.get('max_temperature', 0)), 2)
             },
             "ai_score": {
                 "average": round(float(data.get('avg_score', 0)), 4),
@@ -1675,8 +1669,8 @@ async def get_maintenance_pareto(days: int = 90):
             'Other': 0
         }
         
-        # Categorize existing tasks
-        for task in _maintenance_tasks_db.values():
+        # Categorize existing tasks (_maintenance_tasks_db is a list of dicts)
+        for task in _maintenance_tasks_db:
             title = task['title'].lower()
             desc = task['description'].lower()
             
@@ -1950,7 +1944,7 @@ async def get_alerts(limit: int = 20):
         query = f'''
             SELECT "vibration", "temperature", "ai_score"
             FROM "{MEASUREMENT}"
-            WHERE time > now() - 24h AND "ai_score" < 0.1
+            WHERE time > now() - 24h AND "ai_score" < -0.4
             ORDER BY time DESC
             LIMIT {limit}
         '''
@@ -1968,24 +1962,25 @@ async def get_alerts(limit: int = 20):
             vibration = float(point.get('vibration', 0))
             temperature = float(point.get('temperature', 0))
             
-            # Determine severity
-            if score < -0.5:
+            # Determine severity (normalized convention: ANOMALY = (score+1)/2 < 0.1)
+            if score < -0.8:
                 severity = "ANOMALY"
                 color = "red"
             else:
                 severity = "WARNING"
                 color = "yellow"
-            
+
             # Create descriptive message
             reasons = []
             if vibration > 75:
                 reasons.append(f"High vibration: {vibration:.1f}")
             if temperature > 70:
                 reasons.append(f"High temperature: {temperature:.1f}°C")
-            if score < -0.5:
-                reasons.append(f"Low AI score: {score:.3f}")
-            
-            message = ", ".join(reasons) if reasons else f"AI score: {score:.3f}"
+            if score < -0.8:
+                reasons.append("Critical AI anomaly score")
+
+            health_pct = (score + 1) / 2 * 100
+            message = ", ".join(reasons) if reasons else f"Health below normal ({health_pct:.0f}%)"
             
             alerts.append({
                 "timestamp": point.get('time'),
@@ -2669,7 +2664,46 @@ async def predict_combined(request: PredictionRequest):
             except Exception as e:
                 print(f"Anomaly detection error: {e}")
                 anomaly_result["error"] = str(e)
-        
+        else:
+            # No ML model file: derive a heuristic anomaly assessment from the
+            # live signal so the panel still shows a meaningful current state.
+            h_vib = float(input_data.get('Vibration', input_data.get('vibration', 0)) or 0)
+            h_temp = float(input_data.get('Temperature', input_data.get('temperature', 0)) or 0)
+            h_hum = float(input_data.get('Humidity', input_data.get('humidity', 0)) or 0)
+            h_norm = normalize_score(estimate_score(h_vib, h_temp))
+
+            warnings = []
+            if h_temp > 80:
+                warnings.append("🔴 Critical temperature")
+            elif h_temp > 70:
+                warnings.append("🟡 High temperature")
+            if h_vib > 85:
+                warnings.append("🔴 Critical vibration")
+            elif h_vib > 75:
+                warnings.append("🟡 Elevated vibration")
+            if h_hum > 85:
+                warnings.append("🔴 Extreme humidity")
+
+            if h_norm < 0.1:
+                status, risk_level, status_emoji = "ANOMALY", "CRITICAL", "🔴"
+            elif h_norm < 0.3:
+                status, risk_level, status_emoji = "WARNING", "MEDIUM", "🟡"
+            else:
+                status, risk_level, status_emoji = "NORMAL", "LOW", "✅"
+            if not warnings:
+                warnings = ["Operating within normal range"]
+
+            anomaly_result = {
+                "is_anomaly": status == "ANOMALY",
+                "status": status,
+                "status_emoji": status_emoji,
+                "risk_level": risk_level,
+                "anomaly_score": int(round((1 - h_norm) * 100)),  # 0-100, higher = worse
+                "warnings": warnings,
+                "model_loaded": False,
+                "method": "heuristic"
+            }
+
         # =====================================================================
         # Part 2: Future Failure Prediction (Random Forest Regressor)
         # =====================================================================
@@ -2696,12 +2730,6 @@ async def predict_combined(request: PredictionRequest):
                 
                 # Predict MTTF
                 predicted_mttf = pred_model.predict(pred_input_scaled)[0]
-                # Apply slight per-equipment adjustment to simulate scoping
-                if equipment_id:
-                    if str(equipment_id).endswith("001"):
-                        predicted_mttf = predicted_mttf * 0.95
-                    elif str(equipment_id).endswith("014"):
-                        predicted_mttf = predicted_mttf * 1.05
                 days_estimate = predicted_mttf / 24  # Convert hours to days
                 
                 # Risk assessment based on predicted MTTF
@@ -2757,7 +2785,42 @@ async def predict_combined(request: PredictionRequest):
             except Exception as e:
                 print(f"Predictive model error: {e}")
                 prediction_result["error"] = str(e)
-        
+        else:
+            # No predictive model: estimate time-to-failure with the same
+            # health/wear model used by /api/rul, so the forecast is consistent.
+            h_vib = float(input_data.get('Vibration', input_data.get('vibration', 0)) or 0)
+            h_temp = float(input_data.get('Temperature', input_data.get('temperature', 0)) or 0)
+            h_norm = normalize_score(estimate_score(h_vib, h_temp))
+            cur_health = calculate_health_score(h_vib, h_temp, h_norm)['score']
+
+            max_vib = _calibrated_max_vibration if (_calibrated_max_vibration and _calibrated_max_vibration > 0) else EXPECTED_MAX_VIBRATION
+            max_temp = _calibrated_max_temperature if (_calibrated_max_temperature and _calibrated_max_temperature > 0) else EXPECTED_MAX_TEMPERATURE
+            vib_norm = 0.0 if max_vib <= 0 else min(max(h_vib / max_vib, 0.0), 1.0)
+            temp_norm = 0.0 if max_temp <= 0 else min(max(h_temp / max_temp, 0.0), 1.0)
+            wear = 0.2 + 4.0 * ((0.6 * vib_norm + 0.4 * temp_norm) ** 2)
+            rul_days = 1.0 if cur_health <= 20 else max(1.0, min(120.0, (cur_health - 20) / wear))
+            predicted_mttf = round(rul_days * 24, 2)
+
+            if rul_days <= 3:
+                future_risk, future_emoji, action = "CRITICAL", "🔴", "IMMEDIATE MAINTENANCE REQUIRED"
+            elif rul_days <= 7:
+                future_risk, future_emoji, action = "HIGH", "🟠", "Schedule maintenance within this week"
+            elif rul_days <= 14:
+                future_risk, future_emoji, action = "MEDIUM", "🟡", "Plan maintenance within two weeks"
+            else:
+                future_risk, future_emoji, action = "LOW", "🟢", "Continue normal operation, routine maintenance sufficient"
+
+            prediction_result = {
+                "predicted_mttf": predicted_mttf,
+                "estimated_days_until_failure": round(rul_days, 1),
+                "future_risk_level": future_risk,
+                "future_risk_emoji": future_emoji,
+                "recommended_action": action,
+                "confidence": "Heuristic",
+                "model_loaded": False,
+                "method": "heuristic"
+            }
+
         # =====================================================================
         # Part 3: Combined Risk Assessment
         # =====================================================================

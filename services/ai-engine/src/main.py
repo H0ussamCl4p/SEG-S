@@ -19,6 +19,25 @@ INFLUX_HOST = os.getenv("INFLUX_HOST", "localhost")
 INFLUX_PORT = int(os.getenv("INFLUX_PORT", "8086"))
 INFLUX_DB = os.getenv("INFLUX_DB", "factory_data")
 
+# Expected operating maxima for the heuristic fallback score (used when no ML
+# model is loaded). Configurable so they can track real equipment limits.
+EXPECTED_MAX_VIBRATION = float(os.getenv("EXPECTED_MAX_VIBRATION", "120"))
+EXPECTED_MAX_TEMPERATURE = float(os.getenv("EXPECTED_MAX_TEMPERATURE", "95"))
+
+
+def heuristic_score(vibration, temperature):
+    """Anomaly score in [-1, 1] derived from vibration/temperature when no ML
+    model is available. Mirrors the ai-engine API's estimate_score so the stored
+    ai_score is meaningful — it drives dashboard uptime, alerts and RUL. Higher
+    vibration/temperature => lower (worse) score."""
+    try:
+        vib_norm = min(max(vibration / EXPECTED_MAX_VIBRATION, 0.0), 1.0) if EXPECTED_MAX_VIBRATION > 0 else 0.0
+        temp_norm = min(max(temperature / EXPECTED_MAX_TEMPERATURE, 0.0), 1.0) if EXPECTED_MAX_TEMPERATURE > 0 else 0.0
+        impact = 0.6 * vib_norm + 0.4 * temp_norm
+        return float(max(-1.0, min(1.0, 1.0 - 2.0 * impact)))
+    except Exception:
+        return 0.0
+
 # --- INITIALIZATION ---
 # 1. Load the AI (if available)
 model = None
@@ -109,7 +128,18 @@ def on_message(client, userdata, msg):
                 print(f"⚠️  Prediction error: {e}")
                 status = "NORMAL"
                 score = 0.0
-        
+        else:
+            # No ML model loaded: fall back to a heuristic score so the stored
+            # ai_score carries real signal (otherwise it is always 0.0, which
+            # makes uptime 0% and every reading a "warning").
+            score = heuristic_score(vib, temp)
+            if score < -0.5:
+                status = "ANOMALY"
+            elif score < 0.1:
+                status = "WARNING"
+            else:
+                status = "NORMAL"
+
         # 5. Output to Terminal (Color Coded per machine)
         color = "\033[92m" if status == "NORMAL" else "\033[93m" if status == "WARNING" else "\033[91m"
         if hum is not None:
