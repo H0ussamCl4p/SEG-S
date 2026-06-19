@@ -13,6 +13,7 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
 import uvicorn
 import os
+import re
 import shutil
 import json
 import pickle
@@ -100,6 +101,21 @@ def estimate_score(vibration: float, temperature: float) -> float:
         return float(max(-1.0, min(1.0, score)))
     except Exception:
         return 0.0
+
+# Machine / equipment identifiers are simple tokens (e.g. "MACHINE_001"). They
+# are interpolated into InfluxQL string literals, so anything outside this set
+# is treated as an injection attempt and rejected before it reaches a query.
+_IDENTIFIER_RE = re.compile(r'^[A-Za-z0-9_.\-]{1,64}$')
+
+
+def validate_identifier(value: Optional[str], field: str = "machine_id") -> Optional[str]:
+    """Reject identifiers that could break out of an InfluxQL string literal."""
+    if value is None:
+        return None
+    if not _IDENTIFIER_RE.match(value):
+        raise HTTPException(status_code=400, detail=f"Invalid {field}")
+    return value
+
 
 def normalize_score(score: float) -> float:
     """Normalize any incoming score to [0, 1] for UI consistency.
@@ -718,23 +734,29 @@ async def upload_document(file: UploadFile = File(...)):
     
     if not file.filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Only PDF files are supported")
-        
+
+    # Strip any path components so a crafted filename ("../../etc/x.pdf") can't
+    # escape the uploads directory (path traversal).
+    safe_name = os.path.basename(file.filename).replace("\\", "_")
+    if not safe_name.endswith(".pdf") or safe_name in ("", ".pdf"):
+        raise HTTPException(status_code=400, detail="Invalid filename")
+
     try:
         # Create temp file
         temp_dir = "data/uploads"
         os.makedirs(temp_dir, exist_ok=True)
-        file_path = os.path.join(temp_dir, file.filename)
-        
+        file_path = os.path.join(temp_dir, safe_name)
+
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
-            
+
         # Ingest
         chatbot.ingest_data(file_path, is_directory=False)
-        
+
         # Clean up (optional, keep for now or delete)
         # os.remove(file_path)
-        
-        return {"message": f"Successfully uploaded and ingested {file.filename}"}
+
+        return {"message": f"Successfully uploaded and ingested {safe_name}"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
 
@@ -1101,6 +1123,7 @@ def get_shifts() -> list[dict]:
 @app.get("/api/production/oee")
 def get_oee(equipmentId: Optional[str] = None) -> dict:
     """Calculate OEE (Overall Equipment Effectiveness) metrics."""
+    equipmentId = validate_identifier(equipmentId, "equipmentId")
     # Mock OEE calculation - in production would pull from real data
     availability = 94.5
     performance = 96.2
@@ -1164,6 +1187,7 @@ async def get_live_data(machine_id: str = "MACHINE_001"):
     
     Returns: Current vibration, temperature, AI score, and status
     """
+    machine_id = validate_identifier(machine_id, "machine_id")
     if not influx_client:
         raise HTTPException(
             status_code=503,
@@ -1362,6 +1386,7 @@ async def get_history(limit: int = 50, machine_id: str = None):
     
     Returns: List of timestamped readings
     """
+    machine_id = validate_identifier(machine_id, "machine_id")
     if not influx_client:
         raise HTTPException(
             status_code=503,
@@ -1455,6 +1480,7 @@ async def get_statistics(equipmentId: Optional[str] = None):
     Get aggregated statistics for the dashboard
     Returns: Summary statistics over the last 24 hours
     """
+    equipmentId = validate_identifier(equipmentId, "equipmentId")
     if not influx_client:
         raise HTTPException(
             status_code=503,
@@ -1555,12 +1581,13 @@ async def get_anomaly_pareto(machine_id: Optional[str] = None, days: int = 30):
     
     Returns: Pareto data showing anomaly causes ranked by frequency
     """
+    machine_id = validate_identifier(machine_id, "machine_id")
     if not influx_client:
         raise HTTPException(
             status_code=503,
             detail="InfluxDB connection not available"
         )
-    
+
     days = min(days, 90)
     
     try:
@@ -1737,6 +1764,7 @@ async def get_remaining_useful_life(machine_id: Optional[str] = None):
     - critical_factors: Key contributors to degradation
     - recommendation: Maintenance action suggestion
     """
+    machine_id = validate_identifier(machine_id, "machine_id")
     if not influx_client:
         raise HTTPException(status_code=503, detail="InfluxDB not connected")
     
@@ -2313,7 +2341,7 @@ async def get_model_info():
 
 
 @app.post("/train")
-async def train_model(request: TrainRequest):
+async def train_model(request: TrainRequest, _admin: dict = Depends(get_current_active_admin)):
     """Train or retrain the anomaly detection model with uploaded data"""
     try:
         from sklearn.ensemble import IsolationForest
@@ -2408,7 +2436,7 @@ async def reset_model():
 
 
 @app.post("/upload-dataset")
-async def upload_dataset(file: UploadFile = File(...)):
+async def upload_dataset(file: UploadFile = File(...), _admin: dict = Depends(get_current_active_admin)):
     """Upload CSV/Excel dataset - auto-detects columns and file format"""
     try:
         import pandas as pd
@@ -3020,7 +3048,8 @@ async def configure_ab_test(model_type: str, config: ABTestConfig):
 @app.post("/api/models/train")
 async def trigger_training(
     model_type: Optional[str] = "all",
-    contamination: Optional[float] = 0.05
+    contamination: Optional[float] = 0.05,
+    _admin: dict = Depends(get_current_active_admin)
 ):
     """Trigger model training (runs in background)"""
     if not ENHANCED_ML_AVAILABLE:
